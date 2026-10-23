@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kurz-Check: Passt die Beratung zu Ihrer Wohnung?</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--ink:#1b2127;--muted:#5d6872;--bg:#fbfaf7;--card:#ffffff;--line:#dfe3e6;--accent:#17406b;--warn:#fff4d6;--warn-line:#9a6a00;--err:#a4262c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8ecef;--muted:#a3afb8;--bg:#14181c;--card:#1c2228;--line:#2e3740;--accent:#7fb2e5;--warn:#3a3118;--warn-line:#d8a93c;--err:#ff8a8f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px 40px}
+.entwurf{background:var(--warn);border-bottom:2px solid var(--warn-line);padding:8px 20px;font-size:14px}
+h1{font-size:28px;line-height:1.2;color:var(--accent);margin:28px 0 10px}
+p{margin:0 0 14px}
+.muted{color:var(--muted)}.small{font-size:14px}
+form,.out{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-top:18px}
+label{display:block;font-weight:600;margin:16px 0 4px}
+label:first-child{margin-top:0}
+.hint{font-weight:400;color:var(--muted);font-size:14px}
+input[type=text],input[type=email],input[type=number],select,textarea{width:100%;padding:10px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
+textarea{min-height:70px}
+.row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media (max-width:520px){.row{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin-top:18px}
+.check input{margin-top:5px}
+.btn{display:inline-block;padding:13px 22px;border-radius:8px;border:2px solid var(--accent);background:var(--accent);color:#fff;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;margin:6px 8px 6px 0}
+@media (prefers-color-scheme:dark){.btn{color:#0b1218}}
+.btn.sec{background:transparent;color:var(--accent)}
+.err{color:var(--err);font-size:14px;margin-top:4px;display:none}
+.hinweis{background:var(--warn);border-left:4px solid var(--warn-line);padding:10px 12px;border-radius:4px;font-size:15px;margin-top:14px;display:none}
+pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px;font:14px/1.5 ui-monospace,Menlo,monospace}
+.platzhalter{background:var(--warn);padding:0 4px;border-radius:3px;font-family:ui-monospace,Menlo,monospace;font-size:.92em}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="entwurf"><strong>ENTWURF, nicht veröffentlichen.</strong> E-Mail-Adresse und Datenschutztext sind Platzhalter.</div>
+<div class="wrap">
+<p style="margin-top:18px"><a href="index.html">← Zurück</a></p>
+<h1>Kurz-Check</h1>
+<p>Sechs Angaben zu Ihrer Wohnung. Ich melde mich danach per E-Mail, ob die Beratung für Ihren Fall passt. <span class="platzhalter">[Frist festlegen]</span></p>
+<p class="small muted"><strong>Diese Seite selbst speichert und überträgt nichts.</strong> Ihre Angaben gehen erst an mich, wenn Sie in Ihrem E-Mail-Programm auf „Senden" klicken. E-Mails sind nicht Ende-zu-Ende-verschlüsselt. Ich verwende Ihre Angaben nur, um Ihnen zu antworten. <span class="platzhalter">[Verantwortlicher, Rechtsgrundlage, Speicherdauer, Empfänger (Mail-Anbieter) nach Datenschutzprüfung ergänzen]</span></p>
+<p class="small muted">Bitte tragen Sie keine Namen oder Kontaktdaten von Mietern ein. Pflichtfelder: Lage, Fläche, Baujahr, Nutzung, E-Mail.</p>
+
+<form id="f" novalidate>
+<label for="lage">Stadtteil oder PLZ <span class="hint">(Nürnberg, bitte keine Straße)</span></label>
+<input type="text" id="lage" autocomplete="off" required placeholder="z. B. Wöhrd, 90489">
+<div class="err" id="e_lage">Bitte nennen Sie Stadtteil oder PLZ.</div>
+<div class="hinweis" id="h_ort">Die Beratung gilt bisher nur für Eigentumswohnungen im Stadtgebiet Nürnberg. Wohnungen in anderen Orten, auch in Erlangen, Fürth, Schwaig, Stein oder Zirndorf, gehören nicht dazu. Sie können den Kurz-Check trotzdem abschicken, ich melde mich aber voraussichtlich mit einer Absage.</div>
+
+<div class="row">
+<div><label for="flaeche">Wohnfläche in m²</label><input type="number" id="flaeche" min="10" max="500" step="0.1" required><div class="err" id="e_flaeche">Bitte geben Sie die Wohnfläche an.</div></div>
+<div><label for="baujahr">Baujahr <span class="hint">(ungefähr)</span></label><input type="number" id="baujahr" min="1800" max="2030" required><div class="err" id="e_baujahr">Bitte geben Sie ein Baujahr an.</div></div>
+</div>
+
+<label for="nutzung">Nutzung heute</label>
+<select id="nutzung" required>
+<option value="">Bitte wählen</option>
+<option>selbst genutzt</option>
+<option>vermietet</option>
+<option>leer</option>
+</select>
+<div class="err" id="e_nutzung">Bitte wählen Sie eine Nutzung.</div>
+
+<label for="zeit">Wann möchten Sie verkaufen?</label>
+<select id="zeit">
+<option value="">Keine Angabe</option>
+<option>so bald wie möglich</option>
+<option>in den nächsten 6 Monaten</option>
+<option>später, ich will erst wissen, was möglich ist</option>
+</select>
+
+<label for="frage">Was ist Ihre wichtigste Frage? <span class="hint">(freiwillig)</span></label>
+<textarea id="frage" maxlength="600" placeholder="z. B. Welcher Preis ist realistisch? Was bleibt mir nach dem Kredit?"></textarea>
+
+<label for="mail">Ihre E-Mail-Adresse</label>
+<input type="email" id="mail" autocomplete="email" required>
+<div class="err" id="e_mail">Bitte geben Sie eine gültige E-Mail-Adresse an.</div>
+
+<label class="check"><input type="checkbox" id="dsgvo" required><span>Ich bin damit einverstanden, dass meine Angaben genutzt werden, um mir auf diese Anfrage per E-Mail zu antworten. Weitere E-Mails erhalte ich nur, wenn ich das ausdrücklich möchte. Die <a href="index.html#datenschutz">Datenschutzerklärung</a> habe ich gelesen. <span class="platzhalter">[Wortlaut nach Datenschutzprüfung]</span></span></label>
+<div class="err" id="e_dsgvo">Bitte stimmen Sie zu, damit ich antworten darf.</div>
+
+<p style="margin-top:20px"><button type="submit" class="btn">Anfrage vorbereiten</button></p>
+</form>
+
+<div class="out" id="out" hidden>
+<h2 style="margin:0 0 8px;font-size:20px">Ihre Anfrage ist vorbereitet</h2>
+<p class="small muted">Bitte prüfen Sie den Text. Abgeschickt ist noch nichts.</p>
+<pre id="text"></pre>
+<a class="btn" id="mailto" href="#">E-Mail öffnen</a>
+<button type="button" class="btn sec" id="kopie">Text kopieren</button>
+<p class="small muted" id="kopiert" hidden>Kopiert. Sie können den Text in eine E-Mail an <span class="platzhalter">[E-Mail-Adresse]</span> einfügen.</p>
+<p class="small muted">Funktioniert „E-Mail öffnen" nicht, kopieren Sie den Text und senden Sie ihn an <span class="platzhalter">[E-Mail-Adresse]</span>.</p>
+</div>
+</div>
+
+<script>
+(function(){
+  var EMPFAENGER = "fischmac007@me.com"; // Vorschau-Kopie: Adresse gesetzt, im Original noch Platzhalter
+  var $ = function(id){return document.getElementById(id)};
+  var f = $("f");
+  // Aktives Gebiet: nur Nürnberg (Stadtgebiet). Erlangen und Fürth werden erkannt, aber noch nicht angeboten; Umlandgemeinden (z. B. Schwaig 90571, Stein, Oberasbach, Zirndorf, Schwabach) gehören nicht dazu.
+  function gebiet(v){
+    var s = v.toLowerCase();
+    var m = s.match(/\b(9\d{4})\b/);
+    if (m) {
+      var z = parseInt(m[1], 10);
+      if (z >= 90402 && z <= 90491) return "Nürnberg";
+      if (z >= 91052 && z <= 91058) return "Erlangen";
+      if (z >= 90762 && z <= 90768) return "Fürth";
+      return null;
+    }
+    if (/schwaig|stein\b|oberasbach|zirndorf|schwabach|lauf an|röthenbach|roethenbach|feucht|wendelstein|heroldsberg|eckental|herzogenaurach|baiersdorf/.test(s)) return null;
+    if (/nürnberg|nuernberg|\bnbg\b|wöhrd|woehrd|gostenhof|johannis|gleißhammer|gleisshammer|langwasser|zerzabelshof|mögeldorf|moegeldorf|schweinau|eberhardshof|maxfeld|ziegelstein|schoppershof|steinbühl|steinbuehl|tafelhof|erlenstegen|muggenhof|sankt|st\. ?jobst|sebald|lorenz/.test(s)) return "Nürnberg";
+    if (/erlangen|büchenbach|buechenbach|tennenlohe|eltersdorf|alterlangen|sieglitzhof|röthelheimpark|roethelheimpark|bruck\b|burgberg|hüttendorf|huettendorf/.test(s)) return "Erlangen";
+    if (/fürth|fuerth|dambach|burgfarrnbach|vach\b|stadeln|poppenreuth|ronhof|unterfarrnbach|hardhöhe|hardhoehe/.test(s)) return "Fürth";
+    return null;
+  }
+  $("lage").addEventListener("input", function(){
+    var v = this.value.trim();
+    $("h_ort").style.display = (v.length > 3 && gebiet(v) !== "Nürnberg") ? "block" : "none";
+  });
+  function pruefen(id, ok){ $("e_"+id).style.display = ok ? "none" : "block"; return ok; }
+  f.addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var ok = true;
+    ok = pruefen("lage", $("lage").value.trim().length > 1) && ok;
+    ok = pruefen("flaeche", parseFloat($("flaeche").value) >= 10) && ok;
+    var bj = parseInt($("baujahr").value, 10);
+    ok = pruefen("baujahr", bj >= 1800 && bj <= 2030) && ok;
+    ok = pruefen("nutzung", $("nutzung").value !== "") && ok;
+    ok = pruefen("mail", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("mail").value.trim())) && ok;
+    ok = pruefen("dsgvo", $("dsgvo").checked) && ok;
+    if (!ok) { var e = document.querySelector(".err[style*='block']"); if (e) e.scrollIntoView({block:"center"}); return; }
+    var zeilen = [
+      "Kurz-Check Eigentumswohnung" + (gebiet($("lage").value.trim()) ? " " + gebiet($("lage").value.trim()) : ""),
+      "",
+      "Lage: " + $("lage").value.trim(),
+      "Wohnfläche: " + $("flaeche").value + " m²",
+      "Baujahr: " + bj,
+      "Nutzung: " + $("nutzung").value,
+      "Verkauf: " + ($("zeit").value || "keine Angabe"),
+      "Wichtigste Frage: " + ($("frage").value.trim() || "keine Angabe"),
+      "",
+      "E-Mail: " + $("mail").value.trim(),
+      "Einwilligung zur Antwort per E-Mail: ja"
+    ];
+    var t = zeilen.join("\n");
+    $("text").textContent = t;
+    $("mailto").href = "mailto:" + encodeURIComponent(EMPFAENGER) + "?subject=" + encodeURIComponent("Kurz-Check Eigentumswohnung") + "&body=" + encodeURIComponent(t);
+    $("out").hidden = false;
+    $("out").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  $("kopie").addEventListener("click", function(){
+    var t = $("text").textContent;
+    function fertig(){ $("kopiert").hidden = false; }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(fertig, function(){ auswahl(); }); }
+      else { auswahl(); }
+    } catch (e) { auswahl(); }
+    function auswahl(){
+      var r = document.createRange(); r.selectNodeContents($("text"));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      try { if (document.execCommand("copy")) fertig(); } catch (e) {}
+    }
+  });
+})();
+</script>
+</body>
+</html>
