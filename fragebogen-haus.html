@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fragebogen Hausverkauf</title>
+<style>
+  :root { --bg:#f5f6f7; --card:#fff; --ink:#1b2127; --muted:#5d6872; --line:#d5d9dd; --accent:#17406b; --accent-ink:#fff; --ok:#1f7a4d; --warn:#9a6a00; --req:#a32626; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 18px 16px 90px; }
+  h1 { font-size: 1.5rem; margin: 6px 0 4px; color: var(--accent); }
+  h2 { font-size: 1.15rem; margin: 0 0 4px; color: var(--accent); }
+  .lead { color: var(--muted); margin: 0 0 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 14px 0; }
+  .note { background:#fff4d6; border-left:4px solid var(--warn); padding:10px 12px; border-radius:6px; font-size:.92rem; margin:10px 0; }
+  .grid { display:grid; gap: 12px 16px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } .grid .full { grid-column: 1 / -1; } }
+  label { display:block; font-weight:600; font-size:.93rem; margin-bottom:3px; }
+  .req::after { content:" *"; color: var(--req); }
+  input, select, textarea { width:100%; padding:9px 10px; border:1.5px solid var(--line); border-radius:8px; font:inherit; background:#fff; color:var(--ink); }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 3px solid #5b8cc7; outline-offset: 1px; }
+  .help { color: var(--muted); font-size:.82rem; margin-top:3px; }
+  .unit { display:flex; align-items:center; gap:8px; } .unit span { color: var(--muted); white-space:nowrap; font-size:.9rem; }
+  .bar { position: sticky; top: 0; z-index: 5; background: var(--card); border-bottom: 1px solid var(--line); padding: 8px 16px; }
+  .bar .in { max-width:780px; margin:0 auto; display:flex; align-items:center; gap:12px; font-size:.88rem; }
+  .meter { flex:1; height:8px; background:#e3e6e9; border-radius:99px; overflow:hidden; } .meter i { display:block; height:100%; width:0; background:var(--ok); transition: width .25s; }
+  .btns { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+  button { padding:11px 18px; border-radius:9px; border:1.5px solid var(--accent); background:var(--accent); color:var(--accent-ink); font:inherit; font-weight:600; cursor:pointer; }
+  button.sec { background:#fff; color:var(--accent); }
+  .err { color: var(--req); font-size:.85rem; margin-top:3px; }
+  details summary { cursor:pointer; font-weight:600; }
+  .check { display:flex; gap:10px; align-items:flex-start; margin:6px 0; font-weight:400; } .check input { width:auto; margin-top:5px; }
+  #msg { margin-top:10px; font-size:.95rem; }
+  details.multi { border:1.5px solid var(--line); border-radius:8px; background:#fff; padding:8px 10px; } details.multi[open] { border-color:var(--accent); } .mbox { margin-top:8px; display:grid; gap:2px; } .ms { font-weight:400; }
+</style>
+</head>
+<body>
+<div class="bar"><div class="in"><span id="pct">0 %</span><div class="meter"><i id="meter"></i></div><span>ausgefüllt</span></div></div>
+<div class="wrap">
+  <h1>Fragebogen: Verkauf Ihres Hauses</h1>
+  <p class="lead">Mit Ihren Angaben erstelle ich eine fundierte Marktpreiseinschätzung für Ihr Haus. Nicht alles muss sofort bekannt sein: Wo Sie etwas nicht wissen, lassen Sie das Feld leer oder wählen „weiß nicht“. Je vollständiger, desto genauer wird die Einschätzung. Für ein Haus zählt vor allem, wie groß Haus und Grundstück sind und was erneuert wurde (Teil 2 bis 4). Teil 5 (Zustand der Bauteile, mit Fotos) ist ganz freiwillig.</p>
+
+  <div class="note"><strong>Datenschutz:</strong> Dieses Formular läuft nur in Ihrem Browser. Es wird <strong>nichts gesendet oder gespeichert</strong>. Am Ende laden Sie eine Datei herunter und schicken sie mir. Bitte beachten Sie, dass eine normale E-Mail nicht verschlüsselt ist. Angaben zur genauen Adresse sind freiwillig; für die ersten Berechnungen reichen Gemeinde und Ortsteil. <span id="legalph" style="background:#fff2a8;padding:0 4px">[Datenschutzerklärung ergänzen]</span></div>
+
+  <div class="card"><details><summary>Frühere Datei weiterbearbeiten (optional)</summary>
+    <p class="help">Wenn ich Ihnen schon eine teilweise ausgefüllte Datei geschickt habe oder Sie zwischenspeichern wollten, laden Sie sie hier.</p>
+    <input type="file" id="loadFile" accept="application/json,.json"></details></div>
+
+  <form id="form" novalidate autocomplete="off"></form>
+
+  <div class="card"><details id="fotoCard"><summary>Fotos hinzufügen (optional, wenn Sie schon Fotos haben)</summary>
+    <p class="help">Für das Exposé brauche ich später Fotos. Wenn Sie schon welche haben, können Sie sie hier hinzufügen und je einem Raum zuordnen. Die Fotos werden <strong>nur in Ihrem Browser</strong> verkleinert (Standortdaten in den Bilddaten werden dabei entfernt) und in einer <strong>zweiten Datei</strong> gespeichert, die Sie mir zusammen mit der Fragebogen-Datei schicken. Es wird nichts hochgeladen oder gesendet. <strong>Fotos von Mängeln und Bauteilen sind willkommen:</strong> Wählen Sie beim Foto den Eintrag „Zustand: …“ des Bauteils.</p>
+    <label class="check"><input type="checkbox" id="fotoEinwilligung"><span>Auf den Fotos sind keine Personen und keine persönlichen Unterlagen zu sehen, und die Bewohner (zum Beispiel Mieter) sind mit der Verwendung der Fotos einverstanden.</span></label>
+    <input type="file" id="fotoInput" accept="image/*" multiple>
+    <div class="help">Mehrere Fotos auf einmal sind möglich (höchstens 30). Am besten im Querformat und bei Tageslicht aufgenommen.</div>
+    <div id="fotoListe"></div>
+    <div id="fotoInfo" class="help"></div>
+    <div class="btns">
+      <button type="button" class="sec" id="fotoSpeichern">Fotodatei herunterladen</button>
+      <button type="button" class="sec" id="fotoLaden">Frühere Fotodatei laden</button>
+      <input type="file" id="fotoLadenInput" accept="application/json,.json" style="display:none">
+    </div>
+  </details></div>
+
+  <div class="card">
+    <label class="check"><input type="checkbox" id="einwilligung"><span>Ich bin einverstanden, dass meine Angaben zur Erstellung der Marktpreiseinschätzung verwendet werden. Ich weiß, dass dies keine Verkehrswertermittlung und keine Rechts-, Steuer- oder Anlageberatung ist. <span class="req"></span></span></label>
+    <div class="btns">
+      <button type="button" id="dl">Datei herunterladen und mir schicken</button>
+      <button type="button" class="sec" id="dlpartial">Zwischenstand herunterladen</button>
+    </div>
+    <div id="msg" role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+const TRI = [["", "weiß nicht / keine Angabe"], ["ja", "Ja"], ["nein", "Nein"]];
+const GEMEINDEN = [["altdorf", "Altdorf b. Nürnberg"], ["burgthann", "Burgthann"], ["engelthal", "Engelthal"], ["feucht", "Feucht"], ["happurg", "Happurg"], ["hartenstein", "Hartenstein"], ["henfenfeld", "Henfenfeld"], ["hersbruck", "Hersbruck"],
+  ["kirchensittenbach", "Kirchensittenbach"], ["lauf", "Lauf a. d. Pegnitz"], ["leinburg", "Leinburg"], ["neuhaus", "Neuhaus a. d. Pegnitz"], ["neunkirchen", "Neunkirchen a. Sand"], ["offenhausen", "Offenhausen"], ["ottensoos", "Ottensoos"],
+  ["pommelsbrunn", "Pommelsbrunn"], ["reichenschwand", "Reichenschwand"], ["roethenbach", "Röthenbach a. d. Pegnitz"], ["rueckersdorf", "Rückersdorf"], ["schnaittach", "Schnaittach"], ["schwaig", "Schwaig (mit Behringersdorf)"],
+  ["schwarzenbruck", "Schwarzenbruck"], ["winkelhaid", "Winkelhaid"]];   // Gemeinden des Landkreises Nürnberger Land (Grundstücksmarktbericht 2025)
+const ZUSTAND = [["", "keine Angabe"], ["gut", "gut: neuwertig oder in einwandfreiem Zustand"], ["altersgemaess", "altersgemäß: funktioniert, normale Gebrauchsspuren"], ["maengel", "Mängel sichtbar: Reparatur oder Teilerneuerung nötig"], ["erneuerung", "stark abgenutzt oder defekt: Erneuerung nötig"]];
+const MOD = [["", "weiß nicht / keine Angabe"], ["nein", "nicht erneuert"], ["teilweise", "teilweise erneuert"], ["voll", "vollständig erneuert"]];
+const SECTIONS = [
+ { title: "1. Das Haus", intro: "Grunddaten. Die Wohnfläche steht im Kaufvertrag, in der Wohnflächenberechnung oder im Gutachten.", fields: [
+  { p:"objekt.gemeinde_nl", l:"Gemeinde", t:"sel", req:true, o:[["", "bitte wählen"], ...GEMEINDEN, ["andere", "andere Gemeinde (unten eintragen)"]],
+    h:"Für Häuser rechne ich derzeit mit den Daten des Landkreises Nürnberger Land. Liegt Ihr Haus anderswo, wählen Sie „andere Gemeinde“: Dann kann ich die Einschätzung erst nach einer Prüfung der Datenlage anbieten." },
+  { p:"objekt.stadt", l:"Ort (nur ausfüllen bei „andere Gemeinde“)", t:"text", ph:"z. B. Postbauer-Heng" },
+  { p:"objekt.ortsteil", l:"Ortsteil oder Siedlung (freiwillig)", t:"text", ph:"z. B. Leuzenberg" },
+  { p:"objekt.plz", l:"Postleitzahl", t:"text", ph:"5 Ziffern, z. B. 91244" },
+  { p:"objekt.strasse", l:"Straße und Hausnummer (freiwillig)", t:"text", full:true, h:"Nur nötig für die Lagebewertung auf Straßenebene (Bodenrichtwert). Sie können das auch später mündlich nennen." },
+  { p:"objekt.haustyp", l:"Haustyp", t:"sel", req:true, o:[["", "bitte wählen"], ["efh_frei", "Einfamilienhaus, freistehend"], ["zfh_frei", "Zweifamilienhaus, freistehend"], ["dhh", "Doppelhaushälfte"], ["reihenend", "Reihenendhaus"], ["reihenmittel", "Reihenmittelhaus"], ["mfh", "Mehrfamilienhaus (drei oder mehr Wohnungen)"], ["sonstiges", "anderes (z. B. Bauernhaus, Villa, Bungalow)"]],
+    h:"Mehrfamilienhäuser, Villen und Sonderobjekte sind nicht Teil der Standard-Einschätzung; ich sage Ihnen dann ehrlich, was ich liefern kann." },
+  { p:"objekt.wohneinheiten", l:"Wohneinheiten im Haus (auch Einliegerwohnung)", t:"num", min:1, max:20, step:1 },
+  { p:"objekt.baujahr", l:"Baujahr des Gebäudes", t:"num", req:true, min:1500, max:2100, step:1 },
+  { p:"objekt.anbau_jahr", l:"Jahr eines größeren Anbaus oder einer Erweiterung (falls vorhanden)", t:"num", min:1500, max:2100, step:1 },
+  { p:"objekt.bauweise", l:"Bauweise", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["massiv", "massiv (Ziegel, Beton, Kalksandstein)"], ["fertighaus", "Fertighaus in Holzbauweise (ab Erdgeschoss)"], ["fachwerk", "Fachwerk oder Holzbau (Bestand)"], ["gemischt", "gemischt (z. B. Keller massiv, Obergeschoss Holz)"]],
+    h:"Fertighäuser in Holzbauweise werden im Marktbericht mit einem Abschlag behandelt (Baujahre bis 1980)." }
+ ]},
+ { title: "2. Das Grundstück", intro: "Grundstücksgröße und Besonderheiten. Die Fläche steht im Grundbuchauszug, im Kaufvertrag oder im Lageplan.", fields: [
+  { p:"grundstueck.flaeche_m2", l:"Grundstücksfläche", t:"num", u:"m²", req:true, min:50, max:20000, step:1 },
+  { p:"grundstueck.abteilbar", l:"Wäre ein Teil des Grundstücks eigenständig bebaubar oder abtrennbar?", t:"tri", h:"Zum Beispiel ein zweites Baugrundstück im Garten. Dann gelten für den Bodenwert andere Regeln." },
+  { p:"grundstueck.hanglage", l:"Hanglage", t:"tri" },
+  { p:"grundstueck.zweite_reihe", l:"Liegt das Haus in zweiter Reihe (Zufahrt über ein anderes Grundstück oder einen schmalen Weg)?", t:"tri", full:true },
+  { p:"grundstueck.bodenrichtwert_eur_m2", l:"Bodenrichtwert Ihrer Lage in €/m² (falls bekannt)", t:"num", u:"€/m²", min:0, max:20000, step:5, h:"Aus der Bodenrichtwertkarte (BayernAtlas oder BORIS Bayern, Stichtag 01.01.2026). Wenn Sie ihn nicht kennen, lassen Sie das Feld leer: Ich ermittle ihn aus der Adresse." },
+  { p:"grundstueck.brw_flaeche_m2", l:"Fläche, auf die sich der Bodenrichtwert bezieht (falls bekannt)", t:"num", u:"m²", min:0, max:20000, step:1, h:"Steht in der Auskunft der Bodenrichtwertkarte („Fläche“, zum Beispiel 600 m²)." },
+  { p:"grundstueck.erschliessung_beitragsfrei", l:"Sind Erschließungs- und Kanalanschlussbeiträge bezahlt?", t:"tri", full:true },
+  { p:"grundstueck.nebengebaeude", l:"Nebengebäude (Garage, Carport, Gartenhaus, Werkstatt)", t:"area", full:true, ph:"z. B. Doppelgarage 36 m², Gartenhaus 12 m², Baujahr, Zustand" }
+ ]},
+ { title: "3. Flächen und Aufbau des Gebäudes", intro: "Diese Angaben bestimmen den Neubauwert, den ich für die Einschätzung brauche. Rechnen Sie nicht nach: Eine gute Schätzung genügt, wo Sie es nicht wissen.", fields: [
+  { p:"gebaeude.wohnflaeche_m2", l:"Wohnfläche gesamt", t:"num", u:"m²", req:true, min:20, max:800, h:"Balkone und Terrassen bitte nicht mitzählen, die erfragen wir unten." },
+  { p:"gebaeude.wohnflaeche_we1_m2", l:"Davon Wohnung 1 (Hauptwohnung)", t:"num", u:"m²", min:0, max:800 },
+  { p:"gebaeude.wohnflaeche_we2_m2", l:"Davon Wohnung 2 (falls vorhanden)", t:"num", u:"m²", min:0, max:800 },
+  { p:"gebaeude.nutzflaeche_keller_m2", l:"Nutzfläche Keller und Nebenräume", t:"num", u:"m²", min:0, max:500 },
+  { p:"gebaeude.keller", l:"Keller", t:"sel", req:true, o:[["", "bitte wählen"], ["voll", "voll unterkellert"], ["teil", "teilweise unterkellert"], ["keiner", "nicht unterkellert"]] },
+  { p:"gebaeude.vollgeschosse", l:"Vollgeschosse über dem Keller (ohne Dachgeschoss)", t:"sel", req:true, o:[["", "bitte wählen"], ["1", "1 (Erdgeschoss)"], ["2", "2 (Erd- und Obergeschoss)"], ["3", "3 oder mehr"]], h:"Ein Geschoss unter dem Dach zählt hier nicht mit; das fragen wir gleich." },
+  { p:"gebaeude.dachgeschoss", l:"Dachgeschoss", t:"sel", req:true, o:[["", "bitte wählen"], ["voll", "voll ausgebaut (bewohnt)"], ["teil", "teilweise ausgebaut"], ["nicht", "nicht ausgebaut"], ["flachdach", "Flachdach oder flach geneigtes Dach"]] },
+  { p:"gebaeude.dachform", l:"Dachform", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["sattel", "Satteldach"], ["walm", "Walm- oder Krüppelwalmdach"], ["pult", "Pultdach"], ["mansarde", "Mansarddach"], ["flach", "Flachdach"], ["sonstiges", "anderes"]] },
+  { p:"gebaeude.grundflaeche_m2", l:"Grundfläche des Gebäudes (Außenmaße, eine Ebene)", t:"num", u:"m²", min:20, max:600, h:"Länge mal Breite des Hauses außen, zum Beispiel 14 m mal 7 m = 98 m². Steht oft im Lageplan oder in den Bauplänen." },
+  { p:"gebaeude.bgf_m2", l:"Brutto-Grundfläche (BGF), falls bekannt (z. B. aus einem Gutachten)", t:"num", u:"m²", min:30, max:2500, h:"Summe der Grundflächen aller Ebenen einschließlich Keller und ausgebautem Dachgeschoss, nach Außenmaßen. Wenn Sie sie nicht kennen: leer lassen, ich schätze sie aus der Grundfläche." },
+  { p:"gebaeude.balkon_m2", l:"Balkon, Loggia oder Dachbalkon (zusammen)", t:"num", u:"m²", min:0, max:200 },
+  { p:"gebaeude.terrasse_m2", l:"Terrasse", t:"num", u:"m²", min:0, max:300 },
+  { p:"gebaeude.wintergarten", l:"Wintergarten", t:"tri" },
+  { p:"gebaeude.garage", l:"Garage, Carport, Stellplätze", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["keine", "keine"], ["stellplatz", "nur Stellplätze"], ["carport", "Carport"], ["garage", "Garage (eine)"], ["doppelgarage", "Doppelgarage oder mehrere Garagen"]] }
+ ]},
+ { title: "4. Zustand, Modernisierung und Ausstattung", intro: "Hier geht es darum, was am Haus erneuert wurde. Bitte ehrlich einstufen; später brauchen wir Rechnungen oder Fotos als Beleg. Fehlende Angaben lasse ich offen und weise im Bericht darauf hin.", fields: [
+  { p:"modernisierung.dach", l:"Dach (Eindeckung und Dämmung)", t:"sel", o:MOD },
+  { p:"modernisierung.dach_jahr", l:"Jahr der Dacherneuerung (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
+  { p:"modernisierung.fenster", l:"Fenster und Außentüren", t:"sel", o:MOD },
+  { p:"modernisierung.fenster_jahr", l:"Jahr der Fenstererneuerung (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
+  { p:"modernisierung.fenster_verglasung", l:"Verglasung der neueren Fenster", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["zwei", "Zweifachverglasung"], ["drei", "Dreifachverglasung"], ["alt", "Einfachverglasung oder Verbundfenster"]] },
+  { p:"modernisierung.leitungen", l:"Leitungen (Strom, Wasser, Abwasser)", t:"sel", o:MOD },
+  { p:"modernisierung.leitungen_jahr", l:"Jahr der Leitungserneuerung (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
+  { p:"modernisierung.heizung", l:"Heizungsanlage", t:"sel", o:MOD },
+  { p:"modernisierung.heizung_jahr", l:"Jahr der Heizungserneuerung (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
+  { p:"ausstattung.heizung", l:"Art der Heizung", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["gas", "Gas"], ["oel", "Öl"], ["waermepumpe", "Wärmepumpe"], ["pellets", "Holzpellets oder Scheitholz"], ["fernwaerme", "Fernwärme"], ["strom", "Strom (Nachtspeicher, Direktheizung)"], ["sonstige", "Sonstige"]] },
+  { p:"ausstattung.solar", l:"Solarthermie oder Photovoltaik", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["nein", "keine"], ["solarthermie", "Solarthermie"], ["pv", "Photovoltaik"], ["beides", "beides"]] },
+  { p:"modernisierung.aussenwand", l:"Wärmedämmung der Außenwände (Fassade)", t:"sel", o:MOD },
+  { p:"modernisierung.aussenwand_jahr", l:"Jahr der Fassadendämmung (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
+  { p:"modernisierung.baeder", l:"Bäder und WCs", t:"sel", o:MOD },
+  { p:"modernisierung.baeder_jahr", l:"Jahr der Badsanierung (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
+  { p:"ausstattung.baeder_anzahl", l:"Anzahl Bäder und separater WCs insgesamt", t:"num", min:0, max:12, step:1 },
+  { p:"modernisierung.innenausbau", l:"Innenausbau (Böden, Treppen, Türen, Decken)", t:"sel", o:MOD },
+  { p:"modernisierung.innenausbau_jahr", l:"Jahr des Innenausbaus (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
+  { p:"ausstattung.boden", l:"Fußbodenbelag (überwiegend)", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["hochwertig", "hochwertig (Parkett, Naturstein, Fischgrät)"], ["normal", "normal (Laminat, Vinyl, Fliesen, Teppich)"], ["einfach", "einfach oder abgenutzt"]] },
+  { p:"ausstattung.fussbodenheizung", l:"Fußbodenheizung", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["nein", "nein"], ["teilweise", "teilweise"], ["ueberwiegend", "überwiegend oder im ganzen Haus"]] },
+  { p:"modernisierung.grundriss", l:"Wurde der Grundriss wesentlich verbessert (Umbau, Dachgeschossausbau, Durchbrüche)?", t:"sel", o:MOD, h:"Zum Beispiel ein Dachgeschoss, das erst nachträglich ausgebaut wurde." },
+  { p:"modernisierung.grundriss_jahr", l:"Jahr des Umbaus (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
+  { p:"modernisierung.kernsanierung_jahr", l:"Jahr der Kernsanierung (nur falls vorhanden)", t:"num", min:1900, max:2100, step:1, h:"Nur ausfüllen, wenn das Haus bis auf den Rohbau erneuert wurde (Leitungen, Fenster, Dach, Heizung, Dämmung). Einzelne Maßnahmen zählen nicht. Der Berater prüft den Umfang." },
+  { p:"ausstattung.standard", l:"Gesamteindruck der Ausstattung", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["einfach", "einfach (Standard der Baujahre, wenig Komfort)"], ["mittel", "mittel (üblicher Standard)"], ["gehoben", "gehoben (hochwertige Böden, Bäder, Fenster)"], ["stark_gehoben", "stark gehoben (außergewöhnliche Ausstattung)"]],
+    h:"Das ist Ihre Einschätzung. Wie sehr ich sie für die Berechnung übernehme, prüfe ich mit Fotos und Rechnungen." },
+  { p:"zustand.maengel", l:"Bekannte Mängel und Bauschäden (z. B. Feuchte im Keller, Risse, Schimmel, Setzungen)", t:"area", full:true },
+  { p:"zustand.instandhaltungsstau", l:"Anstehende Arbeiten in den nächsten Jahren (Dach, Fassade, Heizung, Keller)", t:"area", full:true, h:"Auch Arbeiten, die Sie bewusst nicht gemacht haben. Käufer fragen danach." },
+  { p:"zustand.instandhaltungsstau_eur", l:"Geschätzte Kosten dieser Arbeiten und der Mängel zusammen", t:"num", u:"€", min:0, max:2000000, step:1000, h:"Eine grobe Schätzung genügt (am besten nach einem Angebot). Der Marktbericht bereinigt die Kaufpreise um solche Mängel; ohne diese Zahl rechne ich mit einem Haus in durchschnittlichem Zustand für sein Alter." }
+ ]},
+{ title: "5. Zustand der Bauteile (freiwillig, mit Fotos)", intro: "Dieser ganze Teil ist freiwillig. Er hilft mir, anstehende Arbeiten und Mängel realistisch einzuschätzen. Wählen Sie je Bauteil den Zustand und laden Sie, wenn Sie mögen, weiter unten Fotos hoch (im Abschnitt „Fotos hinzufügen“ beim Foto das passende Bauteil wählen, am besten ein Übersichtsfoto und eine Nahaufnahme). Fotos ersetzen keine Besichtigung: Verdeckte Schäden wie Feuchte hinter Wänden sieht man nicht. Mängel, die Sie kennen, müssen Sie Käufern in der Regel ohnehin nennen.", fields: [
+  { p:"bauteile.dach_stufe", l:"Dach (Eindeckung, Dachstuhl, Dämmung, Dachfenster)", t:"sel", o:ZUSTAND },
+  { p:"bauteile.dach_deckung", l:"Dacheindeckung", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["ziegel", "Tonziegel oder Betondachstein"], ["faserzement", "Wellplatten oder Faserzement (älter auch „Eternit“)"], ["schiefer", "Schiefer"], ["metall", "Metall (Blech, Zink)"], ["flach", "Flachdach (Bitumen, Folie)"], ["sonstiges", "anderes"]], h:"Faserzement-Platten aus der Zeit vor 1993 können Asbest enthalten; das sollte ein Fachbetrieb prüfen." },
+  { p:"bauteile.dach_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. Moos, Ziegel gebrochen, undicht an der Gaube" },
+  { p:"bauteile.fassade_stufe", l:"Fassade (Putz, Anstrich, Verkleidung, Sockel)", t:"sel", o:ZUSTAND },
+  { p:"bauteile.fassade_art", l:"Art der Fassade", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["putz", "Putz oder Anstrich"], ["wdvs", "Wärmedämmverbundsystem"], ["klinker", "Klinker oder Verblender"], ["holz", "Holz oder Verkleidung"], ["sonstiges", "anderes"]] },
+  { p:"bauteile.fassade_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. Risse im Putz an der Westseite" },
+  { p:"bauteile.fenster_stufe", l:"Fenster und Außentüren", t:"sel", o:ZUSTAND },
+  { p:"bauteile.fenster_anzahl", l:"Anzahl der Fenster und Türen ungefähr", t:"num", min:0, max:200, step:1 },
+  { p:"bauteile.fenster_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. Rollladen klemmt, Dichtungen porös" },
+  { p:"bauteile.baeder_stufe", l:"Bäder und WCs", t:"sel", o:ZUSTAND },
+  { p:"bauteile.baeder_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. Fliesen aus den 80ern, Silikonfugen schimmelig" },
+  { p:"bauteile.heizung_stufe", l:"Heizung und Warmwasser", t:"sel", o:ZUSTAND },
+  { p:"bauteile.heizung_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. Kessel von 1998, Lärm, Wartungsstau" },
+  { p:"bauteile.elektro_stufe", l:"Elektroinstallation (Zählerschrank, Leitungen, Steckdosen)", t:"sel", o:ZUSTAND },
+  { p:"bauteile.elektro_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. alter Sicherungskasten, wenige Steckdosen" },
+  { p:"bauteile.keller_stufe", l:"Keller und Gründung (Feuchte, Risse)", t:"sel", o:ZUSTAND },
+  { p:"bauteile.keller_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. Feuchtigkeit an der Nordwand, Salzausblühungen" },
+  { p:"bauteile.boeden_stufe", l:"Bodenbeläge", t:"sel", o:ZUSTAND },
+  { p:"bauteile.boeden_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. Teppich abgenutzt, Parkett abgeschliffen" },
+  { p:"bauteile.innen_stufe", l:"Wände, Decken, Treppen, Türen, Küche", t:"sel", o:ZUSTAND },
+  { p:"bauteile.innen_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. Tapeten, Holzdecken, alte Küche" },
+  { p:"bauteile.aussen_stufe", l:"Außenanlagen (Terrasse, Zufahrt, Zaun, Garage)", t:"sel", o:ZUSTAND },
+  { p:"bauteile.aussen_text", l:"Was ist auffällig? (freiwillig)", t:"text", ph:"z. B. Pflaster abgesackt, Garagentor defekt" }
+ ]},
+ { title: "6. Energieausweis", intro: "Der Energieausweis ist beim Verkauf vorzulegen. Bitte die Angaben genau so abschreiben, wie sie im Ausweis stehen.", fields: [
+  { p:"energie.ausweis_art", l:"Art", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["bedarf", "Bedarfsausweis"], ["verbrauch", "Verbrauchsausweis"], ["fehlt", "liegt noch nicht vor"]] },
+  { p:"energie.klasse", l:"Energieeffizienzklasse", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["A+", "A+"], ["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"], ["E", "E"], ["F", "F"], ["G", "G"], ["H", "H"]] },
+  { p:"energie.kennwert_kwh", l:"Kennwert (Endenergie)", t:"num", u:"kWh/(m²·a)", min:0, max:1000 },
+  { p:"energie.gueltig_bis", l:"Gültig bis (Monat/Jahr)", t:"text", ph:"z. B. 05/2030" }
+ ]},
+ { title: "7. Vermietung", intro: "Falls das Haus oder Teile davon vermietet sind. Vermietete Häuser werden im Marktbericht mit einem eigenen Abschlag behandelt.", fields: [
+  { p:"vermietung.vermietet", l:"Ist das Haus oder ein Teil davon vermietet?", t:"tri", req:true },
+  { p:"vermietung.anzahl_vermietet", l:"Wie viele Einheiten sind vermietet?", t:"num", min:0, max:20, step:1 },
+  { p:"vermietung.nettokaltmiete_gesamt", l:"Nettokaltmiete aller vermieteten Einheiten zusammen", t:"num", u:"€/Monat", min:0, max:30000 },
+  { p:"vermietung.mietvertrag_datum", l:"Beginn des (ältesten) Mietvertrags", t:"text", ph:"z. B. 01.03.2022", h:"Tag.Monat.Jahr, ersatzweise Monat.Jahr oder nur das Jahr." },
+  { p:"vermietung.mieter_bleibt", l:"Soll der Mieter nach dem Verkauf bleiben?", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["ja", "ja, Mieter bleibt"], ["nein", "nein, wird frei übergeben"], ["unklar", "noch unklar"]] },
+  { p:"vermietung.eigennutzung", l:"Wie viele Einheiten bewohnen Sie oder Ihre Familie selbst?", t:"num", min:0, max:20, step:1 }
+ ]},
+ { title: "8. Rechtliches und Belastungen", intro: "Diese Punkte können den Preis und die Verkäuflichkeit beeinflussen. Lassen Sie offen, was Sie nicht wissen; ich weise im Bericht darauf hin, was zu klären ist.", fields: [
+  { p:"recht.erbbaurecht", l:"Steht das Haus auf einem Erbbaurechtsgrundstück?", t:"tri" },
+  { p:"recht.wohnrecht", l:"Gibt es ein Wohnrecht, Nießbrauch oder Leibgeding zugunsten einer anderen Person?", t:"tri", h:"Zum Beispiel für die Eltern nach einer Übergabe. Das steht im Grundbuch (Abteilung II)." },
+  { p:"recht.wegerecht", l:"Gibt es Wege- oder Leitungsrechte oder Baulasten?", t:"tri" },
+  { p:"recht.weg_geteilt", l:"Ist das Haus in Wohnungseigentum aufgeteilt (zwei getrennte Grundbuchblätter)?", t:"tri", full:true, h:"Bei Zweifamilienhäusern kommt das vor. Dann verkaufen Sie rechtlich Wohnungen, kein Haus." },
+  { p:"recht.denkmal", l:"Steht das Haus unter Denkmalschutz oder in einem Sanierungsgebiet?", t:"tri" },
+  { p:"recht.bebauungsplan", l:"Weicht die tatsächliche Nutzung vom Bebauungsplan ab (z. B. Wochenendgebiet, Außenbereich)?", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["nein", "nein, normales Wohngebiet"], ["ja", "ja, es gibt Abweichungen"]], h:"Das betrifft zum Beispiel Wochenendhäuser, die dauerhaft bewohnt werden. Im Zweifel fragen Sie bei der Gemeinde nach." },
+  { p:"recht.genehmigungen", l:"Liegen für alle Anbauten und Umbauten Baugenehmigungen vor?", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["ja", "ja, alles genehmigt"], ["teilweise", "teilweise oder unklar"], ["nein", "nein"]] },
+  { p:"recht.mehrere_eigentuemer", l:"Gehört das Haus mehreren Eigentümern (z. B. Ehepartner, Erbengemeinschaft)?", t:"tri" }
+ ]},
+ { title: "9. Gutachten (falls vorhanden)", intro: "Ein Wertgutachten ist der beste Prüfstein für meine Einschätzung. Bitte nur ausfüllen, wenn es schon vorliegt.", fields: [
+  { p:"gutachten.vorhanden", l:"Gibt es ein Wertgutachten für das Haus?", t:"tri" },
+  { p:"gutachten.stichtag", l:"Wertermittlungsstichtag", t:"text", ph:"z. B. 15.10.2026" },
+  { p:"gutachten.verkehrswert_eur", l:"Verkehrswert laut Gutachten", t:"num", u:"€", min:0, max:20000000 },
+  { p:"gutachten.bodenwert_eur", l:"Bodenwert laut Gutachten", t:"num", u:"€", min:0, max:20000000 },
+  { p:"gutachten.verfahren", l:"Wertermittlungsverfahren", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["sachwert", "Sachwertverfahren"], ["ertragswert", "Ertragswertverfahren"], ["vergleichswert", "Vergleichswertverfahren"], ["mehrere", "mehrere Verfahren"]] },
+  { p:"gutachten.ersteller", l:"Wer hat das Gutachten erstellt? (freiwillig)", t:"text" }
+ ]},
+ { title: "10. Ihre Ziele und Ihr Kauf", intro: "Damit ich die Empfehlung auf Ihre Situation abstimmen kann.", fields: [
+  { p:"verkauf.preisvorstellung", l:"Preisvorstellung", t:"num", u:"€", min:0 },
+  { p:"verkauf.garage_im_preis", l:"Garage und Nebengebäude: Sind sie in der Preisvorstellung enthalten?", t:"sel", o:[["", "keine Angabe"], ["im_preis", "ja, im Preis enthalten"], ["aufpreis", "gegen Aufpreis"], ["nein", "nicht Teil des Verkaufs"]] },
+  { p:"verkauf.zeitrahmen_monate", l:"Gewünschter Zeitrahmen", t:"sel", o:[["", "keine Angabe"], ["unter 3", "unter 3 Monate"], ["3-6", "3 bis 6 Monate"], ["6-12", "6 bis 12 Monate"], ["offen", "kein fester Zeitrahmen"]] },
+  { p:"verkauf.restschuld", l:"Restschuld bei der Bank (freiwillig)", t:"num", u:"€", min:0 },
+  { p:"verkauf.vorfaelligkeit_eur", l:"Vorfälligkeitsentschädigung laut Bank (nur wenn schon angefragt)", t:"num", u:"€", min:0 },
+  { p:"verkauf.inventar_mitverkauf", l:"Küche, Einbauten und Möbel", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["ja", "sollen mit verkauft werden"], ["nein", "sollen nicht mit verkauft werden"], ["offen", "noch offen"]] },
+  { p:"verkauf.ziele_auswahl", l:"Was ist Ihnen beim Verkauf besonders wichtig?", t:"multi", full:true, o:[["hoher_preis", "Ein möglichst hoher Preis"], ["schnell", "Eine schnelle Abwicklung"], ["sicherheit", "Sicherheit (solide Käufer, gesicherte Finanzierung)"],
+    ["wenig_aufwand", "Wenig Aufwand für mich"], ["diskretion", "Diskretion (wenig Öffentlichkeit, wenige Besichtigungen)"], ["termin", "Ein fester Übergabe- oder Verkaufstermin"], ["eigennutzer", "Ein Käufer, der selbst einzieht"], ["provision", "Maklerprovision sparen"],
+    ["begleitung", "Begleitung bei Notar, Bank und Unterlagen"], ["steuer", "Steuerliche Fristen beachten"]], h:"Mehrfachauswahl möglich: Menü öffnen und Zutreffendes ankreuzen." },
+  { p:"verkauf.ziele", l:"Sonstiges (optional, schriftlicher Nachtrag)", t:"area", full:true },
+  { p:"fall.kaufjahr", l:"Jahr, in dem Sie das Haus gekauft oder geerbt haben", t:"num", min:1900, max:2100, step:1, h:"Wichtig für die steuerliche Frist (Spekulationsfrist), die ich nicht beurteile; die Steuerberatung klärt das." },
+  { p:"fall.kaufpreis_eur", l:"Kaufpreis laut Kaufvertrag (falls gekauft)", t:"num", u:"€", min:0 },
+  { p:"fall.selbstgenutzt_bis", l:"Bis wann haben Sie das Haus selbst bewohnt (Jahr)?", t:"num", min:1900, max:2100, step:1 },
+  { p:"fall.bisher_versucht", l:"Haben Sie bereits einen Verkauf versucht oder einen Makler angefragt?", t:"sel", full:true, o:[["", "keine Angabe"], ["nein", "nein"], ["makler_angefragt", "Makler angefragt"], ["inseriert", "bereits inseriert"], ["anderes", "anderes"]] }
+ ]}
+];
+const UNTERLAGEN = [
+ ["grundbuchauszug", "Grundbuchauszug"], ["lageplan", "Lageplan oder Flurkarte"], ["grundrisse", "Grundrisse und Bauzeichnungen"], ["wohnflaeche", "Wohnflächenberechnung"], ["energieausweis", "Energieausweis"],
+ ["baugenehmigung", "Baugenehmigung und Genehmigungen für Anbauten"], ["gutachten", "Wertgutachten (falls vorhanden)"], ["rechnungen", "Rechnungen zu Modernisierungen (Heizung, Fenster, Dach, Bäder)"], ["mietvertraege", "Mietverträge (falls vermietet)"], ["versicherung", "Gebäudeversicherung mit Wohnflächenangabe"]];
+
+
+const form = document.getElementById('form');
+const el = {}; // path -> element
+
+function fieldHtml(f) {
+  const id = 'f_' + f.p.replace(/\./g, '_');
+  const cls = f.full ? ' class="full"' : '';
+  let ctl;
+  if (f.t === 'tri') ctl = `<select id="${id}">${TRI.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
+  else if (f.t === 'sel') ctl = `<select id="${id}">${f.o.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
+  else if (f.t === 'multi') ctl = `<details class="multi" id="${id}"><summary><span class="ms">Auswahl öffnen (nichts ausgewählt)</span></summary><div class="mbox">${f.o.map(o => `<label class="check"><input type="checkbox" data-m="${id}" value="${o[0]}"><span>${o[1]}</span></label>`).join('')}</div></details>`;
+  else if (f.t === 'area') ctl = `<textarea id="${id}" rows="3" placeholder="${f.ph || ''}"></textarea>`;
+  else if (f.t === 'num') { const inp = `<input id="${id}" type="number" inputmode="decimal" ${f.min!=null?`min="${f.min}"`:''} ${f.max!=null?`max="${f.max}"`:''} step="${f.step || 'any'}">`; ctl = f.u ? `<div class="unit">${inp}<span>${f.u}</span></div>` : inp; }
+  else ctl = `<input id="${id}" type="text" placeholder="${f.ph || ''}">`;
+  return `<div${cls}><label for="${id}"${f.req ? ' class="req"' : ''}>${f.l}</label>${ctl}${f.h ? `<div class="help">${f.h}</div>` : ''}<div class="err" id="e_${id}"></div></div>`;
+}
+form.innerHTML = SECTIONS.map(s => `<div class="card"><h2>${s.title}</h2><p class="lead">${s.intro}</p><div class="grid">${s.fields.map(fieldHtml).join('')}</div></div>`).join('') +
+  `<div class="card"><h2>11. Unterlagen</h2><p class="lead">Welche Unterlagen haben Sie bereits? Sie müssen sie jetzt nicht mitschicken.</p>${UNTERLAGEN.map(u => `<label class="check"><input type="checkbox" data-doc="${u[0]}"><span>${u[1]}</span></label>`).join('')}</div>`;
+SECTIONS.forEach(s => s.fields.forEach(f => { f.id = 'f_' + f.p.replace(/\./g, '_'); el[f.p] = document.getElementById(f.id); }));
+const fd = (p) => SECTIONS.flatMap(s => s.fields).find(x => x.p === p);
+
+function readField(f) {
+  const e = el[f.p];
+  if (f.t === 'multi') { const w = [...e.querySelectorAll('input[type=checkbox]:checked')].map(c => c.value); return w.length ? w : null; }
+  const v = e.value.trim();
+  if (f.t === 'tri') return v === 'ja' ? true : v === 'nein' ? false : null;
+  if (f.t === 'num') return v === '' ? null : Number(v);
+  return v === '' ? null : v;
+}
+function setNested(o, path, val) { const k = path.split('.'); let c = o; k.slice(0, -1).forEach(x => c = (c[x] = c[x] || {})); c[k[k.length - 1]] = val; }
+
+function buildJson() {
+  const out = { schema: 'fragebogen-verkauf-haus-v1', erstellt: new Date().toISOString().slice(0, 10) };
+  SECTIONS.forEach(s => s.fields.forEach(f => setNested(out, f.p, readField(f))));
+  { const o = out.objekt, gem = GEMEINDEN.find(x => x[0] === o.gemeinde_nl);   // Klartext der Gemeinde für die Auswertung
+    if (gem) { o.gemeinde = gem[1]; if (!o.stadt) o.stadt = gem[1]; } else if (o.gemeinde_nl === 'andere') o.gemeinde = o.stadt || null; }
+  out.unterlagen = {};
+  document.querySelectorAll('[data-doc]').forEach(c => out.unterlagen[c.dataset.doc] = c.checked);
+  out.einwilligung = document.getElementById('einwilligung').checked;
+  if (typeof fotos !== 'undefined' && fotos.length) out.fotos_anzahl = fotos.length;
+  return out;
+}
+
+
+// Datum als TT.MM.JJJJ, MM.JJJJ oder JJJJ; Jahr zwischen 1950 und heute, Tag und Monat müssen existieren
+function datumOk(t) {
+  const m = /^(?:(?:(\d{1,2})\.)?(\d{1,2})\.)?(\d{4})$/.exec(String(t).trim());
+  if (!m) return false;
+  const tag = m[1] ? +m[1] : null, mon = m[2] ? +m[2] : null, jahr = +m[3];
+  if (jahr < 1950 || jahr > new Date().getFullYear()) return false;
+  if (mon !== null && (mon < 1 || mon > 12)) return false;
+  if (tag !== null) { const d = new Date(jahr, mon - 1, tag); if (d.getMonth() !== mon - 1 || d.getDate() !== tag) return false; }
+  return true;
+}
+function validate(final) {
+  let ok = true;
+  document.querySelectorAll('.err').forEach(e => e.textContent = '');
+  const err = (f, t) => { document.getElementById('e_' + f.id).textContent = t; ok = false; };
+  SECTIONS.forEach(s => s.fields.forEach(f => {
+    const v = readField(f);
+    if (final && f.req && (v === null)) err(f, 'Bitte ausfüllen.');
+    if (f.t === 'num' && v !== null) {
+      if (!Number.isFinite(v)) err(f, 'Bitte eine Zahl eingeben.');
+      else if (f.min != null && v < f.min) err(f, `Wert zu klein (mindestens ${f.min}).`);
+      else if (f.max != null && v > f.max) err(f, `Wert zu groß (höchstens ${f.max}).`);
+    }
+  }));
+  const g = (p) => readField(fd(p)), f = fd;
+  const plz = g('objekt.plz');
+  if (plz !== null && !/^\d{5}$/.test(plz)) err(f('objekt.plz'), 'Die Postleitzahl hat 5 Ziffern.');
+  if (g('objekt.gemeinde_nl') === 'andere' && g('objekt.stadt') === null) err(f('objekt.stadt'), 'Bitte den Ort eintragen.');
+  const bj = g('objekt.baujahr'), ab = g('objekt.anbau_jahr');
+  if (bj !== null && ab !== null && ab < bj) err(f('objekt.anbau_jahr'), 'Der Anbau liegt vor dem Baujahr. Bitte prüfen.');
+  ['dach', 'fenster', 'leitungen', 'heizung', 'aussenwand', 'baeder', 'innenausbau', 'grundriss', 'kernsanierung'].forEach(k => {
+    const jp = k === 'kernsanierung' ? 'modernisierung.kernsanierung_jahr' : 'modernisierung.' + k + '_jahr', j = g(jp), st = k === 'kernsanierung' ? null : g('modernisierung.' + k);
+    if (j !== null && bj !== null && j < bj) err(f(jp), 'Das Jahr liegt vor dem Baujahr des Hauses. Bitte prüfen.');
+    if (j !== null && st === 'nein') err(f(jp), 'Sie haben „nicht erneuert“ gewählt und ein Jahr eingetragen. Bitte prüfen.');
+  });
+  [['dach', 'dach'], ['fenster', 'fenster'], ['heizung', 'heizung'], ['baeder', 'baeder'], ['innenausbau', 'innen']].forEach(([m, b]) => {
+    const st = g('bauteile.' + b + '_stufe');
+    if (g('modernisierung.' + m) === 'voll' && (st === 'erneuerung')) err(f('bauteile.' + b + '_stufe'), 'Sie haben dieses Bauteil als „vollständig erneuert“ angegeben, hier aber „Erneuerung nötig“. Bitte prüfen.');
+  });
+  const w = g('gebaeude.wohnflaeche_m2'), w1 = g('gebaeude.wohnflaeche_we1_m2'), w2 = g('gebaeude.wohnflaeche_we2_m2');
+  if (w !== null && w1 !== null && w2 !== null && Math.abs(w1 + w2 - w) > 3) err(f('gebaeude.wohnflaeche_we2_m2'), 'Wohnung 1 plus Wohnung 2 ergibt nicht die Wohnfläche gesamt. Bitte prüfen.');
+  if (w !== null && w1 !== null && w1 > w + 1) err(f('gebaeude.wohnflaeche_we1_m2'), 'Wohnung 1 ist größer als die gesamte Wohnfläche. Bitte prüfen.');
+  const gs = g('grundstueck.flaeche_m2'), gf = g('gebaeude.grundflaeche_m2'), bgf = g('gebaeude.bgf_m2');
+  if (gs !== null && gf !== null && gf > gs) err(f('gebaeude.grundflaeche_m2'), 'Die Grundfläche des Hauses ist größer als das Grundstück. Bitte prüfen.');
+  if (bgf !== null && w !== null && (bgf / w < 1 || bgf / w > 4.5)) err(f('gebaeude.bgf_m2'), 'Brutto-Grundfläche und Wohnfläche passen nicht zusammen (üblich: das 1,3- bis 3-fache). Bitte prüfen.');
+  if (gf !== null && w !== null && gf * 4 < w * 0.8) err(f('gebaeude.grundflaeche_m2'), 'Bei dieser Grundfläche ist so viel Wohnfläche kaum möglich (höchstens vier Ebenen). Bitte prüfen.');
+  const ve = g('vermietung.vermietet'), av = g('vermietung.anzahl_vermietet'), we = g('objekt.wohneinheiten');
+  if (ve === false && av) err(f('vermietung.anzahl_vermietet'), 'Sie haben „nicht vermietet“ gewählt und eine Anzahl eingetragen. Bitte prüfen.');
+  if (av !== null && we !== null && av > we) err(f('vermietung.anzahl_vermietet'), 'Mehr vermietete Einheiten als Wohneinheiten im Haus. Bitte prüfen.');
+  const mvd = g('vermietung.mietvertrag_datum');
+  if (mvd !== null && !datumOk(mvd)) err(f('vermietung.mietvertrag_datum'), 'Bitte als 01.03.2022, 03.2022 oder 2022 eingeben (Jahr zwischen 1950 und heute).');
+  const gst = g('gutachten.stichtag');
+  if (gst !== null && !datumOk(gst)) err(f('gutachten.stichtag'), 'Bitte als 15.10.2026, 10.2026 oder 2026 eingeben.');
+  const bw = g('gutachten.bodenwert_eur'), vw = g('gutachten.verkehrswert_eur');
+  if (bw !== null && vw !== null && bw > vw) err(f('gutachten.bodenwert_eur'), 'Der Bodenwert kann nicht höher als der Verkehrswert sein. Bitte prüfen.');
+  const kj = g('fall.kaufjahr'), sb = g('fall.selbstgenutzt_bis');
+  if (kj !== null && sb !== null && sb < kj) err(f('fall.selbstgenutzt_bis'), 'Das Jahr liegt vor dem Kaufjahr. Bitte prüfen.');
+  return ok;
+}
+
+function progress() {
+  const all = SECTIONS.flatMap(s => s.fields); const key = all.filter(f => !['objekt.strasse', 'objekt.stadt', 'objekt.ortsteil', 'verkauf.ziele', 'verkauf.ziele_auswahl', 'verkauf.restschuld', 'zustand.maengel', 'zustand.instandhaltungsstau', 'grundstueck.nebengebaeude'].includes(f.p) && !f.p.startsWith('fall.') && !f.p.startsWith('gutachten.') && !f.p.endsWith('_jahr') && !f.p.startsWith('vermietung.') && !f.p.startsWith('recht.') && !f.p.startsWith('bauteile.'));
+  const filled = key.filter(f => readField(f) !== null).length; const p = Math.round(filled / key.length * 100);
+  document.getElementById('pct').textContent = p + ' %'; document.getElementById('meter').style.width = p + '%';
+}
+form.addEventListener('input', progress); form.addEventListener('change', progress);
+
+function multiRefresh() { document.querySelectorAll('details.multi').forEach(d => { const n = d.querySelectorAll('input[type=checkbox]:checked').length; d.querySelector('.ms').textContent = n ? n + ' ausgewählt' + (n > 3 ? '' : ': ' + [...d.querySelectorAll('input:checked')].map(c => c.nextElementSibling.textContent).join('; ')) : 'Auswahl öffnen (nichts ausgewählt)'; }); }
+form.addEventListener('change', multiRefresh);
+
+function download(json, name) {
+  const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+}
+const msg = (t) => document.getElementById('msg').textContent = t;
+document.getElementById('dlpartial').addEventListener('click', () => {
+  if (!validate(false)) { msg('Bitte die markierten Felder prüfen.'); return; }
+  download(buildJson(), 'fragebogen-haus-zwischenstand-' + new Date().toISOString().slice(0, 10) + '.json');
+  msg('Zwischenstand heruntergeladen. Mit „Frühere Datei weiterbearbeiten“ können Sie später weitermachen.');
+});
+document.getElementById('dl').addEventListener('click', () => {
+  if (!validate(true)) { msg('Bitte die markierten Felder prüfen. Pflichtfelder sind mit * gekennzeichnet.'); return; }
+  if (!document.getElementById('einwilligung').checked) { msg('Bitte stimmen Sie der Verwendung Ihrer Angaben zu.'); return; }
+  download(buildJson(), 'fragebogen-haus-' + new Date().toISOString().slice(0, 10) + '.json');
+  msg('Fertig: Die Datei wurde heruntergeladen. Bitte schicken Sie sie mir. Danke!' + (typeof fotos !== 'undefined' && fotos.length && !fotoGespeichert ? ' Sie haben Fotos hinzugefügt: Bitte laden Sie auch die Fotodatei herunter (Abschnitt „Fotos hinzufügen“) und schicken Sie beide Dateien.' : ''));
+});
+
+document.getElementById('loadFile').addEventListener('change', (ev) => {
+  const file = ev.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (d.schema !== 'fragebogen-verkauf-haus-v1') throw new Error('schema');
+      SECTIONS.forEach(s => s.fields.forEach(f => {
+        let v = d; f.p.split('.').forEach(k => v = (v && typeof v === 'object') ? v[k] : undefined);
+        const e = el[f.p];
+        if (f.t === 'multi') { const set = Array.isArray(v) ? v : []; e.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = set.indexOf(cb.value) >= 0); multiRefresh(); return; }
+        if (v === undefined || v === null) { e.value = ''; return; }
+        e.value = f.t === 'tri' ? (v ? 'ja' : 'nein') : String(v);
+      }));
+      document.querySelectorAll('[data-doc]').forEach(c => c.checked = !!(d.unterlagen && d.unterlagen[c.dataset.doc]));
+      progress(); msg('Datei geladen. Bitte prüfen und ergänzen.');
+    } catch (e) { msg('Diese Datei passt nicht zum Fragebogen.'); }
+  };
+  r.readAsText(file);
+});
+
+// ---- Fotos (optional): Bilder im Browser verkleinern, einem Raum zuordnen und als zweite Datei speichern (Schema fragebogen-fotos-v1)
+const FOTO_RAEUME = [["hauptfoto","Hauptfoto (bestes Bild)"],["aussen","Haus von außen"],["garten","Garten / Grundstück"],["dach","Dach / Fassade"],["wohnzimmer","Wohnzimmer"],["essbereich","Essbereich"],["kueche","Küche"],["bad","Bad"],["gaeste_wc","Gäste-WC / zweites Bad"],
+  ["schlafzimmer","Schlafzimmer"],["zimmer","weiteres Zimmer"],["flur","Flur / Eingang"],["balkon","Balkon / Terrasse"],["keller","Keller / Abstellraum"],["stellplatz","Garage / Nebengebäude"],["grundriss","Grundriss"],["b_dach","Zustand: Dach"],["b_fassade","Zustand: Fassade"],["b_fenster","Zustand: Fenster und Türen"],["b_bad","Zustand: Bad oder WC"],["b_heizung","Zustand: Heizung"],["b_elektro","Zustand: Elektro"],["b_keller","Zustand: Keller und Feuchte"],["b_boden","Zustand: Boden"],["b_innen","Zustand: Wände, Decken, Treppen, Küche"],["b_aussen","Zustand: Außenanlagen"],["sonstiges","Sonstiges"]];
+const fotos = []; let fotoGespeichert = false;
+(function () {
+  const el = (id) => document.getElementById(id), MAXFOTOS = 30, MAXKANTE = 1600, QUALITAET = 0.82;
+  function verkleinern(file) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onerror = () => rej(new Error('Datei nicht lesbar'));
+      r.onload = () => { const im = new Image(); im.onerror = () => rej(new Error('Dieses Bildformat kann der Browser nicht lesen (zum Beispiel HEIC). Bitte als JPEG speichern.'));
+        im.onload = () => { const s = Math.min(1, MAXKANTE / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.width * s)); c.height = Math.max(1, Math.round(im.height * s));
+          const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+          const url = c.toDataURL('image/jpeg', QUALITAET); res({ url, w: c.width, h: c.height, bytes: Math.round(url.length * 0.75) }); };
+        im.src = r.result; };
+      r.readAsDataURL(file);
+    });
+  }
+  function mb(b) { return (b / 1048576).toFixed(1).replace('.', ',') + ' MB'; }
+  function zeichne() {
+    const box = el('fotoListe'); box.textContent = '';
+    fotos.forEach((f, i) => {
+      const row = document.createElement('div'); row.style.cssText = 'display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:start;border-top:1px solid var(--line);padding:10px 0;';
+      const im = document.createElement('img'); im.src = f.url; im.alt = ''; im.style.cssText = 'width:90px;height:68px;object-fit:cover;border-radius:6px;background:#eee;';
+      const rechts = document.createElement('div');
+      const sel = document.createElement('select'); FOTO_RAEUME.forEach(r => { const o = document.createElement('option'); o.value = r[0]; o.textContent = r[1]; sel.appendChild(o); }); sel.value = f.raum; sel.setAttribute('aria-label', 'Raum des Fotos ' + (i + 1));
+      sel.onchange = () => { f.raum = sel.value; fotoGespeichert = false; };
+      const t = document.createElement('input'); t.type = 'text'; t.maxLength = 120; t.placeholder = 'Beschreibung (optional), z. B. „Küche mit Blick zum Balkon“'; t.value = f.text; t.style.marginTop = '6px'; t.setAttribute('aria-label', 'Beschreibung des Fotos ' + (i + 1));
+      t.oninput = () => { f.text = t.value; fotoGespeichert = false; };
+      const zl = document.createElement('div'); zl.className = 'help'; zl.textContent = (f.name || 'Foto') + ' · ' + f.w + ' × ' + f.h + ' Pixel · ' + mb(f.bytes) + ' ';
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'sec'; b.style.cssText = 'padding:3px 10px;font-size:.8rem;margin-left:6px'; b.textContent = 'Entfernen';
+      b.onclick = () => { fotos.splice(i, 1); fotoGespeichert = false; zeichne(); };
+      zl.appendChild(b); rechts.appendChild(sel); rechts.appendChild(t); rechts.appendChild(zl); row.appendChild(im); row.appendChild(rechts); box.appendChild(row);
+    });
+    const summe = fotos.reduce((a, f) => a + f.bytes, 0);
+    el('fotoInfo').textContent = fotos.length ? fotos.length + ' Foto' + (fotos.length > 1 ? 's' : '') + ', zusammen etwa ' + mb(summe) + (summe > 15 * 1048576 ? ' (sehr groß: Mails lassen meist nur 20 bis 25 MB zu, bitte einige Fotos entfernen)' : '') : '';
+  }
+  async function hinzu(files) {
+    const fehler = [];
+    for (const file of files) {
+      if (fotos.length >= MAXFOTOS) { fehler.push('Höchstens ' + MAXFOTOS + ' Fotos.'); break; }
+      if (!/^image\//.test(file.type) && !/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)) { fehler.push(file.name + ': kein Bild.'); continue; }
+      try { const v = await verkleinern(file); fotos.push({ raum: fotos.some(f => f.raum === 'hauptfoto') ? 'sonstiges' : 'hauptfoto', text: '', name: String(file.name || '').slice(0, 80), url: v.url, w: v.w, h: v.h, bytes: v.bytes }); }
+      catch (e) { fehler.push(file.name + ': ' + e.message); }
+    }
+    fotoGespeichert = false; zeichne();
+    if (fehler.length) el('fotoInfo').textContent += (el('fotoInfo').textContent ? ' · ' : '') + fehler.join(' ');
+  }
+  window.baueFotoDatei = function () {
+    return { schema: 'fragebogen-fotos-v1', erstellt: new Date().toISOString().slice(0, 10), einwilligung_bewohner: !!el('fotoEinwilligung').checked,
+      fotos: fotos.map(f => ({ raum: f.raum, beschreibung: f.text.trim() || null, datei: f.name, breite: f.w, hoehe: f.h, daten: f.url })) };
+  };
+  el('fotoInput').addEventListener('change', (e) => { const fl = [...e.target.files]; e.target.value = ''; hinzu(fl); });
+  el('fotoSpeichern').addEventListener('click', () => {
+    if (!fotos.length) { el('fotoInfo').textContent = 'Es sind noch keine Fotos hinzugefügt.'; return; }
+    if (!el('fotoEinwilligung').checked) { el('fotoInfo').textContent = 'Bitte bestätigen Sie oben, dass keine Personen zu sehen sind und die Bewohner einverstanden sind.'; return; }
+    download(window.baueFotoDatei(), 'fragebogen-fotos-' + new Date().toISOString().slice(0, 10) + '.json'); fotoGespeichert = true;
+    el('fotoInfo').textContent = 'Fotodatei heruntergeladen. Bitte schicken Sie sie zusammen mit der Fragebogen-Datei.';
+  });
+  el('fotoLaden').addEventListener('click', () => el('fotoLadenInput').click());
+  el('fotoLadenInput').addEventListener('change', (e) => {
+    const file = e.target.files[0]; e.target.value = ''; if (!file) return; const r = new FileReader();
+    r.onload = () => { try { const d = JSON.parse(r.result); if (d.schema !== 'fragebogen-fotos-v1' || !Array.isArray(d.fotos)) throw new Error('schema');
+        d.fotos.slice(0, MAXFOTOS).forEach(f => { if (f && typeof f.daten === 'string' && /^data:image\/(jpeg|png|webp);base64,/.test(f.daten) && FOTO_RAEUME.some(x => x[0] === f.raum))
+          fotos.push({ raum: f.raum, text: typeof f.beschreibung === 'string' ? f.beschreibung.slice(0, 120) : '', name: String(f.datei || '').slice(0, 80), url: f.daten, w: +f.breite || 0, h: +f.hoehe || 0, bytes: Math.round(f.daten.length * 0.75) }); });
+        el('fotoEinwilligung').checked = !!d.einwilligung_bewohner; zeichne(); el('fotoCard').open = true; }
+      catch (x) { el('fotoInfo').textContent = 'Diese Datei passt nicht zu den Fotos des Fragebogens.'; } };
+    r.readAsText(file);
+  });
+})();
+progress();
+</script>
+</body>
+</html>

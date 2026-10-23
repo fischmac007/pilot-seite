@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pilot: Preiseinschätzung für Ihre Immobilie</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{--ink:#1b2127;--muted:#5d6872;--bg:#fbfaf7;--card:#ffffff;--line:#dfe3e6;--accent:#17406b;--warn:#fff4d6;--warn-line:#9a6a00;--err:#a4262c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8ecef;--muted:#a3afb8;--bg:#14181c;--card:#1c2228;--line:#2e3740;--accent:#7fb2e5;--warn:#3a3118;--warn-line:#d8a93c;--err:#ff8a8f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px 40px}
+.entwurf{background:var(--warn);border-bottom:2px solid var(--warn-line);padding:8px 20px;font-size:14px}
+h1{font-size:28px;line-height:1.2;color:var(--accent);margin:28px 0 10px}
+p{margin:0 0 14px}
+.muted{color:var(--muted)}.small{font-size:14px}
+form,.out{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-top:18px}
+label{display:block;font-weight:600;margin:16px 0 4px}
+label:first-child{margin-top:0}
+.hint{font-weight:400;color:var(--muted);font-size:14px}
+input[type=text],input[type=email],input[type=number],select,textarea{width:100%;padding:10px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
+textarea{min-height:70px}
+.row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media (max-width:520px){.row{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin-top:18px}
+.check input{margin-top:5px}
+.btn{display:inline-block;padding:13px 22px;border-radius:8px;border:2px solid var(--accent);background:var(--accent);color:#fff;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;margin:6px 8px 6px 0}
+@media (prefers-color-scheme:dark){.btn{color:#0b1218}}
+.btn.sec{background:transparent;color:var(--accent)}
+.err{color:var(--err);font-size:14px;margin-top:4px;display:none}
+.hinweis{background:var(--warn);border-left:4px solid var(--warn-line);padding:10px 12px;border-radius:4px;font-size:15px;margin-top:14px;display:none}
+pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px;font:14px/1.5 ui-monospace,Menlo,monospace}
+.platzhalter{background:var(--warn);padding:0 4px;border-radius:3px;font-family:ui-monospace,Menlo,monospace;font-size:.92em}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="entwurf"><strong>Pilot, nicht öffentlich.</strong> Für persönlich eingeladene Testpersonen. Gelb markierte Stellen sind noch offen.</div>
+<div class="wrap">
+<h1>Pilot: Preiseinschätzung für Ihre Immobilie</h1>
+<p>Ich baue eine unabhängige Beratung für Privatleute, die ihre Eigentumswohnung oder ihr Haus selbst verkaufen wollen. Sie sind eingeladen, sie zu testen. Der Pilot ist <strong>kostenlos und freiwillig</strong>. Sie bekommen eine ehrliche Preiseinschätzung, ich lerne, ob sie verständlich ist und hilft. Kritik ist ausdrücklich erwünscht.</p>
+
+<h2>Wie es abläuft</h2>
+<ol>
+<li><strong>Kurz-Check:</strong> Sie geben auf der nächsten Seite ein paar Basisangaben ein (Ort, Größe, Baujahr, Nutzung). Daraus entsteht eine fertige E-Mail an mich, die Sie selbst abschicken.</li>
+<li><strong>Fragebogen:</strong> Ich melde mich und schicke Ihnen den Link zum ausführlichen Fragebogen. Er läuft nur in Ihrem Browser und sendet nichts. Am Ende laden Sie eine Datei herunter und schicken sie mir.</li>
+<li><strong>Unterlagen und Gespräch:</strong> Sie erhalten die Marktpreiseinschätzung, ein Exposé-Entwurf und (bei Wohnungen) eine Käufersicht. Wir gehen alles in einem Gespräch durch.</li>
+</ol>
+<p><a class="btn" href="kurz-check.html">Kurz-Check starten</a></p>
+
+<h2>Was Sie bekommen, und was nicht</h2>
+<ul>
+<li><strong>Sie bekommen:</strong> eine Einschätzung auf Basis amtlicher Marktdaten (Marktbericht des Gutachterausschusses) mit Preisspanne, Konkurrenzangeboten und einer Rechnung, was nach dem Verkauf bleibt.</li>
+<li><strong>Sie bekommen nicht:</strong> ein Verkehrswertgutachten, Rechts-, Steuer- oder Anlageberatung, eine Vermittlung oder eine Preisgarantie. Sie verkaufen selbst und entscheiden selbst.</li>
+</ul>
+<p class="small muted">Im Pilot rechne ich Wohnungen und Häuser in Nürnberg und im Landkreis Nürnberger Land. Liegt Ihre Immobilie woanders, sage ich Ihnen ehrlich, was ich liefern kann.</p>
+
+<h2 id="datenschutz">Ihre Daten</h2>
+<p class="small">Die Seiten hier speichern und übertragen nichts. Ihre Angaben gehen erst an mich, wenn Sie die vorbereitete E-Mail abschicken. Normale E-Mails sind nicht verschlüsselt. Für die Auswertung nutze ich einen KI-Dienst (Claude von Anthropic); dabei werden Ihre Angaben aus dem Fragebogen, auch die Adresse, an den Dienst übermittelt. Marktdaten und Konkurrenzangebote sind öffentlich. Die Seiten liegen bei GitHub Pages (GitHub, USA); beim Aufruf verarbeitet der Anbieter technische Daten wie die IP-Adresse. Ich lösche Ihre Daten spätestens <span class="platzhalter">[6]</span> Monate nach dem Pilot, auf Wunsch früher. Die Unterlagen sind Pilot-Entwürfe nur für Sie, bitte geben Sie sie nicht weiter.
+<span class="platzhalter">[Verantwortlicher, Rechtsgrundlage, Empfänger nach Datenschutzprüfung ergänzen]</span></p>
+<p class="small muted">Marco Fischhold · <span class="platzhalter">[Kontakt]</span></p>
+</div>
+</body>
+</html>

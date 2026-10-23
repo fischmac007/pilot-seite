@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pilot-Fragebogen Wohnungsverkauf</title>
+<style>
+  :root { --bg:#f5f6f7; --card:#fff; --ink:#1b2127; --muted:#5d6872; --line:#d5d9dd; --accent:#17406b; --accent-ink:#fff; --ok:#1f7a4d; --warn:#9a6a00; --req:#a32626; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 18px 16px 90px; }
+  h1 { font-size: 1.5rem; margin: 6px 0 4px; color: var(--accent); }
+  h2 { font-size: 1.15rem; margin: 0 0 4px; color: var(--accent); }
+  .lead { color: var(--muted); margin: 0 0 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 14px 0; }
+  .note { background:#fff4d6; border-left:4px solid var(--warn); padding:10px 12px; border-radius:6px; font-size:.92rem; margin:10px 0; }
+  .grid { display:grid; gap: 12px 16px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } .grid .full { grid-column: 1 / -1; } }
+  label { display:block; font-weight:600; font-size:.93rem; margin-bottom:3px; }
+  .req::after { content:" *"; color: var(--req); }
+  input, select, textarea { width:100%; padding:9px 10px; border:1.5px solid var(--line); border-radius:8px; font:inherit; background:#fff; color:var(--ink); }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 3px solid #5b8cc7; outline-offset: 1px; }
+  .help { color: var(--muted); font-size:.82rem; margin-top:3px; }
+  .unit { display:flex; align-items:center; gap:8px; } .unit span { color: var(--muted); white-space:nowrap; font-size:.9rem; }
+  .bar { position: sticky; top: 0; z-index: 5; background: var(--card); border-bottom: 1px solid var(--line); padding: 8px 16px; }
+  .bar .in { max-width:780px; margin:0 auto; display:flex; align-items:center; gap:12px; font-size:.88rem; }
+  .meter { flex:1; height:8px; background:#e3e6e9; border-radius:99px; overflow:hidden; } .meter i { display:block; height:100%; width:0; background:var(--ok); transition: width .25s; }
+  .btns { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+  button { padding:11px 18px; border-radius:9px; border:1.5px solid var(--accent); background:var(--accent); color:var(--accent-ink); font:inherit; font-weight:600; cursor:pointer; }
+  button.sec { background:#fff; color:var(--accent); }
+  .err { color: var(--req); font-size:.85rem; margin-top:3px; }
+  details summary { cursor:pointer; font-weight:600; }
+  .check { display:flex; gap:10px; align-items:flex-start; margin:6px 0; font-weight:400; } .check input { width:auto; margin-top:5px; }
+  #msg { margin-top:10px; font-size:.95rem; }
+  details.multi { border:1.5px solid var(--line); border-radius:8px; background:#fff; padding:8px 10px; } details.multi[open] { border-color:var(--accent); } .mbox { margin-top:8px; display:grid; gap:2px; } .ms { font-weight:400; }
+</style>
+</head>
+<body>
+<div class="bar"><div class="in"><span id="pct">0 %</span><div class="meter"><i id="meter"></i></div><span>ausgefüllt</span></div></div>
+<div class="wrap">
+  <h1>Pilot-Fragebogen: Verkauf Ihrer Eigentumswohnung</h1>
+  <p class="lead"><strong>Sie sind die erste Testperson (Pilot).</strong> Der Fragebogen hat zwei Teile: die Angaben zu Ihrer Wohnung (Teil 1 bis 7, auch für meine Berechnung) und Fragen zu Ihrer Einschätzung des Angebots (Teil 8, nur für den Pilot). Bitte notieren Sie, wo Sie hängen bleiben oder etwas unklar ist, das hilft mir mehr als ein perfekt ausgefülltes Formular. Mit Ihren Angaben erstelle ich eine fundierte Marktpreiseinschätzung. Nicht alles muss sofort bekannt sein: Wo Sie etwas nicht wissen, lassen Sie das Feld leer oder wählen „weiß nicht“. Je vollständiger, desto genauer wird die Einschätzung.</p>
+
+  <div class="note"><strong>Datenschutz:</strong> Dieses Formular läuft nur in Ihrem Browser. Es wird <strong>nichts gesendet oder gespeichert</strong>. Am Ende laden Sie eine Datei herunter und schicken sie mir. Bitte beachten Sie, dass eine normale E-Mail nicht verschlüsselt ist. Angaben zur genauen Adresse sind freiwillig; für die ersten Berechnungen reicht der Stadtteil. <span id="legalph" style="background:#fff2a8;padding:0 4px">[Datenschutzerklärung ergänzen]</span></div>
+
+  <div class="card"><details><summary>Frühere Datei weiterbearbeiten (optional)</summary>
+    <p class="help">Wenn ich Ihnen schon eine teilweise ausgefüllte Datei geschickt habe oder Sie zwischenspeichern wollten, laden Sie sie hier.</p>
+    <input type="file" id="loadFile" accept="application/json,.json"></details></div>
+
+  <form id="form" novalidate autocomplete="off"></form>
+
+  <div class="card"><details id="fotoCard"><summary>Fotos hinzufügen (optional, wenn Sie schon Fotos haben)</summary>
+    <p class="help">Für das Exposé brauche ich später Fotos. Wenn Sie schon welche haben, können Sie sie hier hinzufügen und je einem Raum zuordnen. Die Fotos werden <strong>nur in Ihrem Browser</strong> verkleinert (Standortdaten in den Bilddaten werden dabei entfernt) und in einer <strong>zweiten Datei</strong> gespeichert, die Sie mir zusammen mit der Fragebogen-Datei schicken. Es wird nichts hochgeladen oder gesendet.</p>
+    <label class="check"><input type="checkbox" id="fotoEinwilligung"><span>Auf den Fotos sind keine Personen und keine persönlichen Unterlagen zu sehen, und die Bewohner (zum Beispiel der Mieter) sind mit der Verwendung der Fotos einverstanden.</span></label>
+    <input type="file" id="fotoInput" accept="image/*" multiple>
+    <div class="help">Mehrere Fotos auf einmal sind möglich (höchstens 30). Am besten im Querformat und bei Tageslicht aufgenommen.</div>
+    <div id="fotoListe"></div>
+    <div id="fotoInfo" class="help"></div>
+    <div class="btns">
+      <button type="button" class="sec" id="fotoSpeichern">Fotodatei herunterladen</button>
+      <button type="button" class="sec" id="fotoLaden">Frühere Fotodatei laden</button>
+      <input type="file" id="fotoLadenInput" accept="application/json,.json" style="display:none">
+    </div>
+  </details></div>
+
+  <div class="card">
+    <label class="check"><input type="checkbox" id="einwilligung"><span>Ich bin einverstanden, dass meine Angaben zur Erstellung der Marktpreiseinschätzung und zur Auswertung dieses Pilots verwendet werden. Ich weiß, dass dies keine Verkehrswertermittlung und keine Rechts-, Steuer- oder Anlageberatung ist. <span class="req"></span></span></label>
+    <div class="btns">
+      <button type="button" id="dl">Datei herunterladen und mir schicken</button>
+      <button type="button" class="sec" id="dlpartial">Zwischenstand herunterladen</button>
+    </div>
+    <div id="msg" role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+// Feldbeschreibung: path = Pfad im JSON (Schema fragebogen-verkauf-v1)
+const TRI = [["", "weiß nicht / keine Angabe"], ["ja", "Ja"], ["nein", "Nein"]];
+const STAT_BEZIRKE = [["75", "Almoshof"], ["35", "Altenfurt Nord"], ["38", "Altenfurt, Moorenbrunn"], ["01", "Altstadt, St. Lorenz"], ["06", "Altstadt, St. Sebald"], ["22", "Bärenschanze"], ["34", "Beuthener Straße"], ["24", "Bielingplatz"], ["78", "Boxdorf"], ["97", "Brunn"], ["73", "Buch"], ["86", "Buchenbühl"], ["43", "Dianastraße"], ["30", "Dutzendteich"], ["64", "Eberhardshof"], ["53", "Eibach"], ["91", "Erlenstegen"], ["96", "Fischbach"], ["87", "Flughafen"], ["62", "Gaismannshof"], ["13", "Galgenhof"], ["45", "Gartenstadt"], ["61", "Gebersdorf"], ["39", "Gewerbepark Nürnberg-Feucht"], ["17", "Gibitzenhof"], ["29", "Gleißhammer"], ["11", "Glockenhof"], ["04", "Gostenhof"], ["79", "Großgründlach"], ["60", "Großreuth b. Schweinau"], ["15", "Gugelstraße"], ["12", "Guntherstraße"], ["40", "Hasenbuck"], ["05", "Himpfelshof"], ["63", "Höfen"], ["50", "Hohe Marter"], ["14", "Hummelstein"], ["90", "St. Jobst"], ["07", "St. Johannis"], ["48", "Katzwang, Reichelsdorf Ost, Reichelsdorfer Keller"], ["42", "Katzwanger Straße"], ["49", "Kornburg, Worzeldorf"], ["76", "Kraftshof"], ["55", "Krottenbach, Mühlhof"], ["33", "Langwasser Nordost"], ["32", "Langwasser Nordwest"], ["36", "Langwasser Südost"], ["37", "Langwasser Südwest"], ["94", "Laufamholz"], ["20", "St. Leonhard"], ["10", "Ludwigsfeld"], ["47", "Maiach"], ["83", "Marienberg"], ["02", "Marienvorstadt"], ["26", "Maxfeld"], ["92", "Mögeldorf"], ["85", "Mooshof"], ["65", "Muggenhof"], ["77", "Neunhof"], ["08", "Pirckheimerstraße"], ["41", "Rangierbahnhof"], ["31", "Rangierbahnhof-Siedlung"], ["54", "Reichelsdorf"], ["52", "Röthenbach Ost"], ["51", "Röthenbach West"], ["23", "Sandberg"], ["18", "Sandreuth"], ["82", "Schafhof"], ["80", "Schleifweg"], ["93", "Schmausenbuckstraße"], ["71", "Schniegling"], ["81", "Schoppershof"], ["19", "Schweinau"], ["16", "Steinbühl"], ["21", "Sündersbühl"], ["03", "Tafelhof"], ["74", "Thon"], ["44", "Trierer Straße"], ["28", "Tullnau"], ["25", "Uhlandstraße"], ["27", "Veilhof"], ["46", "Werderau"], ["70", "Westfriedhof"], ["72", "Wetzendorf"], ["09", "Wöhrd"], ["95", "Zerzabelshof"], ["84", "Ziegelstein"]];  // Statistische Bezirke der Stadt Nürnberg (Quelle: Liste Stadtteilnamen, Amt für Stadtforschung und Statistik); Reihenfolge alphabetisch
+const SECTIONS = [
+ { title: "1. Die Wohnung", intro: "Grunddaten. Die Wohnfläche steht im Kaufvertrag oder in der Wohnflächenberechnung.", fields: [
+  { p:"objekt.stadt", l:"Stadt", t:"text", req:true, ph:"z. B. Nürnberg", h:"Bitte immer die Stadt nennen: Stadtteilnamen gibt es in mehreren Orten." },
+  { p:"objekt.stat_bezirk", l:"Stadtteil (Nürnberg)", t:"sel", req:true, o:[["", "bitte wählen"], ...STAT_BEZIRKE.map(b => [b[0], b[1]]), ["weiss_nicht", "weiß nicht"], ["sonstige", "anderer Stadtteil oder Ort (unten eintragen)"]],
+    h:"Die Namen sind die amtlichen Statistischen Bezirke der Stadt Nürnberg. „Langwasser“ ist in vier Bezirke geteilt, „Mögeldorf“ und „Altstadt“ sind eigene Einträge. Wenn Sie unsicher sind, wählen Sie „weiß nicht“ und tragen Sie die Straße ein." },
+  { p:"objekt.gemeinde_nl", l:"Gemeinde im Landkreis Nürnberger Land (nur ausfüllen, wenn die Wohnung dort liegt)", t:"sel", o:[["", "nicht zutreffend"], ["altdorf", "Altdorf"], ["feucht", "Feucht"], ["hersbruck", "Hersbruck"], ["lauf", "Lauf a. d. Pegnitz"], ["roethenbach", "Röthenbach a. d. Pegnitz"], ["rueckersdorf", "Rückersdorf"], ["schwaig", "Schwaig (mit Behringersdorf)"], ["schwarzenbruck", "Schwarzenbruck"], ["winkelhaid", "Winkelhaid"], ["andere_nl", "andere Gemeinde im Landkreis (Name oben bei Stadt eintragen)"]],
+    h:"Der Landkreis Nürnberger Land ist nicht die Stadt Nürnberg. Wenn Ihre Wohnung zum Beispiel in Lauf, Feucht oder Schwaig liegt, wählen Sie hier die Gemeinde und lassen den Stadtteil von Nürnberg leer." },
+  { p:"objekt.ortsteil_frei", l:"Anderer Stadtteil oder Ort (nur ausfüllen, wenn Sie oben „anderer Stadtteil oder Ort“ gewählt haben)", t:"text", full:true },
+  { p:"objekt.plz", l:"Postleitzahl", t:"text", ph:"5 Ziffern, z. B. 90419" },
+  { p:"objekt.strasse", l:"Straße und Hausnummer (freiwillig)", t:"text", full:true, h:"Nur nötig für die Lagebewertung auf Straßenebene. Sie können das auch später mündlich nennen." },
+  { p:"objekt.wohnflaeche", l:"Wohnfläche", t:"num", u:"m²", req:true, min:10, max:400 },
+  { p:"objekt.zimmer", l:"Zimmer", t:"num", step:0.5, min:1, max:15 },
+  { p:"objekt.baujahr", l:"Baujahr des Gebäudes", t:"num", req:true, min:1500, max:2100, step:1 },
+  { p:"objekt.kernsanierung_jahr", l:"Jahr der Kernsanierung (nur falls vorhanden)", t:"num", min:1900, max:2100, step:1, h:"Nur ausfüllen, wenn das Gebäude bis auf den Rohbau erneuert wurde (Leitungen, Fenster, Dach, Heizung, Dämmung). Einzelne Maßnahmen wie ein neues Bad oder neue Fenster zählen nicht. Der Berater prüft den Umfang." },
+  { p:"objekt.bodenwertanteil_eur", l:"Bodenwertanteil Ihrer Wohnung in € (falls bekannt)", t:"num", u:"€", min:0, max:5000000, step:1000, h:"Der Wert des Grundstücksanteils, der zu Ihrer Wohnung gehört. Steht manchmal in der Teilungserklärung, im Kaufvertrag (Aufteilung auf Gebäude und Boden), im Wertgutachten oder im Bescheid. Wenn unbekannt: leer lassen, dann gilt ein Standardwert (Anteil am Preis)." },
+  { p:"objekt.bodenrichtwert_eur_m2", l:"Bodenrichtwert Ihrer Lage in €/m² (falls bekannt)", t:"num", u:"€/m²", min:0, max:20000, step:10, h:"Aus der Bodenrichtwertkarte (BORIS Bayern, Stichtag 01.01.2026). Nur nötig, wenn Sie den Bodenwertanteil in Euro nicht kennen. Für Nürnberg erfragt der Berater den Wert beim Gutachterausschuss: dann bitte leer lassen." },
+  { p:"objekt.wgfz", l:"Bezugs-WGFZ des Bodenrichtwerts (falls bekannt)", t:"num", min:0, max:5, step:0.1, h:"Die wirtschaftliche Geschossflächenzahl steht in der Bodenrichtwertkarte neben dem Richtwert. Zusammen mit dem Bodenrichtwert bestimmt sie die Lage Ihrer Wohnung im Wertmodell. Für Nürnberg erfragt der Berater beide Werte beim Gutachterausschuss: dann bitte leer lassen." },
+  { p:"objekt.grundstuecksanteil_m2", l:"Grundstücksanteil Ihrer Wohnung in m² (falls bekannt)", t:"num", u:"m²", min:0, max:5000, step:1, h:"Grundstücksfläche mal Ihr Miteigentumsanteil (zum Beispiel 800 m² mal 55/1000 = 44 m²). Steht in Grundbuch und Teilungserklärung. Zusammen mit dem Bodenrichtwert gibt das den Bodenwertanteil." },
+  { p:"objekt.bezugsfertig", l:"Jahr der Bezugsfertigkeit", t:"num", min:1500, max:2100, step:1, h:"Jahr, ab dem die Wohnung erstmals bezogen werden konnte. Im Nürnberger Mietenspiegel entscheidet das über die Baujahresklasse (2006 und 2007 werden unterschiedlich behandelt)." },
+  { p:"objekt.etage", l:"Etage (Erdgeschoss = 0, 1. Obergeschoss = 1)", t:"num", min:0, max:40, step:1, h:"Bitte die Zählweise prüfen: „2. Stock“ ist meist das 2. Obergeschoss, also 2." },
+  { p:"objekt.obergeschosse_gebaeude", l:"Obergeschosse im Gebäude insgesamt (ohne Erdgeschoss)", t:"num", min:0, max:40, step:1 },
+  { p:"objekt.oberste_wohnung", l:"Ist es die oberste Wohnung / Dachgeschoss?", t:"tri" },
+  { p:"objekt.aufzug", l:"Aufzug im Haus", t:"tri" },
+  { p:"objekt.balkon_vorhanden", l:"Balkon oder Loggia", t:"tri" },
+  { p:"objekt.balkon_m2", l:"Größe des Balkons/der Loggia", t:"num", u:"m²", min:0, max:100, h:"Der Mietenspiegel unterscheidet über und unter 8 m²." },
+  { p:"objekt.terrasse", l:"Terrasse oder Dachterrasse", t:"tri" },
+  { p:"objekt.wintergarten", l:"Wintergarten", t:"tri" },
+  { p:"objekt.keller", l:"Keller / Abstellraum", t:"tri" },
+  { p:"objekt.stellplatz", l:"Stellplatz oder Garage", t:"sel", o:[["", "weiß nicht / keine Angabe"],["keiner","keiner"],["tiefgarage","Tiefgarage"],["stellplatz","Stellplatz"],["garage","Garage"]] },
+  { p:"objekt.engere_innenstadt", l:"Liegt die Straße in „Altstadt und engerer Innenstadt“ (Straßenverzeichnis der Stadt Nürnberg)?", t:"tri", full:true, h:"Das ist für die Miethöhe relevant (Zuschlag). Die Antwort wird automatisch aus Straße und Hausnummer bestimmt, wenn Sie diese oben eintragen. Das Straßenverzeichnis finden Sie unter nuernberg.de/internet/wohnen/mietenspiegel.html. Wenn Sie unsicher sind, lassen Sie es offen." }
+ ]},
+ { title: "2. Ausstattung und Heizung", intro: "Diese Merkmale beeinflussen den Wert und die Vergleichsmiete.", fields: [
+  { p:"ausstattung.heizung", l:"Heizung", t:"sel", o:[["", "weiß nicht / keine Angabe"],["gas","Gas (Zentralheizung)"],["fernwaerme","Fernwärme"],["waermepumpe","Wärmepumpe"],["pellets","Holzpellets"],["solar","Solarthermie überwiegend"],["oel","Öl (Zentralheizung)"],["strom","Strom (Zentralheizung)"],["einzelofen","Einzelöfen (Öl, Kohle, Strom)"],["sonstige","Sonstige"]] },
+  { p:"ausstattung.heizung_baujahr", l:"Baujahr der Heizungsanlage", t:"num", min:1900, max:2100, step:1 },
+  { p:"ausstattung.fussbodenheizung", l:"Fußbodenheizung in mehr als der Hälfte der Wohnung", t:"tri" },
+  { p:"ausstattung.boden", l:"Fußbodenbelag (überwiegend)", t:"sel", o:[["", "weiß nicht / keine Angabe"],["hochwertig","hochwertig (Parkett, Stein, Marmor)"],["normal","normal (Laminat, Teppich, Vinyl)"],["keiner","kein Belag (Estrich)"]] },
+  { p:"ausstattung.kueche", l:"Küche", t:"sel", o:[["", "weiß nicht / keine Angabe"],["einbaukueche_geraete","Einbauküche mit Elektrogeräten (mind. Kühlschrank und Herd)"],["kochnische","Kochnische"],["keine","keine Küche"]] },
+  { p:"ausstattung.kueche_stufe", l:"Zustand und Qualität der Küche", t:"sel", o:[["", "weiß nicht / keine Angabe"],["einfach","einfach: älter oder schlicht, funktionsfähig"],["normal","normal: übliche Einbauküche in gutem Zustand"],["gehoben","modernisiert oder gehoben: neuwertig oder hochwertig (z. B. neue Fronten, Geräte namhafter Hersteller, Arbeitsplatte aus Stein)"]],
+    h:"Gilt für die vorhandene Küche. Ob sie mit verkauft wird, geben Sie weiter unten bei „Möbel und Einrichtung“ an." },
+  { p:"ausstattung.kueche_jahr", l:"Jahr der Küche oder der letzten Erneuerung (falls bekannt)", t:"num", min:1950, max:2100, step:1 },
+  { p:"ausstattung.kueche_kaufpreis", l:"Was hat die Küche beim Kauf gekostet (laut Rechnung, mit Elektrogeräten)?", t:"num", u:"€", min:0, max:200000,
+    h:"Daraus rechnet der Berater einen Orientierungswert für die Küche (Kaufpreis und Jahr). Ohne Rechnung bitte leer lassen: Ich schätze keinen Neupreis. Bitte die Rechnung bereithalten." },
+  { p:"ausstattung.kuechenboden_gefliest", l:"Küchenboden gefliest", t:"tri" },
+  { p:"ausstattung.sprechanlage", l:"Sprechanlage", t:"tri" },
+  { p:"ausstattung.bad", l:"Zustand und Ausstattung des Bades", t:"sel", o:[["", "weiß nicht / keine Angabe"],["einfach","einfach: ohne Bodenfliesen, Wände nicht hoch gefliest, nur Boiler oder Durchlauferhitzer"],["normal","normal: gefliest, übliche Ausstattung, Zustand wie beim Einbau"],["gehoben","modernisiert oder gehoben: renoviert oder hochwertig ausgestattet (z. B. neue Fliesen und Sanitärobjekte, bodengleiche Dusche, hochwertige Armaturen)"]],
+    h:"Ein modernisiertes Bad ist für Käufer, die selbst einziehen, oft ein wichtiges Argument. Bitte ehrlich einstufen; später brauchen wir Fotos als Beleg." },
+  { p:"ausstattung.bad_renoviert_jahr", l:"Jahr der letzten Badrenovierung (falls bekannt)", t:"num", min:1950, max:2100, step:1 },
+  { p:"ausstattung.separates_bad", l:"Separates Badezimmer", t:"tri" },
+  { p:"ausstattung.unbeheizter_raum", l:"Ist mindestens ein Wohnraum, die Küche oder das Bad nicht beheizt?", t:"tri", full:true }
+ ]},
+ { title: "3. Energieausweis", intro: "Der Energieausweis ist beim Verkauf vorzulegen. Bitte die Angaben genau so abschreiben, wie sie im Ausweis stehen.", fields: [
+  { p:"energie.ausweis_art", l:"Art", t:"sel", o:[["", "weiß nicht / keine Angabe"],["bedarf","Bedarfsausweis"],["verbrauch","Verbrauchsausweis"]] },
+  { p:"energie.klasse", l:"Energieeffizienzklasse", t:"sel", o:[["", "weiß nicht / keine Angabe"],["A+","A+"],["A","A"],["B","B"],["C","C"],["D","D"],["E","E"],["F","F"],["G","G"],["H","H"]], h:"Klassen reichen von A+ (sehr gut) bis H." },
+  { p:"energie.kennwert_kwh", l:"Kennwert (Endenergie)", t:"num", u:"kWh/(m²·a)", min:0, max:1000 },
+  { p:"energie.baujahr_laut_ausweis", l:"Baujahr des Gebäudes laut Energieausweis (falls abweichend von oben)", t:"num", min:1800, max:2100, step:1 },
+  { p:"energie.gueltig_bis", l:"Gültig bis (Monat/Jahr)", t:"text", ph:"z. B. 05/2030" }
+ ]},
+ { title: "4. Vermietung", intro: "Falls die Wohnung vermietet ist. Bitte nach Möglichkeit den Mietvertrag bereithalten.", fields: [
+  { p:"vermietung.vermietet", l:"Ist die Wohnung vermietet?", t:"tri", req:true },
+  { p:"vermietung.mietvertrag_datum", l:"Beginn des Mietvertrags", t:"text", ph:"z. B. 01.03.2022", h:"Tag.Monat.Jahr, ersatzweise Monat.Jahr oder nur das Jahr. Das Datum bestimmt, welcher Mietenspiegel galt." },
+  { p:"vermietung.gesamtmiete", l:"Monatliche Gesamtmiete ohne Nebenkosten-Vorauszahlung", t:"num", u:"€", min:0, max:20000, h:"Der Betrag, den der Mieter monatlich als Miete zahlt, ohne Vorauszahlung für Heizung/Wasser etc." },
+  { p:"vermietung.nettokaltmiete", l:"Davon Nettokaltmiete laut Vertrag", t:"num", u:"€", min:0, max:20000, h:"Bei möblierter Vermietung: nur der Mietanteil ohne Möblierungszuschlag." },
+  { p:"vermietung.moeblierungszuschlag", l:"Davon Möblierungszuschlag laut Vertrag", t:"num", u:"€", min:0, max:5000 },
+  { p:"vermietung.stellplatzmiete_eur", l:"Davon Miete für den Stellplatz oder die Garage (falls extra berechnet)", t:"num", u:"€", min:0, max:2000 },
+  { p:"vermietung.moebliert", l:"Möbliert vermietet?", t:"tri" },
+  { p:"vermietung.befristet", l:"Mietvertrag befristet?", t:"tri" },
+  { p:"vermietung.nebenkosten_vorauszahlung", l:"Nebenkosten-Vorauszahlung", t:"num", u:"€/Monat", min:0 },
+  { p:"vermietung.mieter_bleibt", l:"Soll der Mieter nach dem Verkauf bleiben?", t:"sel", o:[["", "weiß nicht / keine Angabe"],["ja","ja, Mieter bleibt"],["nein","nein, Mieter zieht aus / Wohnung wird geräumt"],["unklar","noch unklar"]] }
+ ]},
+ { title: "5. Eigentümergemeinschaft und Kosten", intro: "Diese Angaben stehen in der Hausgeldabrechnung und im Wirtschaftsplan.", fields: [
+  { p:"weg.hausgeld", l:"Hausgeld", t:"num", u:"€/Monat", min:0, max:5000 },
+  { p:"weg.hausgeld_nicht_umlagefaehig", l:"Davon nicht auf den Mieter umlegbar", t:"num", u:"€/Monat", min:0, max:5000, h:"Das sind vor allem Verwaltung und Instandhaltungsrücklage. Die Aufteilung steht in der Hausgeldabrechnung. Wenn Sie sie nicht kennen, lassen Sie es leer." },
+  { p:"weg.ruecklage_betrag", l:"Instandhaltungsrücklage der Gemeinschaft (gesamt)", t:"num", u:"€", min:0 },
+  { p:"weg.sonderumlage_geplant", l:"Sind Sonderumlagen beschlossen oder geplant?", t:"tri" },
+  { p:"weg.sanierung_beschluesse", l:"Beschlossene oder geplante Sanierungen (Dach, Fassade, Heizung, Aufzug)", t:"area", full:true }
+ ]},
+ { title: "6. Ihre Ziele", intro: "Damit ich die Empfehlung auf Ihre Situation abstimmen kann.", fields: [
+  { p:"verkauf.preisvorstellung", l:"Preisvorstellung", t:"num", u:"€", min:0 },
+  { p:"verkauf.stellplatz_im_preis", l:"Stellplatz oder Garage: Ist er in Ihrer Preisvorstellung enthalten?", t:"sel", o:[["", "keine Angabe"],["im_preis","ja, im Preis enthalten"],["aufpreis","wird mitverkauft, aber gegen Aufpreis (separat)"],["nein","nein, nicht Teil des Verkaufs"]], h:"Nur relevant, wenn Sie bei den Objektdaten einen Stellplatz oder eine Garage angegeben haben." },
+  { p:"verkauf.stellplatz_aufpreis", l:"Aufpreis für den Stellplatz oder die Garage (nur wenn separat)", t:"num", u:"€", min:0 },
+  { p:"verkauf.kueche_im_preis", l:"Küche: Ist sie in Ihrer Preisvorstellung enthalten?", t:"sel", o:[["", "keine Angabe"],["im_preis","ja, im Preis enthalten"],["aufpreis","wird mitverkauft, aber gegen Aufpreis (separat)"],["nein","nein, nicht Teil des Verkaufs"]], h:"Nur relevant, wenn die Wohnung eine Einbauküche hat." },
+  { p:"verkauf.kueche_aufpreis", l:"Aufpreis für die Küche (nur wenn separat)", t:"num", u:"€", min:0 },
+  { p:"verkauf.zeitrahmen_monate", l:"Gewünschter Zeitrahmen", t:"sel", o:[["", "keine Angabe"],["unter 3","unter 3 Monate"],["3-6","3 bis 6 Monate"],["6-12","6 bis 12 Monate"],["offen","kein fester Zeitrahmen"]] },
+  { p:"verkauf.restschuld", l:"Restschuld bei der Bank (freiwillig)", t:"num", u:"€", min:0 },
+  { p:"verkauf.vorfaelligkeit_eur", l:"Vorfälligkeitsentschädigung laut Bank (nur wenn schon angefragt)", t:"num", u:"€", min:0 },
+  { p:"verkauf.darlehen_zins_pct", l:"Zinssatz Ihres Darlehens (falls bekannt)", t:"num", u:"% pro Jahr", min:0, max:15, step:0.01 },
+  { p:"verkauf.zinsbindung_bis", l:"Zinsbindung endet im Jahr (falls bekannt)", t:"num", min:2026, max:2060, step:1, h:"Danach kann der Zins steigen; das ändert Ihren Cashflow beim Halten." },
+  { p:"verkauf.sonstige_verkaufskosten_eur", l:"Weitere Verkaufskosten, die Sie erwarten (z. B. Löschung der Grundschuld, Renovierung vor dem Verkauf)", t:"num", u:"€", min:0 },
+  { p:"verkauf.inventar_mitverkauf", l:"Möbel und Einrichtung", t:"sel", o:[["", "weiß nicht / keine Angabe"],["ja","sollen mit verkauft werden"],["nein","sollen nicht mit verkauft werden"],["offen","noch offen"]], h:"Möbel gehören nicht automatisch zur Wohnung." },
+  { p:"verkauf.ziele_auswahl", l:"Was ist Ihnen beim Verkauf besonders wichtig?", t:"multi", full:true, o:[["hoher_preis","Ein möglichst hoher Preis"],["schnell","Eine schnelle Abwicklung"],["sicherheit","Sicherheit (solide Käufer, gesicherte Finanzierung)"],
+    ["wenig_aufwand","Wenig Aufwand für mich"],["diskretion","Diskretion (wenig Öffentlichkeit, wenige Besichtigungen)"],["mieter","Der Mieter soll geschützt sein oder bleiben"],["termin","Ein fester Übergabe- oder Verkaufstermin"],
+    ["eigennutzer","Ein Käufer, der selbst einzieht"],["provision","Maklerprovision sparen"],["begleitung","Begleitung bei Notar, Bank und Unterlagen"],["steuer","Steuerliche Fristen beachten (z. B. zehn Jahre seit dem Kauf)"]],
+    h:"Mehrfachauswahl möglich: Menü öffnen und Zutreffendes ankreuzen." },
+  { p:"verkauf.ziele", l:"Sonstiges (optional, schriftlicher Nachtrag)", t:"area", full:true, ph:"Was Ihnen noch wichtig ist und oben nicht vorkommt" }
+ ]}
+ ,{ title: "7. Ergänzende Fragen zu Ihrer vermieteten Wohnung", intro: "Diese Fragen sind für Ihre Situation (vermietet, möbliert) und klären Punkte, die den Preis und den Ablauf beeinflussen. Alles freiwillig, lassen Sie offen, was Sie nicht wissen.", fields: [
+  { p:"fall.kaufjahr", l:"Jahr, in dem Sie die Wohnung gekauft haben", t:"num", min:1950, max:2100, step:1, h:"Wichtig für die steuerliche Frist (Spekulationsfrist), die ich nicht beurteile; die Steuerberatung klärt das." },
+  { p:"fall.kaufpreis_eur", l:"Kaufpreis der Wohnung laut Kaufvertrag (mit Stellplatz und Küche, falls mitgekauft)", t:"num", u:"€", min:0, h:"Dient als Plausibilitätsanker und für die steuerliche Frist (Spekulationsgewinn); die Steuerberatung klärt die Steuer." },
+  { p:"fall.stellplatz_kaufpreis_eur", l:"Davon Kaufpreisanteil für den Stellplatz oder die Garage", t:"num", u:"€", min:0 },
+  { p:"fall.eigenkapital_eur", l:"Eigenkapital, das Sie beim Kauf eingebracht haben (falls bekannt)", t:"num", u:"€", min:0, h:"Für die Rechnung, ob Sie Ihr Eigenkapital bei einem Verkauf zurückbekommen; freiwillig." },
+  { p:"fall.kaufnebenkosten_eur", l:"Kaufnebenkosten (Grunderwerbsteuer, Notar, Grundbuch, Makler), falls bekannt", t:"num", u:"€", min:0 },
+  { p:"fall.selbstgenutzt_bis", l:"Bis wann haben Sie die Wohnung selbst bewohnt (Jahr)?", t:"num", min:1950, max:2100, step:1 },
+  { p:"fall.mehrere_eigentuemer", l:"Gehört die Wohnung mehreren Eigentümern (z. B. Ehepartner)?", t:"tri" },
+  { p:"fall.vormieter", l:"Gab es vor dem jetzigen Mieter einen anderen Mieter?", t:"tri" },
+  { p:"fall.vormiete_euro", l:"Miete des Vormieters, falls bekannt (Nettokaltmiete)", t:"num", u:"€/Monat", min:0, max:20000, h:"Eine höhere Vormiete kann bei der Mietpreisbremse eine Rolle spielen. Ob das hier gilt, klärt eine Fachperson." },
+  { p:"fall.mieterhoehungen", l:"Wurde seit Mietbeginn die Miete erhöht?", t:"tri" },
+  { p:"fall.letzte_mieterhoehung", l:"Datum der letzten Mieterhöhung", t:"text", ph:"z. B. 01.04.2024" },
+  { p:"fall.ruege_mieter", l:"Hat der Mieter jemals die Miethöhe beanstandet, gemindert oder Rückzahlung verlangt?", t:"tri", full:true },
+  { p:"fall.kaution_euro", l:"Kaution", t:"num", u:"€", min:0, max:50000 },
+  { p:"fall.mieter_informiert", l:"Ist der Mieter über Ihren Verkaufswunsch informiert?", t:"tri" },
+  { p:"fall.mieter_fotos", l:"Wäre der Mieter mit Fotos der Wohnung und mit Besichtigungen einverstanden?", t:"tri", full:true, h:"Fotos in bewohnten Wohnungen brauchen die Zustimmung des Mieters." },
+  { p:"fall.moebel_eigentum", l:"Gehören die Möbel Ihnen (und nicht dem Mieter)?", t:"tri" },
+  { p:"fall.bank_vorfaelligkeit", l:"Haben Sie bei der Bank die Vorfälligkeitsentschädigung für die Restschuld angefragt?", t:"tri", full:true },
+  { p:"fall.bisher_versucht", l:"Haben Sie bereits einen Verkauf versucht oder einen Makler angefragt?", t:"sel", full:true, o:[["", "keine Angabe"],["nein","nein"],["makler_angefragt","Makler angefragt"],["inseriert","bereits inseriert"],["anderes","anderes"]] },
+  { p:"fall.makler_provision_genannt", l:"Falls ein Makler angefragt wurde: Welche Provision wurde genannt (in % oder €)?", t:"text", full:true }
+ ]}
+ ,{ title: "8. Ihre Einschätzung zum Angebot (nur Pilot)", intro: `Ich teste ein Angebot in drei Stufen. <strong>Es gibt keine falschen Antworten</strong>, und es geht nicht darum, dass Sie etwas kaufen. Mich interessiert, was Ihnen etwas wert wäre.<ul>
+  <li><strong>Stufe 1, Marktpreis-Bericht:</strong> Preisspanne, Startpreis, Zeitpunkt, Konkurrenzangebote, Zielgruppen, Ablaufplan, Mietcheck.</li>
+  <li><strong>Stufe 2, Verkaufspaket:</strong> Stufe 1 plus ausführlicher Verkaufsleitfaden, fertiger Inserattext fürs Portal, Foto-Checkliste und Bildretusche, Besichtigungs- und Antwortvorlagen. Sie verkaufen selbst.</li>
+  <li><strong>Stufe 3, Begleitung:</strong> Stufe 2 plus laufende Betreuung über 3 bis 6 Monate bis zum Notartermin.</li></ul>
+  Zusatz für vermietete Wohnungen: eine Rechnung, was passiert, wenn die Wohnung vermietet oder frei verkauft wird.`, fields: [
+  { p:"pilot.alternative", l:"Was hätten Sie ohne diese Beratung getan?", t:"sel", full:true, o:[["", "keine Angabe"],["makler","einen Makler beauftragt"],["allein","allein verkauft"],["online_bewertung","nur eine Online-Bewertung genutzt"],["abwarten","abgewartet"],["unklar","weiß ich nicht"]] },
+  { p:"pilot.erwartung", l:"Was erwarten Sie von so einer Beratung?", t:"area", full:true },
+  { p:"pilot.interesse_stufe1", l:"Interesse an Stufe 1 (Marktpreis-Bericht)", t:"sel", o:[["", "keine Angabe"],["nein","kein Interesse"],["vielleicht","vielleicht"],["ja","ja"]] },
+  { p:"pilot.interesse_stufe2", l:"Interesse an Stufe 2 (Verkaufspaket, Sie verkaufen selbst)", t:"sel", o:[["", "keine Angabe"],["nein","kein Interesse"],["vielleicht","vielleicht"],["ja","ja"]] },
+  { p:"pilot.interesse_stufe3", l:"Interesse an Stufe 3 (mit Begleitung)", t:"sel", o:[["", "keine Angabe"],["nein","kein Interesse"],["vielleicht","vielleicht"],["ja","ja"]] },
+  { p:"pilot.wichtigster_baustein", l:"Welcher Teil wäre für Sie am wertvollsten?", t:"sel", full:true, o:[["", "keine Angabe"],["preis","Preiseinschätzung und Startpreis"],["inserat","fertiger Inserattext und Bilder"],["ablauf","Verkaufsleitfaden und Checklisten"],["miete","Mieten- und Wert-Hebel-Rechnung"],["begleitung","laufende Begleitung"],["nichts","keiner davon"]] },
+  { p:"pilot.preis1_zu_billig", l:"Stufe 1: Ab welchem Preis wäre er so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis1_gut", l:"Stufe 1: Ab welchem Preis wäre er ein gutes Angebot (günstig, aber vertrauenswürdig)?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis1_teuer", l:"Stufe 1: Ab welchem Preis wäre er teuer, aber Sie würden noch darüber nachdenken?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis1_zu_teuer", l:"Stufe 1: Ab welchem Preis wäre er zu teuer, Sie würden ihn nicht kaufen?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis2_zu_billig", l:"Stufe 2: Ab welchem Preis wäre das Verkaufspaket so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis2_gut", l:"Stufe 2: Ab welchem Preis wäre es ein gutes Angebot?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis2_teuer", l:"Stufe 2: Ab welchem Preis wäre es teuer, aber noch denkbar?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis2_zu_teuer", l:"Stufe 2: Ab welchem Preis wäre es zu teuer?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.provision_erwartung", l:"Was schätzen Sie, würde ein Makler für Ihren Verkauf insgesamt kosten (in €)?", t:"num", u:"€", min:0, max:200000, h:"Ihre Schätzung, nicht die Wahrheit. Ich vergleiche sie später mit der Realität." },
+  { p:"pilot.dauer_minuten", l:"Wie lange haben Sie für den Fragebogen gebraucht?", t:"num", u:"Minuten", min:0, max:600 },
+  { p:"pilot.unklar", l:"Was war unklar, schwer zu beantworten oder hat gefehlt?", t:"area", full:true },
+  { p:"pilot.fallstudie_ok", l:"Darf ich Ihren Fall anonymisiert (ohne Namen, Straße, Preisangaben) als Beispiel nutzen?", t:"tri", full:true },
+  { p:"pilot.nachbefragung_ok", l:"Darf ich mich nach dem Verkauf nochmals bei Ihnen melden, um zu hören, wie es gelaufen ist?", t:"tri", full:true }
+ ]}
+];
+const UNTERLAGEN = [
+ ["grundbuchauszug","Grundbuchauszug"],["teilungserklaerung","Teilungserklärung"],["protokolle","Protokolle der letzten drei Eigentümerversammlungen"],
+ ["wirtschaftsplan","Wirtschaftsplan und letzte Hausgeldabrechnung"],["energieausweis","Energieausweis"],["wohnflaeche","Wohnflächenberechnung"],
+ ["mietvertrag","Mietvertrag (falls vermietet)"],["nebenkosten","Letzte Nebenkostenabrechnung (falls vermietet)"],["moebelliste","Möbelliste mit Anschaffungsjahr und Preis (falls möbliert)"]];
+
+const form = document.getElementById('form');
+const el = {}; // path -> element
+function fieldHtml(f) {
+  const id = 'f_' + f.p.replace(/\./g, '_');
+  const cls = f.full ? ' class="full"' : '';
+  let ctl;
+  if (f.t === 'tri') ctl = `<select id="${id}">${TRI.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
+  else if (f.t === 'sel') ctl = `<select id="${id}">${f.o.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
+  else if (f.t === 'multi') ctl = `<details class="multi" id="${id}"><summary><span class="ms">Auswahl öffnen (nichts ausgewählt)</span></summary><div class="mbox">${f.o.map(o => `<label class="check"><input type="checkbox" data-m="${id}" value="${o[0]}"><span>${o[1]}</span></label>`).join('')}</div></details>`;
+  else if (f.t === 'area') ctl = `<textarea id="${id}" rows="3" placeholder="${f.ph || ''}"></textarea>`;
+  else if (f.t === 'num') { const inp = `<input id="${id}" type="number" inputmode="decimal" ${f.min!=null?`min="${f.min}"`:''} ${f.max!=null?`max="${f.max}"`:''} step="${f.step || 'any'}">`; ctl = f.u ? `<div class="unit">${inp}<span>${f.u}</span></div>` : inp; }
+  else ctl = `<input id="${id}" type="text" placeholder="${f.ph || ''}">`;
+  return `<div${cls}><label for="${id}"${f.req ? ' class="req"' : ''}>${f.l}</label>${ctl}${f.h ? `<div class="help">${f.h}</div>` : ''}<div class="err" id="e_${id}"></div></div>`;
+}
+form.innerHTML = SECTIONS.map(s => `<div class="card"><h2>${s.title}</h2><p class="lead">${s.intro}</p><div class="grid">${s.fields.map(fieldHtml).join('')}</div></div>`).join('') +
+  `<div class="card"><h2>9. Unterlagen</h2><p class="lead">Welche Unterlagen haben Sie bereits? Sie müssen sie jetzt nicht mitschicken.</p>${UNTERLAGEN.map(u => `<label class="check"><input type="checkbox" data-doc="${u[0]}"><span>${u[1]}</span></label>`).join('')}</div>`;
+SECTIONS.forEach(s => s.fields.forEach(f => { f.id = 'f_' + f.p.replace(/\./g, '_'); el[f.p] = document.getElementById(f.id); }));
+
+function readField(f) {
+  const e = el[f.p];
+  if (f.t === 'multi') { const w = [...e.querySelectorAll('input[type=checkbox]:checked')].map(c => c.value); return w.length ? w : null; }
+  const v = e.value.trim();
+  if (f.t === 'tri') return v === 'ja' ? true : v === 'nein' ? false : null;
+  if (f.t === 'num') return v === '' ? null : Number(v);
+  return v === '' ? null : v;
+}
+function setNested(o, path, val) { const k = path.split('.'); let c = o; k.slice(0, -1).forEach(x => c = (c[x] = c[x] || {})); c[k[k.length - 1]] = val; }
+
+function buildJson() {
+  const out = { schema: 'fragebogen-verkauf-v1', erstellt: new Date().toISOString().slice(0, 10) };
+  SECTIONS.forEach(s => s.fields.forEach(f => setNested(out, f.p, readField(f))));
+  { const o = out.objekt, b = o.stat_bezirk, hit = STAT_BEZIRKE.find(x => x[0] === b);     // Stadtteil: Name aus dem Auswahlfeld, sonst freier Text
+    if (hit) o.ortsteil = hit[1]; else if (b === 'sonstige') o.ortsteil = o.ortsteil_frei || null; else o.ortsteil = null;
+    if (!hit) o.stat_bezirk = (b === 'sonstige' || b === 'weiss_nicht') ? null : o.stat_bezirk; }
+  { const o = out.objekt, gem = ((SECTIONS[0].fields.find(x => x.p === 'objekt.gemeinde_nl') || {}).o || []).find(x => x[0] === o.gemeinde_nl); if (gem && o.gemeinde_nl !== 'andere_nl') { o.gemeinde = gem[1]; if (!o.stadt) o.stadt = gem[1]; } else if (o.gemeinde_nl === 'andere_nl') o.gemeinde = o.stadt || null; if (!o.gemeinde_nl) delete o.gemeinde_nl; }
+  { const sel = el['objekt.engere_innenstadt']; if (sel && sel.dataset.auto === '1' && out.objekt.engere_innenstadt != null) out.objekt.engere_innenstadt_quelle = 'Straßenverzeichnis der Stadt Nürnberg zum Mietenspiegel, Stand ' + ((window.ALTSTADT_STRASSEN || {}).stand || '?'); }
+  out.unterlagen = {};
+  document.querySelectorAll('[data-doc]').forEach(c => out.unterlagen[c.dataset.doc] = c.checked);
+  out.einwilligung = document.getElementById('einwilligung').checked;
+  if (typeof fotos !== 'undefined' && fotos.length) out.fotos_anzahl = fotos.length;
+  return out;
+}
+
+// Datum als TT.MM.JJJJ, MM.JJJJ oder JJJJ; Jahr zwischen 1950 und heute, Tag und Monat müssen existieren
+function datumOk(t) {
+  const m = /^(?:(?:(\d{1,2})\.)?(\d{1,2})\.)?(\d{4})$/.exec(String(t).trim());
+  if (!m) return false;
+  const tag = m[1] ? +m[1] : null, mon = m[2] ? +m[2] : null, jahr = +m[3];
+  if (jahr < 1950 || jahr > new Date().getFullYear()) return false;
+  if (mon !== null && (mon < 1 || mon > 12)) return false;
+  if (tag !== null) { const d = new Date(jahr, mon - 1, tag); if (d.getMonth() !== mon - 1 || d.getDate() !== tag) return false; }
+  return true;
+}
+function ausserhalbNuernberg() {
+  const fd = (p) => SECTIONS.flatMap(s => s.fields).find(x => x.p === p);
+  const gem = readField(fd('objekt.gemeinde_nl')), st = (readField(fd('objekt.stadt')) || '').toLowerCase();
+  return !!gem || (st !== '' && !/n(ü|ue|u)rnberg/.test(st));
+}
+function validate(final) {
+  let ok = true;
+  document.querySelectorAll('.err').forEach(e => e.textContent = '');
+  const err = (f, t) => { document.getElementById('e_' + f.id).textContent = t; ok = false; };
+  SECTIONS.forEach(s => s.fields.forEach(f => {
+    const v = readField(f);
+    if (final && f.req && (v === null) && !(f.p === 'objekt.stat_bezirk' && ausserhalbNuernberg())) err(f, 'Bitte ausfüllen.');
+    if (f.t === 'num' && v !== null) {
+      if (!Number.isFinite(v)) err(f, 'Bitte eine Zahl eingeben.');
+      else if (f.min != null && v < f.min) err(f, `Wert zu klein (mindestens ${f.min}).`);
+      else if (f.max != null && v > f.max) err(f, `Wert zu groß (höchstens ${f.max}).`);
+    }
+  }));
+  const g = (p) => readField(SECTIONS.flatMap(s => s.fields).find(f => f.p === p));
+  const ges = g('vermietung.gesamtmiete'), nk = g('vermietung.nettokaltmiete'), mz = g('vermietung.moeblierungszuschlag');
+  const f = (p) => SECTIONS.flatMap(s => s.fields).find(x => x.p === p);
+  if (nk !== null && ges !== null && nk > ges) err(f('vermietung.nettokaltmiete'), 'Die Nettokaltmiete kann nicht höher als die Gesamtmiete sein.');
+  if (nk !== null && mz !== null && ges !== null && Math.abs(nk + mz - ges) > 1) err(f('vermietung.moeblierungszuschlag'), 'Nettokaltmiete plus Möblierungszuschlag ergibt nicht die Gesamtmiete. Bitte prüfen.');
+  const og = g('objekt.etage'), ogg = g('objekt.obergeschosse_gebaeude');
+  if (og !== null && ogg !== null && og > ogg) err(f('objekt.obergeschosse_gebaeude'), 'Weniger Obergeschosse als die Etage der Wohnung. Bitte prüfen.');
+  const hg = g('weg.hausgeld'), hgn = g('weg.hausgeld_nicht_umlagefaehig');
+  if (hg !== null && hgn !== null && hgn > hg) err(f('weg.hausgeld_nicht_umlagefaehig'), 'Der nicht umlegbare Anteil kann nicht größer als das Hausgeld sein.');
+  const plz = g('objekt.plz');
+  if (plz !== null && !/^\d{5}$/.test(plz)) err(f('objekt.plz'), 'Die Postleitzahl hat 5 Ziffern.');
+  const mvd = g('vermietung.mietvertrag_datum');
+  if (mvd !== null && !datumOk(mvd)) err(f('vermietung.mietvertrag_datum'), 'Bitte als 01.03.2022, 03.2022 oder 2022 eingeben (Jahr zwischen 1950 und heute).');
+  if (g('objekt.stat_bezirk') === 'sonstige' && g('objekt.ortsteil_frei') === null) err(f('objekt.ortsteil_frei'), 'Bitte den Stadtteil oder Ort eintragen.');
+  const bj = g('objekt.baujahr'), bf = g('objekt.bezugsfertig');
+  if (bj !== null && bf !== null && bf < bj) err(f('objekt.bezugsfertig'), 'Die Bezugsfertigkeit liegt vor dem Baujahr. Bitte prüfen.');
+  const bwe = g('objekt.bodenwertanteil_eur'), pv = g('verkauf.preisvorstellung');
+  if (bwe !== null && pv !== null && bwe > pv) err(f('objekt.bodenwertanteil_eur'), 'Der Bodenwertanteil kann nicht höher als der Preis sein. Bitte prüfen.');
+  ['pilot.preis1', 'pilot.preis2'].forEach(pre => {
+    const ks = ['_zu_billig', '_gut', '_teuer', '_zu_teuer'].map(k => g(pre + k));
+    const vals = ks.filter(v => v !== null);
+    for (let i = 1; i < ks.length; i++) {
+      if (ks[i] !== null && ks[i - 1] !== null && ks[i] < ks[i - 1]) { err(f(pre + ['_zu_billig', '_gut', '_teuer', '_zu_teuer'][i]), 'Die Preise sollten von „zu billig“ bis „zu teuer“ ansteigen. Bitte prüfen.'); break; }
+    }
+  });
+  return ok;
+}
+
+function progress() {
+  const all = SECTIONS.flatMap(s => s.fields); const key = all.filter(f => !['objekt.strasse','verkauf.ziele','verkauf.ziele_auswahl','weg.sanierung_beschluesse','verkauf.restschuld'].includes(f.p) && !f.p.startsWith('fall.') && !f.p.startsWith('pilot.'));
+  const filled = key.filter(f => readField(f) !== null).length; const p = Math.round(filled / key.length * 100);
+  document.getElementById('pct').textContent = p + ' %'; document.getElementById('meter').style.width = p + '%';
+}
+form.addEventListener('input', progress); form.addEventListener('change', progress);
+function bezirkText(t) { return String(t || '').toLowerCase().replace(/ß/g, 'ss').replace(/^\s*(st\.|sankt)\s*/, '').replace(/[^a-zäöü0-9]/g, ''); }
+function multiRefresh() { document.querySelectorAll('details.multi').forEach(d => { const n = d.querySelectorAll('input[type=checkbox]:checked').length; d.querySelector('.ms').textContent = n ? n + ' ausgewählt' + (n > 3 ? '' : ': ' + [...d.querySelectorAll('input:checked')].map(c => c.nextElementSibling.textContent).join('; ')) : 'Auswahl öffnen (nichts ausgewählt)'; }); }
+form.addEventListener('change', multiRefresh);
+
+function download(json, name) {
+  const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+}
+const msg = (t) => document.getElementById('msg').textContent = t;
+document.getElementById('dlpartial').addEventListener('click', () => {
+  if (!validate(false)) { msg('Bitte die markierten Felder prüfen.'); return; }
+  download(buildJson(), 'fragebogen-pilot-zwischenstand-' + new Date().toISOString().slice(0, 10) + '.json');
+  msg('Zwischenstand heruntergeladen. Mit „Frühere Datei weiterbearbeiten“ können Sie später weitermachen.');
+});
+document.getElementById('dl').addEventListener('click', () => {
+  if (!validate(true)) { msg('Bitte die markierten Felder prüfen. Pflichtfelder sind mit * gekennzeichnet.'); return; }
+  if (!document.getElementById('einwilligung').checked) { msg('Bitte stimmen Sie der Verwendung Ihrer Angaben zu.'); return; }
+  download(buildJson(), 'fragebogen-pilot-' + new Date().toISOString().slice(0, 10) + '.json');
+  msg('Fertig: Die Datei wurde heruntergeladen. Bitte schicken Sie sie mir. Danke!' + (typeof fotos !== 'undefined' && fotos.length && !fotoGespeichert ? ' Sie haben Fotos hinzugefügt: Bitte laden Sie auch die Fotodatei herunter (Abschnitt „Fotos hinzufügen“) und schicken Sie beide Dateien.' : ''));
+});
+
+document.getElementById('loadFile').addEventListener('change', (ev) => {
+  const file = ev.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (d.schema !== 'fragebogen-verkauf-v1') throw new Error('schema');
+      if (d.objekt && d.objekt.stat_bezirk == null && typeof d.objekt.ortsteil === 'string' && d.objekt.ortsteil.trim()) {   // älterer Text -> Auswahlfeld, wenn eindeutig
+        const t = bezirkText(d.objekt.ortsteil.includes(',') && d.objekt.stadt == null ? d.objekt.ortsteil.split(',').slice(1).join(',') : d.objekt.ortsteil), tr = STAT_BEZIRKE.filter(x => bezirkText(x[1]).includes(t) || t.includes(bezirkText(x[1])));
+        if (t && tr.length === 1) d.objekt.stat_bezirk = tr[0][0]; else if (t) { d.objekt.stat_bezirk = 'sonstige'; d.objekt.ortsteil_frei = d.objekt.ortsteil; }
+      }
+      if (d.objekt && d.objekt.stadt == null && typeof d.objekt.ortsteil === 'string' && d.objekt.ortsteil.includes(',')) {   // ältere Dateien: "Stadt, Stadtteil" in einem Feld
+        const teile = d.objekt.ortsteil.split(','); d.objekt.stadt = teile.shift().trim(); d.objekt.ortsteil = teile.join(',').trim();
+      }
+      SECTIONS.forEach(s => s.fields.forEach(f => {
+        let v = d; f.p.split('.').forEach(k => v = (v && typeof v === 'object') ? v[k] : undefined);
+        const e = el[f.p];
+        if (f.t === 'multi') { const set = Array.isArray(v) ? v : []; e.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = set.indexOf(cb.value) >= 0); multiRefresh(); return; }
+        if (v === undefined || v === null) { e.value = ''; return; }
+        e.value = f.t === 'tri' ? (v ? 'ja' : 'nein') : String(v);
+      }));
+      document.querySelectorAll('[data-doc]').forEach(c => c.checked = !!(d.unterlagen && d.unterlagen[c.dataset.doc]));
+      { const sel = el['objekt.engere_innenstadt']; if (sel) { sel.dataset.auto = ''; sel.dataset.manuell = sel.value ? '1' : ''; } altstadtAuto(); }
+      progress(); msg('Datei geladen. Bitte prüfen und ergänzen.');
+    } catch (e) { msg('Diese Datei passt nicht zum Fragebogen.'); }
+  };
+  r.readAsText(file);
+});
+// ---- Fotos (optional): Bilder im Browser verkleinern, einem Raum zuordnen und als zweite Datei speichern (Schema fragebogen-fotos-v1)
+const FOTO_RAEUME = [["hauptfoto","Hauptfoto (bestes Bild)"],["aussen","Haus von außen"],["wohnzimmer","Wohnzimmer"],["essbereich","Essbereich"],["kueche","Küche"],["bad","Bad"],["gaeste_wc","Gäste-WC / zweites Bad"],
+  ["schlafzimmer","Schlafzimmer"],["zimmer","weiteres Zimmer"],["flur","Flur / Eingang"],["balkon","Balkon / Terrasse"],["keller","Keller / Abstellraum"],["stellplatz","Stellplatz / Garage"],["grundriss","Grundriss"],["sonstiges","Sonstiges"]];
+const fotos = []; let fotoGespeichert = false;
+(function () {
+  const el = (id) => document.getElementById(id), MAXFOTOS = 30, MAXKANTE = 1600, QUALITAET = 0.82;
+  function verkleinern(file) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onerror = () => rej(new Error('Datei nicht lesbar'));
+      r.onload = () => { const im = new Image(); im.onerror = () => rej(new Error('Dieses Bildformat kann der Browser nicht lesen (zum Beispiel HEIC). Bitte als JPEG speichern.'));
+        im.onload = () => { const s = Math.min(1, MAXKANTE / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.width * s)); c.height = Math.max(1, Math.round(im.height * s));
+          const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+          const url = c.toDataURL('image/jpeg', QUALITAET); res({ url, w: c.width, h: c.height, bytes: Math.round(url.length * 0.75) }); };
+        im.src = r.result; };
+      r.readAsDataURL(file);
+    });
+  }
+  function mb(b) { return (b / 1048576).toFixed(1).replace('.', ',') + ' MB'; }
+  function zeichne() {
+    const box = el('fotoListe'); box.textContent = '';
+    fotos.forEach((f, i) => {
+      const row = document.createElement('div'); row.style.cssText = 'display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:start;border-top:1px solid var(--line);padding:10px 0;';
+      const im = document.createElement('img'); im.src = f.url; im.alt = ''; im.style.cssText = 'width:90px;height:68px;object-fit:cover;border-radius:6px;background:#eee;';
+      const rechts = document.createElement('div');
+      const sel = document.createElement('select'); FOTO_RAEUME.forEach(r => { const o = document.createElement('option'); o.value = r[0]; o.textContent = r[1]; sel.appendChild(o); }); sel.value = f.raum; sel.setAttribute('aria-label', 'Raum des Fotos ' + (i + 1));
+      sel.onchange = () => { f.raum = sel.value; fotoGespeichert = false; };
+      const t = document.createElement('input'); t.type = 'text'; t.maxLength = 120; t.placeholder = 'Beschreibung (optional), z. B. „Küche mit Blick zum Balkon“'; t.value = f.text; t.style.marginTop = '6px'; t.setAttribute('aria-label', 'Beschreibung des Fotos ' + (i + 1));
+      t.oninput = () => { f.text = t.value; fotoGespeichert = false; };
+      const zl = document.createElement('div'); zl.className = 'help'; zl.textContent = (f.name || 'Foto') + ' · ' + f.w + ' × ' + f.h + ' Pixel · ' + mb(f.bytes) + ' ';
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'sec'; b.style.cssText = 'padding:3px 10px;font-size:.8rem;margin-left:6px'; b.textContent = 'Entfernen';
+      b.onclick = () => { fotos.splice(i, 1); fotoGespeichert = false; zeichne(); };
+      zl.appendChild(b); rechts.appendChild(sel); rechts.appendChild(t); rechts.appendChild(zl); row.appendChild(im); row.appendChild(rechts); box.appendChild(row);
+    });
+    const summe = fotos.reduce((a, f) => a + f.bytes, 0);
+    el('fotoInfo').textContent = fotos.length ? fotos.length + ' Foto' + (fotos.length > 1 ? 's' : '') + ', zusammen etwa ' + mb(summe) + (summe > 15 * 1048576 ? ' (sehr groß: Mails lassen meist nur 20 bis 25 MB zu, bitte einige Fotos entfernen)' : '') : '';
+  }
+  async function hinzu(files) {
+    const fehler = [];
+    for (const file of files) {
+      if (fotos.length >= MAXFOTOS) { fehler.push('Höchstens ' + MAXFOTOS + ' Fotos.'); break; }
+      if (!/^image\//.test(file.type) && !/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)) { fehler.push(file.name + ': kein Bild.'); continue; }
+      try { const v = await verkleinern(file); fotos.push({ raum: fotos.some(f => f.raum === 'hauptfoto') ? 'sonstiges' : 'hauptfoto', text: '', name: String(file.name || '').slice(0, 80), url: v.url, w: v.w, h: v.h, bytes: v.bytes }); }
+      catch (e) { fehler.push(file.name + ': ' + e.message); }
+    }
+    fotoGespeichert = false; zeichne();
+    if (fehler.length) el('fotoInfo').textContent += (el('fotoInfo').textContent ? ' · ' : '') + fehler.join(' ');
+  }
+  window.baueFotoDatei = function () {
+    return { schema: 'fragebogen-fotos-v1', erstellt: new Date().toISOString().slice(0, 10), einwilligung_bewohner: !!el('fotoEinwilligung').checked,
+      fotos: fotos.map(f => ({ raum: f.raum, beschreibung: f.text.trim() || null, datei: f.name, breite: f.w, hoehe: f.h, daten: f.url })) };
+  };
+  el('fotoInput').addEventListener('change', (e) => { const fl = [...e.target.files]; e.target.value = ''; hinzu(fl); });
+  el('fotoSpeichern').addEventListener('click', () => {
+    if (!fotos.length) { el('fotoInfo').textContent = 'Es sind noch keine Fotos hinzugefügt.'; return; }
+    if (!el('fotoEinwilligung').checked) { el('fotoInfo').textContent = 'Bitte bestätigen Sie oben, dass keine Personen zu sehen sind und die Bewohner einverstanden sind.'; return; }
+    download(window.baueFotoDatei(), 'fragebogen-fotos-' + new Date().toISOString().slice(0, 10) + '.json'); fotoGespeichert = true;
+    el('fotoInfo').textContent = 'Fotodatei heruntergeladen. Bitte schicken Sie sie zusammen mit der Fragebogen-Datei.';
+  });
+  el('fotoLaden').addEventListener('click', () => el('fotoLadenInput').click());
+  el('fotoLadenInput').addEventListener('change', (e) => {
+    const file = e.target.files[0]; e.target.value = ''; if (!file) return; const r = new FileReader();
+    r.onload = () => { try { const d = JSON.parse(r.result); if (d.schema !== 'fragebogen-fotos-v1' || !Array.isArray(d.fotos)) throw new Error('schema');
+        d.fotos.slice(0, MAXFOTOS).forEach(f => { if (f && typeof f.daten === 'string' && /^data:image\/(jpeg|png|webp);base64,/.test(f.daten) && FOTO_RAEUME.some(x => x[0] === f.raum))
+          fotos.push({ raum: f.raum, text: typeof f.beschreibung === 'string' ? f.beschreibung.slice(0, 120) : '', name: String(f.datei || '').slice(0, 80), url: f.daten, w: +f.breite || 0, h: +f.hoehe || 0, bytes: Math.round(f.daten.length * 0.75) }); });
+        el('fotoEinwilligung').checked = !!d.einwilligung_bewohner; zeichne(); el('fotoCard').open = true; }
+      catch (x) { el('fotoInfo').textContent = 'Diese Datei passt nicht zu den Fotos des Fragebogens.'; } };
+    r.readAsText(file);
+  });
+})();
+// ---- Altstadt und engere Innenstadt: automatisch aus Straße und Hausnummer (Straßenverzeichnis der Stadt Nürnberg zum Mietenspiegel)
+function altstadtAuto() {
+  const sel = el['objekt.engere_innenstadt'], str = el['objekt.strasse']; if (!sel || !str) return;
+  let note = document.getElementById('altstadtNote'); if (!note) { note = document.createElement('div'); note.id = 'altstadtNote'; note.className = 'help'; sel.parentElement.insertBefore(note, sel.nextSibling); }
+  if (sel.dataset.manuell === '1') { note.textContent = ''; return; }
+  const stadt = (el['objekt.stadt'].value || '').toLowerCase(), plz = (el['objekt.plz'].value || '').trim();
+  const nbg = !stadt || /n(ü|ue|u)rnberg/.test(stadt) || (/^\d{5}$/.test(plz) && +plz >= 90402 && +plz <= 90491);
+  const L = window.AltstadtLookup, text = str.value.trim();
+  if (!L || !window.ALTSTADT_STRASSEN) { note.textContent = text ? 'Diese Fassung bestimmt die Antwort nicht automatisch: bitte selbst beantworten.' : ''; return; }
+  if (!text) { if (sel.dataset.auto === '1') { sel.value = ''; sel.dataset.auto = ''; } note.textContent = 'Wird automatisch bestimmt, sobald Sie oben Straße und Hausnummer eintragen.'; progress(); return; }
+  if (!nbg) { note.textContent = 'Die automatische Prüfung gilt nur für Nürnberg.'; return; }
+  const r = L.pruefe(text);
+  if (r.ergebnis === null) { note.textContent = 'Für „' + r.strasse + '“ ist die Hausnummer nötig (die Straße gehört nur teilweise zum Gebiet). Bitte oben mit Hausnummer eintragen.'; return; }
+  if (r.ergebnis === undefined) return;
+  sel.value = r.ergebnis ? 'ja' : 'nein'; sel.dataset.auto = '1';
+  note.textContent = 'Automatisch aus dem Straßenverzeichnis der Stadt Nürnberg (Stand ' + r.stand + ') bestimmt: ' + r.strasse + (r.nr ? ' ' + r.nr : '') + (r.ergebnis ? ' liegt im' : ' liegt nicht im') + ' Stadtteil „Altstadt und engere Innenstadt“. Sie können die Antwort ändern.';
+  progress();
+}
+(function () {
+  const sel = el['objekt.engere_innenstadt']; if (!sel) return;
+  sel.addEventListener('change', (e) => { if (e.isTrusted) { sel.dataset.manuell = '1'; sel.dataset.auto = ''; const n = document.getElementById('altstadtNote'); if (n) n.textContent = 'Von Ihnen beantwortet.'; } });
+  ['objekt.strasse', 'objekt.stadt', 'objekt.plz'].forEach(k => { const e2 = el[k]; if (e2) { e2.addEventListener('input', altstadtAuto); e2.addEventListener('change', altstadtAuto); } });
+  altstadtAuto();
+})();
+progress();
+</script>
+</body>
+</html>

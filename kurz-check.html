@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kurz-Check: Pilot Preiseinschätzung</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{--ink:#1b2127;--muted:#5d6872;--bg:#fbfaf7;--card:#ffffff;--line:#dfe3e6;--accent:#17406b;--warn:#fff4d6;--warn-line:#9a6a00;--err:#a4262c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8ecef;--muted:#a3afb8;--bg:#14181c;--card:#1c2228;--line:#2e3740;--accent:#7fb2e5;--warn:#3a3118;--warn-line:#d8a93c;--err:#ff8a8f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px 40px}
+.entwurf{background:var(--warn);border-bottom:2px solid var(--warn-line);padding:8px 20px;font-size:14px}
+h1{font-size:28px;line-height:1.2;color:var(--accent);margin:28px 0 10px}
+p{margin:0 0 14px}
+.muted{color:var(--muted)}.small{font-size:14px}
+form,.out{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-top:18px}
+label{display:block;font-weight:600;margin:16px 0 4px}
+label:first-child{margin-top:0}
+.hint{font-weight:400;color:var(--muted);font-size:14px}
+input[type=text],input[type=email],input[type=number],select,textarea{width:100%;padding:10px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
+textarea{min-height:70px}
+.row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media (max-width:520px){.row{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin-top:18px}
+.check input{margin-top:5px}
+.btn{display:inline-block;padding:13px 22px;border-radius:8px;border:2px solid var(--accent);background:var(--accent);color:#fff;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;margin:6px 8px 6px 0}
+@media (prefers-color-scheme:dark){.btn{color:#0b1218}}
+.btn.sec{background:transparent;color:var(--accent)}
+.err{color:var(--err);font-size:14px;margin-top:4px;display:none}
+.hinweis{background:var(--warn);border-left:4px solid var(--warn-line);padding:10px 12px;border-radius:4px;font-size:15px;margin-top:14px;display:none}
+pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px;font:14px/1.5 ui-monospace,Menlo,monospace}
+.platzhalter{background:var(--warn);padding:0 4px;border-radius:3px;font-family:ui-monospace,Menlo,monospace;font-size:.92em}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="entwurf"><strong>Pilot, nicht öffentlich.</strong> </div>
+<div class="wrap">
+<p style="margin-top:18px"><a href="index.html">← Zurück</a></p>
+<h1>Kurz-Check</h1>
+<p>Ein paar Angaben zu Ihrer Immobilie. Daraus entsteht eine fertige E-Mail an mich. Danach melde ich mich mit dem Link zum ausführlichen Fragebogen.</p>
+<p class="small muted"><strong>Diese Seite selbst speichert und überträgt nichts.</strong> Ihre Angaben gehen erst an mich, wenn Sie in Ihrem E-Mail-Programm auf „Senden“ klicken. E-Mails sind nicht Ende-zu-Ende-verschlüsselt. Ich verwende Ihre Angaben nur, um Ihnen zu antworten. Bitte tragen Sie keine Namen oder Kontaktdaten von Mietern ein und keine Straße.</p>
+
+<form id="f" novalidate>
+<label for="art">Was möchten Sie verkaufen?</label>
+<select id="art" required><option value="">Bitte wählen</option><option value="Wohnung">Eigentumswohnung</option><option value="Haus">Ein- oder Zweifamilienhaus, Doppel- oder Reihenhaus</option></select>
+<div class="err" id="e_art">Bitte wählen Sie die Art der Immobilie.</div>
+
+<label for="lage">Ort und Ortsteil <span class="hint">(bitte keine Straße)</span></label>
+<input type="text" id="lage" autocomplete="off" required placeholder="z. B. Schwaig, Reichenschwand, Nürnberg Wöhrd">
+<div class="err" id="e_lage">Bitte nennen Sie den Ort.</div>
+<div class="hinweis" id="h_ort">Im Pilot rechne ich Nürnberg und den Landkreis Nürnberger Land. Für andere Orte kann ich vermutlich keine Einschätzung liefern; schicken Sie den Kurz-Check trotzdem ab, ich antworte ehrlich.</div>
+
+<div class="row">
+<div><label for="flaeche">Wohnfläche in m²</label><input type="number" id="flaeche" min="10" max="800" step="0.1" required><div class="err" id="e_flaeche">Bitte geben Sie die Wohnfläche an.</div></div>
+<div><label for="baujahr">Baujahr <span class="hint">(ungefähr)</span></label><input type="number" id="baujahr" min="1500" max="2030" required><div class="err" id="e_baujahr">Bitte geben Sie ein Baujahr an.</div></div>
+</div>
+<div id="gs" hidden><label for="grund">Grundstücksfläche in m²</label><input type="number" id="grund" min="50" max="20000" step="1"><div class="err" id="e_grund">Bitte geben Sie die Grundstücksfläche an.</div></div>
+
+<label for="nutzung">Nutzung heute</label>
+<select id="nutzung" required><option value="">Bitte wählen</option><option>selbst genutzt</option><option>vermietet</option><option>teilweise vermietet</option><option>leer</option></select>
+<div class="err" id="e_nutzung">Bitte wählen Sie eine Nutzung.</div>
+
+<label for="zeit">Wann möchten Sie verkaufen?</label>
+<select id="zeit"><option value="">Keine Angabe</option><option>so bald wie möglich</option><option>in den nächsten 6 Monaten</option><option>später, ich will erst wissen, was möglich ist</option></select>
+
+<label for="frage">Was ist Ihre wichtigste Frage? <span class="hint">(freiwillig)</span></label>
+<textarea id="frage" maxlength="600" placeholder="z. B. Welcher Preis ist realistisch? Was bleibt mir nach dem Kredit?"></textarea>
+
+<label for="mail">Ihre E-Mail-Adresse</label>
+<input type="email" id="mail" autocomplete="email" required>
+<div class="err" id="e_mail">Bitte geben Sie eine gültige E-Mail-Adresse an.</div>
+
+<label class="check"><input type="checkbox" id="dsgvo" required><span>Ich bin damit einverstanden, dass meine Angaben genutzt werden, um mir auf diese Anfrage per E-Mail zu antworten. Weitere E-Mails erhalte ich nur, wenn ich das ausdrücklich möchte. Die <a href="index.html#datenschutz">Hinweise zu Ihren Daten</a> habe ich gelesen.</span></label>
+<div class="err" id="e_dsgvo">Bitte stimmen Sie zu, damit ich antworten darf.</div>
+
+<p style="margin-top:20px"><button type="submit" class="btn">Anfrage vorbereiten</button></p>
+</form>
+
+<div class="out" id="out" hidden>
+<h2 style="margin:0 0 8px;font-size:20px">Ihre Anfrage ist vorbereitet</h2>
+<p class="small muted">Bitte prüfen Sie den Text. Abgeschickt ist noch nichts.</p>
+<pre id="text"></pre>
+<a class="btn" id="mailto" href="#">E-Mail öffnen</a>
+<button type="button" class="btn sec" id="kopie">Text kopieren</button>
+<p class="small muted" id="kopiert" hidden>Kopiert. Sie können den Text in eine E-Mail an fischmac007@me.com einfügen.</p>
+<p class="small muted">Funktioniert „E-Mail öffnen“ nicht, kopieren Sie den Text und senden Sie ihn an fischmac007@me.com.</p>
+</div>
+</div>
+
+<script>
+(function(){
+  var EMPFAENGER = 'fischmac007@me.com';
+  var $ = function(id){return document.getElementById(id)};
+  var f = $("f");
+  function art(){ var h = $("art").value === "Haus"; $("gs").hidden = !h; }
+  $("art").addEventListener("change", art);
+  var BEKANNT = /n(ü|ue)rnberg|nbg|altdorf|burgthann|engelthal|feucht|happurg|hartenstein|henfenfeld|hersbruck|kirchensittenbach|lauf|leinburg|neuhaus|neunkirchen|offenhausen|ottensoos|pommelsbrunn|reichenschwand|r(ö|oe)thenbach|r(ü|ue)ckersdorf|schnaittach|schwaig|schwarzenbruck|winkelhaid|9(04|05|06|07|12)\d\d/i;
+  $("lage").addEventListener("input", function(){ var v = this.value.trim(); $("h_ort").style.display = (v.length > 3 && !BEKANNT.test(v)) ? "block" : "none"; });
+  function pruefen(id, ok){ $("e_"+id).style.display = ok ? "none" : "block"; return ok; }
+  f.addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var haus = $("art").value === "Haus", ok = true;
+    ok = pruefen("art", $("art").value !== "") && ok;
+    ok = pruefen("lage", $("lage").value.trim().length > 1) && ok;
+    ok = pruefen("flaeche", parseFloat($("flaeche").value) >= 10) && ok;
+    var bj = parseInt($("baujahr").value, 10);
+    ok = pruefen("baujahr", bj >= 1500 && bj <= 2030) && ok;
+    ok = pruefen("grund", !haus || parseFloat($("grund").value) >= 50) && ok;
+    ok = pruefen("nutzung", $("nutzung").value !== "") && ok;
+    ok = pruefen("mail", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("mail").value.trim())) && ok;
+    ok = pruefen("dsgvo", $("dsgvo").checked) && ok;
+    if (!ok) { var e = document.querySelector(".err[style*='block']"); if (e) e.scrollIntoView({block:"center"}); return; }
+    var titel = "Pilot Kurz-Check " + (haus ? "Haus" : "Eigentumswohnung");
+    var z = [titel, "", "Ort: " + $("lage").value.trim(), "Wohnfläche: " + $("flaeche").value + " m²"];
+    if (haus) z.push("Grundstück: " + $("grund").value + " m²");
+    z = z.concat(["Baujahr: " + bj, "Nutzung: " + $("nutzung").value, "Verkauf: " + ($("zeit").value || "keine Angabe"), "Wichtigste Frage: " + ($("frage").value.trim() || "keine Angabe"), "",
+      "E-Mail: " + $("mail").value.trim(), "Einwilligung zur Antwort per E-Mail: ja"]);
+    var t = z.join("\n");
+    $("text").textContent = t;
+    $("mailto").href = "mailto:" + encodeURIComponent(EMPFAENGER) + "?subject=" + encodeURIComponent(titel) + "&body=" + encodeURIComponent(t);
+    $("out").hidden = false;
+    $("out").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  $("kopie").addEventListener("click", function(){
+    var t = $("text").textContent;
+    function fertig(){ $("kopiert").hidden = false; }
+    function auswahl(){ var r = document.createRange(); r.selectNodeContents($("text")); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); try { if (document.execCommand("copy")) fertig(); } catch (x) {} }
+    try { if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(fertig, auswahl); } else { auswahl(); } } catch (x) { auswahl(); }
+  });
+})();
+</script>
+</body>
+</html>
