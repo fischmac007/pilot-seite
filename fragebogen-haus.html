@@ -156,6 +156,7 @@ const SECTIONS = [
   { p:"ausstattung.fussbodenheizung", l:"Fußbodenheizung", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["nein", "nein"], ["teilweise", "teilweise"], ["ueberwiegend", "überwiegend oder im ganzen Haus"]] },
   { p:"modernisierung.grundriss", l:"Wurde der Grundriss wesentlich verbessert (Umbau, Dachgeschossausbau, Durchbrüche)?", t:"sel", o:MOD, h:"Zum Beispiel ein Dachgeschoss, das erst nachträglich ausgebaut wurde." },
   { p:"modernisierung.grundriss_jahr", l:"Jahr des Umbaus (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
+  { p:"modernisierung.kosten_eur", l:"Gesamtkosten der Modernisierungen und Umbauten der letzten Jahre (falls bekannt)", t:"num", u:"€", min:0, max:5000000, step:1000, h:"Alle Arbeiten zusammen, einschließlich Eigenleistung nach Schätzung. Daraus zeige ich, wie viel davon im Wert ankommt." },
   { p:"modernisierung.kernsanierung_jahr", l:"Jahr der Kernsanierung (nur falls vorhanden)", t:"num", min:1900, max:2100, step:1, h:"Nur ausfüllen, wenn das Haus bis auf den Rohbau erneuert wurde (Leitungen, Fenster, Dach, Heizung, Dämmung). Einzelne Maßnahmen zählen nicht. Der Berater prüft den Umfang." },
   { p:"ausstattung.standard", l:"Gesamteindruck der Ausstattung", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["einfach", "einfach (Standard der Baujahre, wenig Komfort)"], ["mittel", "mittel (üblicher Standard)"], ["gehoben", "gehoben (hochwertige Böden, Bäder, Fenster)"], ["stark_gehoben", "stark gehoben (außergewöhnliche Ausstattung)"]],
     h:"Das ist Ihre Einschätzung. Wie sehr ich sie für die Berechnung übernehme, prüfe ich mit Fotos und Rechnungen." },
@@ -196,6 +197,7 @@ const SECTIONS = [
  ]},
  { title: "7. Vermietung", intro: "Falls das Haus oder Teile davon vermietet sind. Vermietete Häuser werden im Marktbericht mit einem eigenen Abschlag behandelt.", fields: [
   { p:"vermietung.vermietet", l:"Ist das Haus oder ein Teil davon vermietet?", t:"tri", req:true },
+  { p:"vermietung.mieter_art", l:"An wen ist vermietet?", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["fremde", "an fremde Dritte"], ["angehoerige", "an Angehörige (z. B. Familie, Eltern)"], ["gemischt", "teils Angehörige, teils Dritte"]], h:"Bei Angehörigen ist die Miete oft keine Marktmiete; das ist für die Einschätzung wichtig." },
   { p:"vermietung.anzahl_vermietet", l:"Wie viele Einheiten sind vermietet?", t:"num", min:0, max:20, step:1 },
   { p:"vermietung.nettokaltmiete_gesamt", l:"Nettokaltmiete aller vermieteten Einheiten zusammen", t:"num", u:"€/Monat", min:0, max:30000 },
   { p:"vermietung.mietvertrag_datum", l:"Beginn des (ältesten) Mietvertrags", t:"datum", h:"Wählen Sie Tag und Monat, soweit Sie sie wissen; das Jahr genügt." },
