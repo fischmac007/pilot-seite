@@ -100,6 +100,8 @@ const SECTIONS = [
  { title: "2. Das Grundstück", intro: "Grundstücksgröße und Besonderheiten. Die Fläche steht im Grundbuchauszug, im Kaufvertrag oder im Lageplan.", fields: [
   { p:"grundstueck.flaeche_m2", l:"Grundstücksfläche", t:"num", u:"m²", req:true, min:50, max:20000, step:1 },
   { p:"grundstueck.abteilbar", l:"Wäre ein Teil des Grundstücks eigenständig bebaubar oder abtrennbar?", t:"tri", h:"Zum Beispiel ein zweites Baugrundstück im Garten. Dann gelten für den Bodenwert andere Regeln." },
+  { p:"grundstueck.abtrennbare_flaeche_m2", l:"Größe des Teils, der abtrennbar oder eigenständig bebaubar wäre (falls vorhanden)", t:"num", u:"m²", min:0, max:20000, step:1, h:"Bei großen Grundstücken ist das für den Wert entscheidend: Ein Garten oder eine Wiese zählt weniger als eine Fläche, die man bebauen oder verkaufen könnte." },
+  { p:"grundstueck.restflaeche_art", l:"Wie wird der Teil des Grundstücks genutzt, der über den üblichen Hausgarten hinausgeht?", t:"sel", o:[["", "nicht zutreffend / keine Angabe"], ["garten", "Garten oder Rasen"], ["wiese", "Wiese oder Obstwiese"], ["wald", "Wald oder Gehölz"], ["acker", "Acker oder landwirtschaftlich genutzt"], ["bebaubar", "baureif, eigenständig bebaubar"], ["sonstiges", "anderes"]], full:true },
   { p:"grundstueck.hanglage", l:"Hanglage", t:"tri" },
   { p:"grundstueck.zweite_reihe", l:"Liegt das Haus in zweiter Reihe (Zufahrt über ein anderes Grundstück oder einen schmalen Weg)?", t:"tri", full:true },
   { p:"grundstueck.bodenrichtwert_eur_m2", l:"Bodenrichtwert Ihrer Lage in €/m² (falls bekannt)", t:"num", u:"€/m²", min:0, max:20000, step:5, h:"Aus der Bodenrichtwertkarte (BayernAtlas oder BORIS Bayern, Stichtag 01.01.2026). Wenn Sie ihn nicht kennen, lassen Sie das Feld leer: Ich ermittle ihn aus der Adresse." },
@@ -121,7 +123,14 @@ const SECTIONS = [
   { p:"gebaeude.balkon_m2", l:"Balkon, Loggia oder Dachbalkon (zusammen)", t:"num", u:"m²", min:0, max:200 },
   { p:"gebaeude.terrasse_m2", l:"Terrasse", t:"num", u:"m²", min:0, max:300 },
   { p:"gebaeude.wintergarten", l:"Wintergarten", t:"tri" },
-  { p:"gebaeude.garage", l:"Garage, Carport, Stellplätze", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["keine", "keine"], ["stellplatz", "nur Stellplätze"], ["carport", "Carport"], ["garage", "Garage (eine)"], ["doppelgarage", "Doppelgarage oder mehrere Garagen"]] }
+  { p:"gebaeude.garage", l:"Garage, Carport, Stellplätze (Überblick)", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["keine", "keine"], ["stellplatz", "nur Stellplätze"], ["carport", "Carport"], ["garage", "Garage (eine)"], ["doppelgarage", "Doppelgarage oder mehrere Garagen"]], h:"Die genauen Angaben (Anzahl, Bauweise, Baujahr) folgen gleich: Garagen sind ein eigener Wertteil." },
+  { p:"gebaeude.garagen_einzel", l:"Anzahl Einzelgaragen", t:"num", min:0, max:10, step:1 },
+  { p:"gebaeude.garagen_doppel", l:"Anzahl Doppelgaragen", t:"num", min:0, max:10, step:1 },
+  { p:"gebaeude.garagen_bauweise", l:"Bauweise der Garagen", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["fertig", "Fertiggarage (Beton- oder Stahlfertigteil)"], ["massiv", "gemauert oder in Massivbauweise"], ["aufwendig", "massiv mit besonderer Ausstattung (Ziegeldach, Fliesen, Wasser, Heizung)"]] },
+  { p:"gebaeude.garagen_baujahr", l:"Baujahr der Garagen (falls abweichend vom Haus)", t:"num", min:1900, max:2100, step:1 },
+  { p:"gebaeude.garagen_flaeche_m2", l:"Gesamtfläche aller Garagen (falls bekannt)", t:"num", u:"m²", min:5, max:500, step:1, h:"Wenn Sie sie nicht kennen: leer lassen. Ich rechne mit 18 m² je Einzel- und 36 m² je Doppelgarage." },
+  { p:"gebaeude.carports", l:"Anzahl Carports", t:"num", min:0, max:10, step:1 },
+  { p:"gebaeude.stellplaetze_offen", l:"Anzahl offene Stellplätze", t:"num", min:0, max:20, step:1 }
  ]},
  { title: "4. Zustand, Modernisierung und Ausstattung", intro: "Hier geht es darum, was am Haus erneuert wurde. Bitte ehrlich einstufen; später brauchen wir Rechnungen oder Fotos als Beleg. Fehlende Angaben lasse ich offen und weise im Bericht darauf hin.", fields: [
   { p:"modernisierung.dach", l:"Dach (Eindeckung und Dämmung)", t:"sel", o:MOD },
