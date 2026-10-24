@@ -105,7 +105,7 @@ const SECTIONS = [
   { p:"grundstueck.restflaeche_art", l:"Wie wird der Teil des Grundstücks genutzt, der über den üblichen Hausgarten hinausgeht?", t:"sel", o:[["", "nicht zutreffend / keine Angabe"], ["garten", "Garten oder Rasen"], ["wiese", "Wiese oder Obstwiese"], ["wald", "Wald oder Gehölz"], ["acker", "Acker oder landwirtschaftlich genutzt"], ["bebaubar", "baureif, eigenständig bebaubar"], ["sonstiges", "anderes"]], full:true },
   { p:"grundstueck.hanglage", l:"Hanglage", t:"tri" },
   { p:"grundstueck.zweite_reihe", l:"Liegt das Haus in zweiter Reihe (Zufahrt über ein anderes Grundstück oder einen schmalen Weg)?", t:"tri", full:true },
-  { p:"grundstueck.bodenrichtwert_eur_m2", l:"Bodenrichtwert Ihrer Lage in €/m² (falls bekannt)", t:"num", u:"€/m²", min:0, max:20000, step:5, h:"Aus der Bodenrichtwertkarte (BayernAtlas oder BORIS Bayern, Stichtag 01.01.2026). Wenn Sie ihn nicht kennen, lassen Sie das Feld leer: Ich ermittle ihn aus der Adresse." },
+  { p:"grundstueck.bodenrichtwert_eur_m2", l:"Bodenrichtwert Ihrer Lage in €/m² (falls bekannt): Preis je m² für ein übliches Grundstück in Ihrer Gegend", t:"num", u:"€/m²", min:0, max:20000, step:5, h:"Aus der Bodenrichtwertkarte (BayernAtlas oder BORIS Bayern, Stichtag 01.01.2026). Wenn Sie ihn nicht kennen, lassen Sie das Feld leer: Ich ermittle ihn aus der Adresse." },
   { p:"grundstueck.brw_flaeche_m2", l:"Fläche, auf die sich der Bodenrichtwert bezieht (falls bekannt)", t:"num", u:"m²", min:0, max:20000, step:1, h:"Steht in der Auskunft der Bodenrichtwertkarte („Fläche“, zum Beispiel 600 m²)." },
   { p:"grundstueck.erschliessung_beitragsfrei", l:"Sind Erschließungs- und Kanalanschlussbeiträge bezahlt?", t:"tri", full:true },
   { p:"grundstueck.nebengebaeude", l:"Nebengebäude (Garage, Carport, Gartenhaus, Werkstatt)", t:"area", full:true, ph:"z. B. Doppelgarage 36 m², Gartenhaus 12 m², Baujahr, Zustand" }
@@ -198,7 +198,7 @@ const SECTIONS = [
   { p:"vermietung.vermietet", l:"Ist das Haus oder ein Teil davon vermietet?", t:"tri", req:true },
   { p:"vermietung.anzahl_vermietet", l:"Wie viele Einheiten sind vermietet?", t:"num", min:0, max:20, step:1 },
   { p:"vermietung.nettokaltmiete_gesamt", l:"Nettokaltmiete aller vermieteten Einheiten zusammen", t:"num", u:"€/Monat", min:0, max:30000 },
-  { p:"vermietung.mietvertrag_datum", l:"Beginn des (ältesten) Mietvertrags", t:"text", ph:"z. B. 01.03.2022", h:"Tag.Monat.Jahr, ersatzweise Monat.Jahr oder nur das Jahr." },
+  { p:"vermietung.mietvertrag_datum", l:"Beginn des (ältesten) Mietvertrags", t:"datum", h:"Wählen Sie Tag und Monat, soweit Sie sie wissen; das Jahr genügt." },
   { p:"vermietung.mieter_bleibt", l:"Soll der Mieter nach dem Verkauf bleiben?", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["ja", "ja, Mieter bleibt"], ["nein", "nein, wird frei übergeben"], ["unklar", "noch unklar"]] },
   { p:"vermietung.eigennutzung", l:"Wie viele Einheiten bewohnen Sie oder Ihre Familie selbst?", t:"num", min:0, max:20, step:1 }
  ]},
@@ -214,9 +214,10 @@ const SECTIONS = [
  ]},
  { title: "9. Gutachten (falls vorhanden)", intro: "Ein Wertgutachten ist der beste Prüfstein für meine Einschätzung. Bitte nur ausfüllen, wenn es schon vorliegt.", fields: [
   { p:"gutachten.vorhanden", l:"Gibt es ein Wertgutachten für das Haus?", t:"tri" },
-  { p:"gutachten.stichtag", l:"Wertermittlungsstichtag", t:"text", ph:"z. B. 15.10.2026" },
+  { p:"gutachten.stichtag", l:"Wertermittlungsstichtag (Datum, auf das sich der Wert im Gutachten bezieht)", t:"datum", h:"Steht auf der ersten Seite des Gutachtens („Wertermittlungsstichtag“ oder „Qualitätsstichtag“). Nicht das Datum, an dem das Gutachten geschrieben wurde. Das Jahr genügt." },
   { p:"gutachten.verkehrswert_eur", l:"Verkehrswert laut Gutachten", t:"num", u:"€", min:0, max:20000000 },
-  { p:"gutachten.bodenwert_eur", l:"Bodenwert laut Gutachten", t:"num", u:"€", min:0, max:20000000 },
+  { p:"gutachten.bodenwert_eur", l:"Bodenwert laut Gutachten: Wert des Grundstücks ohne Gebäude, Gesamtbetrag", t:"num", u:"€", min:0, max:20000000, h:"Gemeint ist, was das Grundstück allein wert ist, ohne das Haus: Grundstücksfläche mal Preis je m². Beispiel: 428 m² mal 440 €/m² ergibt 188.320 €. Das Gutachten nennt den Betrag meist unter „Bodenwert“ oder „Bodenwertermittlung“. Steht dort nur ein Preis je m², tragen Sie ihn im nächsten Feld ein." },
+  { p:"gutachten.bodenwert_qm", l:"Bodenwert laut Gutachten je m² (falls nur dieser Preis im Gutachten steht)", t:"num", u:"€/m²", min:0, max:20000, step:1, h:"Das ist der Preis je Quadratmeter Grundstück, meist abgeleitet vom Bodenrichtwert (zum Beispiel 230 €/m²)." },
   { p:"gutachten.verfahren", l:"Wertermittlungsverfahren", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["sachwert", "Sachwertverfahren"], ["ertragswert", "Ertragswertverfahren"], ["vergleichswert", "Vergleichswertverfahren"], ["mehrere", "mehrere Verfahren"]] },
   { p:"gutachten.ersteller", l:"Wer hat das Gutachten erstellt? (freiwillig)", t:"text" }
  ]},
@@ -252,6 +253,7 @@ function fieldHtml(f) {
   if (f.t === 'tri') ctl = `<select id="${id}">${TRI.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
   else if (f.t === 'sel') ctl = `<select id="${id}">${f.o.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
   else if (f.t === 'multi') ctl = `<details class="multi" id="${id}"><summary><span class="ms">Auswahl öffnen (nichts ausgewählt)</span></summary><div class="mbox">${f.o.map(o => `<label class="check"><input type="checkbox" data-m="${id}" value="${o[0]}"><span>${o[1]}</span></label>`).join('')}</div></details>`;
+  else if (f.t === 'datum') { const mon = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']; ctl = `<div class="datum" id="${id}" style="display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:8px"><select id="${id}_t" aria-label="Tag"><option value="">Tag</option>${Array.from({length:31},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select><select id="${id}_m" aria-label="Monat"><option value="">Monat</option>${mon.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('')}</select><input id="${id}_j" type="number" inputmode="numeric" min="1950" max="2100" step="1" placeholder="Jahr" aria-label="Jahr"></div>`; }
   else if (f.t === 'area') ctl = `<textarea id="${id}" rows="3" placeholder="${f.ph || ''}"></textarea>`;
   else if (f.t === 'num') { const inp = `<input id="${id}" type="number" inputmode="decimal" ${f.min!=null?`min="${f.min}"`:''} ${f.max!=null?`max="${f.max}"`:''} step="${f.step || 'any'}">`; ctl = f.u ? `<div class="unit">${inp}<span>${f.u}</span></div>` : inp; }
   else ctl = `<input id="${id}" type="text" placeholder="${f.ph || ''}">`;
@@ -264,6 +266,11 @@ const fd = (p) => SECTIONS.flatMap(s => s.fields).find(x => x.p === p);
 
 function readField(f) {
   const e = el[f.p];
+  if (f.t === 'datum') {      // Tag und Monat sind freiwillig: ergibt "TT.MM.JJJJ", "MM.JJJJ" oder "JJJJ"
+    const j = document.getElementById(e.id + '_j').value.trim(), m = document.getElementById(e.id + '_m').value, t = document.getElementById(e.id + '_t').value;
+    if (!j) return null;
+    return (m && t ? String(t).padStart(2, '0') + '.' : '') + (m ? String(m).padStart(2, '0') + '.' : '') + j;
+  }
   if (f.t === 'multi') { const w = [...e.querySelectorAll('input[type=checkbox]:checked')].map(c => c.value); return w.length ? w : null; }
   const v = e.value.trim();
   if (f.t === 'tri') return v === 'ja' ? true : v === 'nein' ? false : null;
@@ -334,9 +341,9 @@ function validate(final) {
   if (ve === false && av) err(f('vermietung.anzahl_vermietet'), 'Sie haben „nicht vermietet“ gewählt und eine Anzahl eingetragen. Bitte prüfen.');
   if (av !== null && we !== null && av > we) err(f('vermietung.anzahl_vermietet'), 'Mehr vermietete Einheiten als Wohneinheiten im Haus. Bitte prüfen.');
   const mvd = g('vermietung.mietvertrag_datum');
-  if (mvd !== null && !datumOk(mvd)) err(f('vermietung.mietvertrag_datum'), 'Bitte als 01.03.2022, 03.2022 oder 2022 eingeben (Jahr zwischen 1950 und heute).');
+  if (mvd !== null && !datumOk(mvd)) err(f('vermietung.mietvertrag_datum'), 'Bitte ein Jahr zwischen 1950 und heute eintragen; Tag und Monat sind freiwillig.');
   const gst = g('gutachten.stichtag');
-  if (gst !== null && !datumOk(gst)) err(f('gutachten.stichtag'), 'Bitte als 15.10.2026, 10.2026 oder 2026 eingeben.');
+  if (gst !== null && !datumOk(gst)) err(f('gutachten.stichtag'), 'Bitte ein Jahr zwischen 1950 und heute eintragen; Tag und Monat sind freiwillig.');
   const bw = g('gutachten.bodenwert_eur'), vw = g('gutachten.verkehrswert_eur');
   if (bw !== null && vw !== null && bw > vw) err(f('gutachten.bodenwert_eur'), 'Der Bodenwert kann nicht höher als der Verkehrswert sein. Bitte prüfen.');
   const kj = g('fall.kaufjahr'), sb = g('fall.selbstgenutzt_bis');
@@ -382,6 +389,11 @@ document.getElementById('loadFile').addEventListener('change', (ev) => {
         let v = d; f.p.split('.').forEach(k => v = (v && typeof v === 'object') ? v[k] : undefined);
         const e = el[f.p];
         if (f.t === 'multi') { const set = Array.isArray(v) ? v : []; e.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = set.indexOf(cb.value) >= 0); multiRefresh(); return; }
+        if (f.t === 'datum') {
+          const q = /^(?:(?:(\d{1,2})\.)?(\d{1,2})\.)?(\d{4})$/.exec(String(v == null ? '' : v).trim());
+          document.getElementById(e.id + '_t').value = q && q[1] ? String(+q[1]) : ''; document.getElementById(e.id + '_m').value = q && q[2] ? String(+q[2]) : ''; document.getElementById(e.id + '_j').value = q ? q[3] : '';
+          return;
+        }
         if (v === undefined || v === null) { e.value = ''; return; }
         e.value = f.t === 'tri' ? (v ? 'ja' : 'nein') : String(v);
       }));
