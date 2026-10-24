@@ -95,7 +95,8 @@ const SECTIONS = [
   { p:"objekt.baujahr", l:"Baujahr des Gebäudes", t:"num", req:true, min:1500, max:2100, step:1 },
   { p:"objekt.anbau_jahr", l:"Jahr eines größeren Anbaus oder einer Erweiterung (falls vorhanden)", t:"num", min:1500, max:2100, step:1 },
   { p:"objekt.bauweise", l:"Bauweise", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["massiv", "massiv (Ziegel, Beton, Kalksandstein)"], ["fertighaus", "Fertighaus in Holzbauweise (ab Erdgeschoss)"], ["fachwerk", "Fachwerk oder Holzbau (Bestand)"], ["gemischt", "gemischt (z. B. Keller massiv, Obergeschoss Holz)"]],
-    h:"Fertighäuser in Holzbauweise werden im Marktbericht mit einem Abschlag behandelt (Baujahre bis 1980)." }
+    h:"Fertighäuser in Holzbauweise werden im Marktbericht mit einem Abschlag behandelt (Baujahre bis 1980)." },
+  { p:"objekt.besonderheiten", l:"Besonderheiten des Hauses (freiwillig)", t:"area", full:true, ph:"z. B. aufwendige Dachform, Erker, Anbauten, Hanglage, barrierefrei, Brennstofflager für die Heizung", h:"Alles, was das Haus von einem üblichen Haus unterscheidet: Die Einschätzung rechnet mit Durchschnittswerten, ungewöhnliche Bauformen sollte ein Berater vor Ort ansehen." }
  ]},
  { title: "2. Das Grundstück", intro: "Grundstücksgröße und Besonderheiten. Die Fläche steht im Grundbuchauszug, im Kaufvertrag oder im Lageplan.", fields: [
   { p:"grundstueck.flaeche_m2", l:"Grundstücksfläche", t:"num", u:"m²", req:true, min:50, max:20000, step:1 },
@@ -142,7 +143,7 @@ const SECTIONS = [
   { p:"modernisierung.leitungen_jahr", l:"Jahr der Leitungserneuerung (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
   { p:"modernisierung.heizung", l:"Heizungsanlage", t:"sel", o:MOD },
   { p:"modernisierung.heizung_jahr", l:"Jahr der Heizungserneuerung (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
-  { p:"ausstattung.heizung", l:"Art der Heizung", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["gas", "Gas"], ["oel", "Öl"], ["waermepumpe", "Wärmepumpe"], ["pellets", "Holzpellets oder Scheitholz"], ["fernwaerme", "Fernwärme"], ["strom", "Strom (Nachtspeicher, Direktheizung)"], ["sonstige", "Sonstige"]] },
+  { p:"ausstattung.heizung", l:"Art der Heizung", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["gas", "Gas"], ["oel", "Öl"], ["waermepumpe", "Wärmepumpe"], ["pellets", "Holzpellets oder Scheitholz"], ["hackschnitzel", "Holzhackschnitzel"], ["fernwaerme", "Fernwärme"], ["strom", "Strom (Nachtspeicher, Direktheizung)"], ["sonstige", "Sonstige"]] },
   { p:"ausstattung.solar", l:"Solarthermie oder Photovoltaik", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["nein", "keine"], ["solarthermie", "Solarthermie"], ["pv", "Photovoltaik"], ["beides", "beides"]] },
   { p:"modernisierung.aussenwand", l:"Wärmedämmung der Außenwände (Fassade)", t:"sel", o:MOD },
   { p:"modernisierung.aussenwand_jahr", l:"Jahr der Fassadendämmung (falls vorhanden)", t:"num", min:1900, max:2100, step:1 },
