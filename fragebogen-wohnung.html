@@ -77,6 +77,8 @@
 // Feldbeschreibung: path = Pfad im JSON (Schema fragebogen-verkauf-v1)
 const TRI = [["", "weiß nicht / keine Angabe"], ["ja", "Ja"], ["nein", "Nein"]];
 const STAT_BEZIRKE = [["75", "Almoshof"], ["35", "Altenfurt Nord"], ["38", "Altenfurt, Moorenbrunn"], ["01", "Altstadt, St. Lorenz"], ["06", "Altstadt, St. Sebald"], ["22", "Bärenschanze"], ["34", "Beuthener Straße"], ["24", "Bielingplatz"], ["78", "Boxdorf"], ["97", "Brunn"], ["73", "Buch"], ["86", "Buchenbühl"], ["43", "Dianastraße"], ["30", "Dutzendteich"], ["64", "Eberhardshof"], ["53", "Eibach"], ["91", "Erlenstegen"], ["96", "Fischbach"], ["87", "Flughafen"], ["62", "Gaismannshof"], ["13", "Galgenhof"], ["45", "Gartenstadt"], ["61", "Gebersdorf"], ["39", "Gewerbepark Nürnberg-Feucht"], ["17", "Gibitzenhof"], ["29", "Gleißhammer"], ["11", "Glockenhof"], ["04", "Gostenhof"], ["79", "Großgründlach"], ["60", "Großreuth b. Schweinau"], ["15", "Gugelstraße"], ["12", "Guntherstraße"], ["40", "Hasenbuck"], ["05", "Himpfelshof"], ["63", "Höfen"], ["50", "Hohe Marter"], ["14", "Hummelstein"], ["90", "St. Jobst"], ["07", "St. Johannis"], ["48", "Katzwang, Reichelsdorf Ost, Reichelsdorfer Keller"], ["42", "Katzwanger Straße"], ["49", "Kornburg, Worzeldorf"], ["76", "Kraftshof"], ["55", "Krottenbach, Mühlhof"], ["33", "Langwasser Nordost"], ["32", "Langwasser Nordwest"], ["36", "Langwasser Südost"], ["37", "Langwasser Südwest"], ["94", "Laufamholz"], ["20", "St. Leonhard"], ["10", "Ludwigsfeld"], ["47", "Maiach"], ["83", "Marienberg"], ["02", "Marienvorstadt"], ["26", "Maxfeld"], ["92", "Mögeldorf"], ["85", "Mooshof"], ["65", "Muggenhof"], ["77", "Neunhof"], ["08", "Pirckheimerstraße"], ["41", "Rangierbahnhof"], ["31", "Rangierbahnhof-Siedlung"], ["54", "Reichelsdorf"], ["52", "Röthenbach Ost"], ["51", "Röthenbach West"], ["23", "Sandberg"], ["18", "Sandreuth"], ["82", "Schafhof"], ["80", "Schleifweg"], ["93", "Schmausenbuckstraße"], ["71", "Schniegling"], ["81", "Schoppershof"], ["19", "Schweinau"], ["16", "Steinbühl"], ["21", "Sündersbühl"], ["03", "Tafelhof"], ["74", "Thon"], ["44", "Trierer Straße"], ["28", "Tullnau"], ["25", "Uhlandstraße"], ["27", "Veilhof"], ["46", "Werderau"], ["70", "Westfriedhof"], ["72", "Wetzendorf"], ["09", "Wöhrd"], ["95", "Zerzabelshof"], ["84", "Ziegelstein"]];  // Statistische Bezirke der Stadt Nürnberg (Quelle: Liste Stadtteilnamen, Amt für Stadtforschung und Statistik); Reihenfolge alphabetisch
+const WUNSCH = [["", "keine Angabe"], ["basis", "Basis: Ich trage Angaben und Fotos selbst ein, beantworte Rückfragen und erhalte den Bericht mit einem abschließenden Gespräch"], ["vor_ort", "Vor Ort: wie Basis, dazu Besichtigung und persönliches Durchgehen des Fragebogens vor dem fertigen Bericht"], ["szenarien", "Szenarien: zusätzlich Rechenbeispiele zu meinen Optionen (zum Beispiel verkaufen, behalten oder vermieten)"], ["offen", "Weiß ich noch nicht, ich möchte zuerst wissen, was möglich ist"]];
+const PILOT = true;   // Pilot-Fragen zur Preiseinschätzung (Teil 8); für den Regelbetrieb auf false setzen
 const SECTIONS = [
  { title: "1. Die Wohnung", intro: "Grunddaten. Die Wohnfläche steht im Kaufvertrag oder in der Wohnflächenberechnung.", fields: [
   { p:"objekt.stadt", l:"Stadt", t:"text", req:true, ph:"z. B. Nürnberg", h:"Bitte immer die Stadt nennen: Stadtteilnamen gibt es in mehreren Orten." },
@@ -164,6 +166,16 @@ const SECTIONS = [
   { p:"verkauf.vorfaelligkeit_eur", l:"Vorfälligkeitsentschädigung laut Bank (nur wenn schon angefragt)", t:"num", u:"€", min:0 },
   { p:"verkauf.darlehen_zins_pct", l:"Zinssatz Ihres Darlehens (falls bekannt)", t:"num", u:"% pro Jahr", min:0, max:15, step:0.01 },
   { p:"verkauf.zinsbindung_bis", l:"Zinsbindung endet im Jahr (falls bekannt)", t:"num", min:2026, max:2060, step:1, h:"Danach kann der Zins steigen; das ändert Ihren Cashflow beim Halten." },
+  { p:"verkauf.d1_betrag", l:"Mehrere Darlehen, Darlehen 1: Restschuld heute", t:"num", u:"€", min:0, max:20000000, h:"Nur ausfüllen, wenn Sie mehrere Darlehen haben und Rechenbeispiele wünschen. Bei einem Darlehen genügen die Felder oben." },
+  { p:"verkauf.d1_tilgung_pct", l:"Darlehen 1: Tilgung am Anfang", t:"num", u:"% pro Jahr", min:0, max:20, step:0.01, h:"Leer lassen, wenn das Darlehen endfällig ist." },
+  { p:"verkauf.d1_endfaellig", l:"Darlehen 1: Wird es am Ende der Laufzeit auf einmal zurückgezahlt (endfällig, keine laufende Tilgung)?", t:"tri", full:true },
+  { p:"verkauf.d2_betrag", l:"Darlehen 2: Restschuld heute", t:"num", u:"€", min:0, max:20000000 },
+  { p:"verkauf.d2_zins_pct", l:"Darlehen 2: Zinssatz", t:"num", u:"% pro Jahr", min:0, max:15, step:0.01 },
+  { p:"verkauf.d2_tilgung_pct", l:"Darlehen 2: Tilgung am Anfang", t:"num", u:"% pro Jahr", min:0, max:20, step:0.01 },
+  { p:"verkauf.d2_zinsbindung_bis", l:"Darlehen 2: Zinsbindung endet im Jahr", t:"num", min:2026, max:2070, step:1 },
+  { p:"verkauf.d2_endfaellig", l:"Darlehen 2: Wird es am Ende der Laufzeit auf einmal zurückgezahlt (endfällig, keine laufende Tilgung)?", t:"tri", full:true },
+  { p:"verkauf.weitere_darlehen", l:"Weitere Darlehen oder Bausparverträge (kurz beschreiben)", t:"text", full:true },
+  { p:"verkauf.sondertilgung", l:"Ist eine Sondertilgung vertraglich möglich?", t:"tri", full:true },
   { p:"verkauf.sonstige_verkaufskosten_eur", l:"Weitere Verkaufskosten, die Sie erwarten (z. B. Löschung der Grundschuld, Renovierung vor dem Verkauf)", t:"num", u:"€", min:0 },
   { p:"verkauf.inventar_mitverkauf", l:"Möbel und Einrichtung", t:"sel", o:[["", "weiß nicht / keine Angabe"],["ja","sollen mit verkauft werden"],["nein","sollen nicht mit verkauft werden"],["offen","noch offen"]], h:"Möbel gehören nicht automatisch zur Wohnung." },
   { p:"verkauf.ziele_auswahl", l:"Was ist Ihnen beim Verkauf besonders wichtig?", t:"multi", full:true, o:[["hoher_preis","Ein möglichst hoher Preis"],["schnell","Eine schnelle Abwicklung"],["sicherheit","Sicherheit (solide Käufer, gesicherte Finanzierung)"],
@@ -193,25 +205,21 @@ const SECTIONS = [
   { p:"fall.bisher_versucht", l:"Haben Sie bereits einen Verkauf versucht oder einen Makler angefragt?", t:"sel", full:true, o:[["", "keine Angabe"],["nein","nein"],["makler_angefragt","Makler angefragt"],["inseriert","bereits inseriert"],["anderes","anderes"]] },
   { p:"fall.makler_provision_genannt", l:"Falls ein Makler angefragt wurde: Welche Provision wurde genannt (in % oder €)?", t:"text", full:true }
  ]}
- ,{ title: "8. Ihre Einschätzung zum Angebot (nur Pilot)", intro: `Ich teste ein Angebot in drei Stufen. <strong>Es gibt keine falschen Antworten</strong>, und es geht nicht darum, dass Sie etwas kaufen. Mich interessiert, was Ihnen etwas wert wäre.<ul>
-  <li><strong>Stufe 1, Marktpreis-Bericht:</strong> Preisspanne, Startpreis, Zeitpunkt, Konkurrenzangebote, Zielgruppen, Ablaufplan, Mietcheck.</li>
-  <li><strong>Stufe 2, Verkaufspaket:</strong> Stufe 1 plus ausführlicher Verkaufsleitfaden, fertiger Inserattext fürs Portal, Foto-Checkliste und Bildretusche, Besichtigungs- und Antwortvorlagen. Sie verkaufen selbst.</li>
-  <li><strong>Stufe 3, Begleitung:</strong> Stufe 2 plus laufende Betreuung über 3 bis 6 Monate bis zum Notartermin.</li></ul>
+ ,{ title: "8. Ihre Einschätzung zum Angebot (nur Pilot)", intro: `Ich teste ein Angebot in drei Umfängen. <strong>Es gibt keine falschen Antworten</strong>, und es geht nicht darum, dass Sie etwas kaufen. Mich interessiert, was Ihnen etwas wert wäre.<ul>
+  <li><strong>Basis:</strong> Sie tragen Angaben und Fotos selbst im Fragebogen ein, beantworten einige Rückfragen und bekommen den Bericht mit einem abschließenden Gespräch.</li>
+  <li><strong>Vor Ort:</strong> Wie Basis, dazu Besichtigung vor Ort und persönliches Durchgehen des Fragebogens, bevor der Bericht fertig wird.</li>
+  <li><strong>Szenarien:</strong> Zusätzlich Rechenbeispiele zu Ihren Optionen, zum Beispiel verkaufen, behalten oder vermieten. Die Rechenbeispiele zeigen, was bei angenommenen Zahlen herauskommt; sie sind keine Anlage-, Finanzierungs-, Steuer- oder Rechtsberatung.</li></ul>
   Zusatz für vermietete Wohnungen: eine Rechnung, was passiert, wenn die Wohnung vermietet oder frei verkauft wird.`, fields: [
   { p:"pilot.alternative", l:"Was hätten Sie ohne diese Beratung getan?", t:"sel", full:true, o:[["", "keine Angabe"],["makler","einen Makler beauftragt"],["allein","allein verkauft"],["online_bewertung","nur eine Online-Bewertung genutzt"],["abwarten","abgewartet"],["unklar","weiß ich nicht"]] },
   { p:"pilot.erwartung", l:"Was erwarten Sie von so einer Beratung?", t:"area", full:true },
-  { p:"pilot.interesse_stufe1", l:"Interesse an Stufe 1 (Marktpreis-Bericht)", t:"sel", o:[["", "keine Angabe"],["nein","kein Interesse"],["vielleicht","vielleicht"],["ja","ja"]] },
-  { p:"pilot.interesse_stufe2", l:"Interesse an Stufe 2 (Verkaufspaket, Sie verkaufen selbst)", t:"sel", o:[["", "keine Angabe"],["nein","kein Interesse"],["vielleicht","vielleicht"],["ja","ja"]] },
-  { p:"pilot.interesse_stufe3", l:"Interesse an Stufe 3 (mit Begleitung)", t:"sel", o:[["", "keine Angabe"],["nein","kein Interesse"],["vielleicht","vielleicht"],["ja","ja"]] },
-  { p:"pilot.wichtigster_baustein", l:"Welcher Teil wäre für Sie am wertvollsten?", t:"sel", full:true, o:[["", "keine Angabe"],["preis","Preiseinschätzung und Startpreis"],["inserat","fertiger Inserattext und Bilder"],["ablauf","Verkaufsleitfaden und Checklisten"],["miete","Mieten- und Wert-Hebel-Rechnung"],["begleitung","laufende Begleitung"],["nichts","keiner davon"]] },
-  { p:"pilot.preis1_zu_billig", l:"Stufe 1: Ab welchem Preis wäre er so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
-  { p:"pilot.preis1_gut", l:"Stufe 1: Ab welchem Preis wäre er ein gutes Angebot (günstig, aber vertrauenswürdig)?", t:"num", u:"€", min:0, max:100000 },
-  { p:"pilot.preis1_teuer", l:"Stufe 1: Ab welchem Preis wäre er teuer, aber Sie würden noch darüber nachdenken?", t:"num", u:"€", min:0, max:100000 },
-  { p:"pilot.preis1_zu_teuer", l:"Stufe 1: Ab welchem Preis wäre er zu teuer, Sie würden ihn nicht kaufen?", t:"num", u:"€", min:0, max:100000 },
-  { p:"pilot.preis2_zu_billig", l:"Stufe 2: Ab welchem Preis wäre das Verkaufspaket so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
-  { p:"pilot.preis2_gut", l:"Stufe 2: Ab welchem Preis wäre es ein gutes Angebot?", t:"num", u:"€", min:0, max:100000 },
-  { p:"pilot.preis2_teuer", l:"Stufe 2: Ab welchem Preis wäre es teuer, aber noch denkbar?", t:"num", u:"€", min:0, max:100000 },
-  { p:"pilot.preis2_zu_teuer", l:"Stufe 2: Ab welchem Preis wäre es zu teuer?", t:"num", u:"€", min:0, max:100000 },
+  { p:"wunsch.umfang", l:"Welchen Umfang würden Sie sich wünschen? (freiwillig, unverbindlich; Preise nenne ich in meiner Antwort)", t:"sel", full:true, o:WUNSCH },
+  { p:"pilot.wichtigster_baustein", l:"Welcher Teil wäre für Sie am wertvollsten?", t:"sel", full:true, o:[["", "keine Angabe"],["preis","Preiseinschätzung und Startpreis"],["vor_ort","Besichtigung und persönliches Gespräch"],["szenarien","Rechenbeispiele zu meinen Optionen"],["miete","Mieten- und Wert-Hebel-Rechnung"],["nichts","keiner davon"]] },
+  { p:"pilot.preis_basis_zu_billig", l:"Basis: Ab welchem Preis wäre der Bericht so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_basis_zu_teuer", l:"Basis: Ab welchem Preis wäre er zu teuer, sodass Sie ihn nicht in Betracht ziehen?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_vor_ort_zu_billig", l:"Vor Ort: Ab welchem Preis wäre das so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_vor_ort_zu_teuer", l:"Vor Ort: Ab welchem Preis wäre es zu teuer?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_szenarien_zu_billig", l:"Szenarien: Ab welchem Preis wäre das so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_szenarien_zu_teuer", l:"Szenarien: Ab welchem Preis wäre es zu teuer?", t:"num", u:"€", min:0, max:100000 },
   { p:"pilot.provision_erwartung", l:"Was schätzen Sie, würde ein Makler für Ihren Verkauf insgesamt kosten (in €)?", t:"num", u:"€", min:0, max:200000, h:"Ihre Schätzung, nicht die Wahrheit. Ich vergleiche sie später mit der Realität." },
   { p:"pilot.dauer_minuten", l:"Wie lange haben Sie für den Fragebogen gebraucht?", t:"num", u:"Minuten", min:0, max:600 },
   { p:"pilot.unklar", l:"Was war unklar, schwer zu beantworten oder hat gefehlt?", t:"area", full:true },
@@ -219,6 +227,7 @@ const SECTIONS = [
   { p:"pilot.nachbefragung_ok", l:"Darf ich mich nach dem Verkauf nochmals bei Ihnen melden, um zu hören, wie es gelaufen ist?", t:"tri", full:true }
  ]}
 ];
+if (!PILOT) SECTIONS.splice(SECTIONS.findIndex(x => x.title.startsWith("8.")), 1);
 const UNTERLAGEN = [
  ["grundbuchauszug","Grundbuchauszug"],["teilungserklaerung","Teilungserklärung"],["protokolle","Protokolle der letzten drei Eigentümerversammlungen"],
  ["wirtschaftsplan","Wirtschaftsplan und letzte Hausgeldabrechnung"],["energieausweis","Energieausweis"],["wohnflaeche","Wohnflächenberechnung"],
@@ -239,7 +248,7 @@ function fieldHtml(f) {
   return `<div${cls}><label for="${id}"${f.req ? ' class="req"' : ''}>${f.l}</label>${ctl}${f.h ? `<div class="help">${f.h}</div>` : ''}<div class="err" id="e_${id}"></div></div>`;
 }
 form.innerHTML = SECTIONS.map(s => `<div class="card"><h2>${s.title}</h2><p class="lead">${s.intro}</p><div class="grid">${s.fields.map(fieldHtml).join('')}</div></div>`).join('') +
-  `<div class="card"><h2>9. Unterlagen</h2><p class="lead">Welche Unterlagen haben Sie bereits? Sie müssen sie jetzt nicht mitschicken.</p>${UNTERLAGEN.map(u => `<label class="check"><input type="checkbox" data-doc="${u[0]}"><span>${u[1]}</span></label>`).join('')}</div>`;
+  `<div class="card"><h2>${SECTIONS.length + 1}. Unterlagen</h2><p class="lead">Welche Unterlagen haben Sie bereits? Sie müssen sie jetzt nicht mitschicken.</p>${UNTERLAGEN.map(u => `<label class="check"><input type="checkbox" data-doc="${u[0]}"><span>${u[1]}</span></label>`).join('')}</div>`;
 SECTIONS.forEach(s => s.fields.forEach(f => { f.id = 'f_' + f.p.replace(/\./g, '_'); el[f.p] = document.getElementById(f.id); }));
 
 function readField(f) {
@@ -313,18 +322,18 @@ function validate(final) {
   if (bj !== null && bf !== null && bf < bj) err(f('objekt.bezugsfertig'), 'Die Bezugsfertigkeit liegt vor dem Baujahr. Bitte prüfen.');
   const bwe = g('objekt.bodenwertanteil_eur'), pv = g('verkauf.preisvorstellung');
   if (bwe !== null && pv !== null && bwe > pv) err(f('objekt.bodenwertanteil_eur'), 'Der Bodenwertanteil kann nicht höher als der Preis sein. Bitte prüfen.');
-  ['pilot.preis1', 'pilot.preis2'].forEach(pre => {
-    const ks = ['_zu_billig', '_gut', '_teuer', '_zu_teuer'].map(k => g(pre + k));
-    const vals = ks.filter(v => v !== null);
-    for (let i = 1; i < ks.length; i++) {
-      if (ks[i] !== null && ks[i - 1] !== null && ks[i] < ks[i - 1]) { err(f(pre + ['_zu_billig', '_gut', '_teuer', '_zu_teuer'][i]), 'Die Preise sollten von „zu billig“ bis „zu teuer“ ansteigen. Bitte prüfen.'); break; }
-    }
+  ['pilot.preis_basis', 'pilot.preis_vor_ort', 'pilot.preis_szenarien'].forEach(pre => {
+    const lo = g(pre + '_zu_billig'), hi = g(pre + '_zu_teuer');
+    if (lo !== null && hi !== null && hi < lo) err(f(pre + '_zu_teuer'), 'Die Preise sollten von „zu billig“ bis „zu teuer“ ansteigen. Bitte prüfen.');
   });
+  const dr1 = g('verkauf.d1_betrag'), dr2 = g('verkauf.d2_betrag'), rsch = g('verkauf.restschuld');
+  if (rsch !== null && (dr1 !== null || dr2 !== null)) { const sm = (dr1 || 0) + (dr2 || 0); if (Math.abs(sm - rsch) > Math.max(1000, rsch * 0.02)) err(f('verkauf.restschuld'), 'Die Darlehen 1 und 2 ergeben zusammen ' + Math.round(sm).toLocaleString('de-DE') + ' €, die Restschuld ist anders angegeben. Fehlt ein Darlehen oder passt eine Zahl nicht? Bitte prüfen.'); }
+  [['d1'], ['d2']].forEach(([d]) => { if (g('verkauf.' + d + '_endfaellig') === true && g('verkauf.' + d + '_tilgung_pct')) err(f('verkauf.' + d + '_tilgung_pct'), 'Sie haben „endfällig“ gewählt und eine Tilgung eingetragen. Bitte prüfen.'); });
   return ok;
 }
 
 function progress() {
-  const all = SECTIONS.flatMap(s => s.fields); const key = all.filter(f => !['objekt.strasse','verkauf.ziele','verkauf.ziele_auswahl','weg.sanierung_beschluesse','verkauf.restschuld'].includes(f.p) && !f.p.startsWith('fall.') && !f.p.startsWith('pilot.'));
+  const all = SECTIONS.flatMap(s => s.fields); const key = all.filter(f => !['objekt.strasse','verkauf.ziele','verkauf.ziele_auswahl','weg.sanierung_beschluesse','verkauf.restschuld'].includes(f.p) && !f.p.startsWith('fall.') && !f.p.startsWith('pilot.') && !f.p.startsWith('wunsch.') && !/^verkauf\.(d1_|d2_|weitere_darlehen|sondertilgung)/.test(f.p));
   const filled = key.filter(f => readField(f) !== null).length; const p = Math.round(filled / key.length * 100);
   document.getElementById('pct').textContent = p + ' %'; document.getElementById('meter').style.width = p + '%';
 }

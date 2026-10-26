@@ -81,6 +81,8 @@ const GEMEINDEN = [["altdorf", "Altdorf b. Nürnberg"], ["burgthann", "Burgthann
   ["schwarzenbruck", "Schwarzenbruck"], ["winkelhaid", "Winkelhaid"]];   // Gemeinden des Landkreises Nürnberger Land (Grundstücksmarktbericht 2025)
 const ZUSTAND = [["", "keine Angabe"], ["neuwertig", "neuwertig: neu eingebaut oder erneuert, ohne Gebrauchsspuren"], ["gut", "gut: einwandfrei, aber nicht neu"], ["altersgemaess", "altersgemäß: funktioniert, normale Gebrauchsspuren"], ["maengel", "Mängel sichtbar: Reparatur oder Teilerneuerung nötig"], ["erneuerung", "stark abgenutzt oder defekt: Erneuerung nötig"]];
 const MOD = [["", "weiß nicht / keine Angabe"], ["nein", "nicht erneuert"], ["teilweise", "teilweise erneuert"], ["voll", "vollständig erneuert"]];
+const WUNSCH = [["", "keine Angabe"], ["basis", "Basis: Ich trage Angaben und Fotos selbst ein, beantworte Rückfragen und erhalte den Bericht mit einem abschließenden Gespräch"], ["vor_ort", "Vor Ort: wie Basis, dazu Besichtigung und persönliches Durchgehen des Fragebogens vor dem fertigen Bericht"], ["szenarien", "Szenarien: zusätzlich Rechenbeispiele zu meinen Optionen (zum Beispiel verkaufen, behalten oder vermieten)"], ["offen", "Weiß ich noch nicht, ich möchte zuerst wissen, was möglich ist"]];
+const PILOT = true;   // Pilot-Fragen zur Preiseinschätzung (Teil 12); für den Regelbetrieb auf false setzen
 const SECTIONS = [
  { title: "1. Das Haus", intro: "Grunddaten. Die Wohnfläche steht im Kaufvertrag, in der Wohnflächenberechnung oder im Gutachten.", fields: [
   { p:"objekt.gemeinde_nl", l:"Gemeinde", t:"sel", req:true, o:[["", "bitte wählen"], ...GEMEINDEN, ["andere", "andere Gemeinde (unten eintragen)"]],
@@ -238,8 +240,36 @@ const SECTIONS = [
   { p:"fall.kaufpreis_eur", l:"Kaufpreis laut Kaufvertrag (falls gekauft)", t:"num", u:"€", min:0 },
   { p:"fall.selbstgenutzt_bis", l:"Bis wann haben Sie das Haus selbst bewohnt (Jahr)?", t:"num", min:1900, max:2100, step:1 },
   { p:"fall.bisher_versucht", l:"Haben Sie bereits einen Verkauf versucht oder einen Makler angefragt?", t:"sel", full:true, o:[["", "keine Angabe"], ["nein", "nein"], ["makler_angefragt", "Makler angefragt"], ["inseriert", "bereits inseriert"], ["anderes", "anderes"]] }
+ ]},
+ { title: "11. Finanzierung (freiwillig)", intro: "Alles in diesem Teil ist freiwillig. Er hilft mir nur, wenn Sie Rechenbeispiele zu Verkauf, Behalten oder einem neuen Haus wünschen. Die Zahlen stehen im Darlehensvertrag oder in der Jahresmitteilung Ihrer Bank. Wenn Sie mehrere Darlehen haben, tragen Sie die zwei größten ein und den Rest unter „Weitere Darlehen“. Eine Restschuld ohne weitere Angaben ist ebenfalls in Ordnung.", fields: [
+  { p:"verkauf.d1_betrag", l:"Darlehen 1: Restschuld heute", t:"num", u:"€", min:0, max:20000000 },
+  { p:"verkauf.d1_zins_pct", l:"Darlehen 1: Zinssatz", t:"num", u:"% pro Jahr", min:0, max:15, step:0.01 },
+  { p:"verkauf.d1_tilgung_pct", l:"Darlehen 1: Tilgung am Anfang", t:"num", u:"% pro Jahr", min:0, max:20, step:0.01, h:"Leer lassen, wenn das Darlehen endfällig ist." },
+  { p:"verkauf.d1_zinsbindung_bis", l:"Darlehen 1: Zinsbindung endet im Jahr", t:"num", min:2026, max:2070, step:1 },
+  { p:"verkauf.d1_endfaellig", l:"Darlehen 1: Wird es am Ende der Laufzeit auf einmal zurückgezahlt (endfällig, keine laufende Tilgung)?", t:"tri", full:true },
+  { p:"verkauf.d2_betrag", l:"Darlehen 2: Restschuld heute", t:"num", u:"€", min:0, max:20000000 },
+  { p:"verkauf.d2_zins_pct", l:"Darlehen 2: Zinssatz", t:"num", u:"% pro Jahr", min:0, max:15, step:0.01 },
+  { p:"verkauf.d2_tilgung_pct", l:"Darlehen 2: Tilgung am Anfang", t:"num", u:"% pro Jahr", min:0, max:20, step:0.01 },
+  { p:"verkauf.d2_zinsbindung_bis", l:"Darlehen 2: Zinsbindung endet im Jahr", t:"num", min:2026, max:2070, step:1 },
+  { p:"verkauf.d2_endfaellig", l:"Darlehen 2: Wird es am Ende der Laufzeit auf einmal zurückgezahlt (endfällig, keine laufende Tilgung)?", t:"tri", full:true },
+  { p:"verkauf.weitere_darlehen", l:"Weitere Darlehen oder Bausparverträge (kurz beschreiben)", t:"text", full:true },
+  { p:"verkauf.sondertilgung", l:"Ist eine Sondertilgung vertraglich möglich?", t:"tri", full:true },
+  { p:"wunsch.umfang", l:"Welchen Umfang würden Sie sich von der Beratung wünschen? (freiwillig, unverbindlich; Preise nenne ich in meiner Antwort)", t:"sel", full:true, o:WUNSCH, h:"Die Rechenbeispiele bei „Szenarien“ zeigen, was bei angenommenen Zahlen herauskommt. Sie sind keine Anlage-, Finanzierungs-, Steuer- oder Rechtsberatung." }
  ]}
 ];
+if (PILOT) SECTIONS.push({ title: "12. Ihre Einschätzung zum Angebot (nur Pilot)", intro: "Ich teste ein Angebot in drei Umfängen (Basis, Vor Ort, Szenarien, siehe Frage am Ende von Teil 11). <strong>Es gibt keine falschen Antworten</strong>, und es geht nicht darum, dass Sie etwas kaufen. Mich interessiert, was Ihnen etwas wert wäre. Alles freiwillig.", fields: [
+  { p:"pilot.erwartung", l:"Was erwarten Sie von so einer Beratung?", t:"area", full:true },
+  { p:"pilot.preis_basis_zu_billig", l:"Basis: Ab welchem Preis wäre der Bericht so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_basis_zu_teuer", l:"Basis: Ab welchem Preis wäre er zu teuer, sodass Sie ihn nicht in Betracht ziehen?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_vor_ort_zu_billig", l:"Vor Ort: Ab welchem Preis wäre das so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_vor_ort_zu_teuer", l:"Vor Ort: Ab welchem Preis wäre es zu teuer?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_szenarien_zu_billig", l:"Szenarien: Ab welchem Preis wäre das so günstig, dass Sie an der Qualität zweifeln?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.preis_szenarien_zu_teuer", l:"Szenarien: Ab welchem Preis wäre es zu teuer?", t:"num", u:"€", min:0, max:100000 },
+  { p:"pilot.dauer_minuten", l:"Wie lange haben Sie für den Fragebogen gebraucht?", t:"num", u:"Minuten", min:0, max:600 },
+  { p:"pilot.unklar", l:"Was war unklar, schwer zu beantworten oder hat gefehlt?", t:"area", full:true },
+  { p:"pilot.fallstudie_ok", l:"Darf ich Ihren Fall anonymisiert (ohne Namen, Straße, Preisangaben) als Beispiel nutzen?", t:"tri", full:true },
+  { p:"pilot.nachbefragung_ok", l:"Darf ich mich nach dem Verkauf nochmals bei Ihnen melden, um zu hören, wie es gelaufen ist?", t:"tri", full:true }
+]});
 const UNTERLAGEN = [
  ["grundbuchauszug", "Grundbuchauszug"], ["lageplan", "Lageplan oder Flurkarte"], ["grundrisse", "Grundrisse und Bauzeichnungen"], ["wohnflaeche", "Wohnflächenberechnung"], ["energieausweis", "Energieausweis"],
  ["baugenehmigung", "Baugenehmigung und Genehmigungen für Anbauten"], ["gutachten", "Wertgutachten (falls vorhanden)"], ["rechnungen", "Rechnungen zu Modernisierungen (Heizung, Fenster, Dach, Bäder)"], ["mietvertraege", "Mietverträge (falls vermietet)"], ["versicherung", "Gebäudeversicherung mit Wohnflächenangabe"]];
@@ -262,7 +292,7 @@ function fieldHtml(f) {
   return `<div${cls}><label for="${id}"${f.req ? ' class="req"' : ''}>${f.l}</label>${ctl}${f.h ? `<div class="help">${f.h}</div>` : ''}<div class="err" id="e_${id}"></div></div>`;
 }
 form.innerHTML = SECTIONS.map(s => `<div class="card"><h2>${s.title}</h2><p class="lead">${s.intro}</p><div class="grid">${s.fields.map(fieldHtml).join('')}</div></div>`).join('') +
-  `<div class="card"><h2>11. Unterlagen</h2><p class="lead">Welche Unterlagen haben Sie bereits? Sie müssen sie jetzt nicht mitschicken.</p>${UNTERLAGEN.map(u => `<label class="check"><input type="checkbox" data-doc="${u[0]}"><span>${u[1]}</span></label>`).join('')}</div>`;
+  `<div class="card"><h2>${SECTIONS.length + 1}. Unterlagen</h2><p class="lead">Welche Unterlagen haben Sie bereits? Sie müssen sie jetzt nicht mitschicken.</p>${UNTERLAGEN.map(u => `<label class="check"><input type="checkbox" data-doc="${u[0]}"><span>${u[1]}</span></label>`).join('')}</div>`;
 SECTIONS.forEach(s => s.fields.forEach(f => { f.id = 'f_' + f.p.replace(/\./g, '_'); el[f.p] = document.getElementById(f.id); }));
 const fd = (p) => SECTIONS.flatMap(s => s.fields).find(x => x.p === p);
 
@@ -348,13 +378,16 @@ function validate(final) {
   if (gst !== null && !datumOk(gst)) err(f('gutachten.stichtag'), 'Bitte ein Jahr zwischen 1950 und heute eintragen; Tag und Monat sind freiwillig.');
   const bw = g('gutachten.bodenwert_eur'), vw = g('gutachten.verkehrswert_eur');
   if (bw !== null && vw !== null && bw > vw) err(f('gutachten.bodenwert_eur'), 'Der Bodenwert kann nicht höher als der Verkehrswert sein. Bitte prüfen.');
+  const dr1 = g('verkauf.d1_betrag'), dr2 = g('verkauf.d2_betrag'), rsch = g('verkauf.restschuld');
+  if (rsch !== null && (dr1 !== null || dr2 !== null)) { const sm = (dr1 || 0) + (dr2 || 0); if (Math.abs(sm - rsch) > Math.max(1000, rsch * 0.02)) err(f('verkauf.restschuld'), 'Die Darlehen 1 und 2 ergeben zusammen ' + Math.round(sm).toLocaleString('de-DE') + ' €, die Restschuld ist anders angegeben. Fehlt ein Darlehen oder passt eine Zahl nicht? Bitte prüfen.'); }
+  [['d1'], ['d2']].forEach(([d]) => { if (g('verkauf.' + d + '_endfaellig') === true && g('verkauf.' + d + '_tilgung_pct')) err(f('verkauf.' + d + '_tilgung_pct'), 'Sie haben „endfällig“ gewählt und eine Tilgung eingetragen. Bitte prüfen.'); });
   const kj = g('fall.kaufjahr'), sb = g('fall.selbstgenutzt_bis');
   if (kj !== null && sb !== null && sb < kj) err(f('fall.selbstgenutzt_bis'), 'Das Jahr liegt vor dem Kaufjahr. Bitte prüfen.');
   return ok;
 }
 
 function progress() {
-  const all = SECTIONS.flatMap(s => s.fields); const key = all.filter(f => !['objekt.strasse', 'objekt.stadt', 'objekt.ortsteil', 'verkauf.ziele', 'verkauf.ziele_auswahl', 'verkauf.restschuld', 'zustand.maengel', 'zustand.instandhaltungsstau', 'grundstueck.nebengebaeude'].includes(f.p) && !f.p.startsWith('fall.') && !f.p.startsWith('gutachten.') && !f.p.endsWith('_jahr') && !f.p.startsWith('vermietung.') && !f.p.startsWith('recht.') && !f.p.startsWith('bauteile.'));
+  const all = SECTIONS.flatMap(s => s.fields); const key = all.filter(f => !['objekt.strasse', 'objekt.stadt', 'objekt.ortsteil', 'verkauf.ziele', 'verkauf.ziele_auswahl', 'verkauf.restschuld', 'zustand.maengel', 'zustand.instandhaltungsstau', 'grundstueck.nebengebaeude'].includes(f.p) && !f.p.startsWith('fall.') && !f.p.startsWith('gutachten.') && !f.p.endsWith('_jahr') && !f.p.startsWith('vermietung.') && !f.p.startsWith('recht.') && !f.p.startsWith('bauteile.') && !f.p.startsWith('pilot.') && !f.p.startsWith('wunsch.') && !/^verkauf\.(d1_|d2_|weitere_darlehen|sondertilgung)/.test(f.p));
   const filled = key.filter(f => readField(f) !== null).length; const p = Math.round(filled / key.length * 100);
   document.getElementById('pct').textContent = p + ' %'; document.getElementById('meter').style.width = p + '%';
 }

@@ -73,6 +73,13 @@ pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);borde
 <option>später, ich will erst wissen, was möglich ist</option>
 </select>
 
+<label>Welchen Umfang würden Sie sich wünschen? <span class="hint">(freiwillig und unverbindlich; Preise nenne ich Ihnen in meiner Antwort)</span></label>
+<label class="check"><input type="radio" name="umfang" value="Basis"><span><strong>Basis:</strong> Ich trage meine Angaben und Fotos selbst im Fragebogen ein, beantworte einige Rückfragen und bekomme den Bericht mit einem abschließenden Gespräch.</span></label>
+<label class="check"><input type="radio" name="umfang" value="Vor Ort"><span><strong>Vor Ort:</strong> Wie Basis, dazu Besichtigung vor Ort und persönliches Durchgehen des Fragebogens, bevor der Bericht fertig wird.</span></label>
+<label class="check"><input type="radio" name="umfang" value="Szenarien"><span><strong>Szenarien:</strong> Zusätzlich Rechenbeispiele zu meinen Optionen (zum Beispiel verkaufen, behalten oder vermieten).</span></label>
+<label class="check"><input type="radio" name="umfang" value="Weiß ich noch nicht"><span><strong>Weiß ich noch nicht:</strong> Ich möchte zuerst wissen, was möglich ist.</span></label>
+<p class="small muted">Die Rechenbeispiele bei „Szenarien“ zeigen, was bei angenommenen Zahlen herauskommt. Sie sind keine Anlage-, Finanzierungs-, Steuer- oder Rechtsberatung.</p>
+
 <label for="frage">Was ist Ihre wichtigste Frage? <span class="hint">(freiwillig)</span></label>
 <textarea id="frage" maxlength="600" placeholder="z. B. Welcher Preis ist realistisch? Was bleibt mir nach dem Kredit?"></textarea>
 
@@ -123,6 +130,7 @@ pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);borde
     var v = this.value.trim();
     $("h_ort").style.display = (v.length > 3 && gebiet(v) !== "Nürnberg") ? "block" : "none";
   });
+  function umfang(){ var r = document.querySelector('input[name="umfang"]:checked'); return r ? r.value : "keine Angabe"; }
   function pruefen(id, ok){ $("e_"+id).style.display = ok ? "none" : "block"; return ok; }
   f.addEventListener("submit", function(ev){
     ev.preventDefault();
@@ -143,6 +151,7 @@ pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);borde
       "Baujahr: " + bj,
       "Nutzung: " + $("nutzung").value,
       "Verkauf: " + ($("zeit").value || "keine Angabe"),
+      "Gewünschter Umfang: " + umfang(),
       "Wichtigste Frage: " + ($("frage").value.trim() || "keine Angabe"),
       "",
       "E-Mail: " + $("mail").value.trim(),
