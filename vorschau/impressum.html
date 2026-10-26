@@ -6,15 +6,33 @@
 <title>Impressum</title>
 <meta name="robots" content="noindex">
 <style>
-:root{--ink:#1b2127;--muted:#5d6872;--bg:#fbfaf7;--card:#ffffff;--line:#dfe3e6;--accent:#17406b;--warn:#fff4d6;--wl:#9a6a00}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8ecef;--muted:#a3afb8;--bg:#14181c;--card:#1c2228;--line:#2e3740;--accent:#7fb2e5;--warn:#3a3118;--wl:#d8a93c}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-.wrap{max-width:760px;margin:0 auto;padding:0 20px 50px}
-.entwurf{background:var(--warn);border-bottom:2px solid var(--wl);padding:8px 20px;font-size:14px}
-h1{font-size:30px;color:var(--accent);margin:26px 0 12px}h2{font-size:19px;color:var(--accent);margin:26px 0 6px}
-p{margin:0 0 12px}.small{font-size:14px;color:var(--muted)}
-.platzhalter{background:var(--warn);padding:0 4px;border-radius:3px;font-family:ui-monospace,Menlo,monospace;font-size:.92em}
-a{color:var(--accent)}:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+/* Design "Frisch" (Kurz-Check, Impressum, Pilotseiten). Klassen wie bisher, nur Systemschriften. */
+:root{--font:ui-rounded,"SF Pro Rounded","Avenir Next","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;--ink:#1f2d33;--muted:#5b6d74;--bg:#f5fbfa;--card:#ffffff;--line:#d6ebe8;--accent:#0f7c8a;--accent-ink:#ffffff;--accent-soft:#d7f0f2;--sun-soft:#ffe8df;--warn:#fff2e6;--warn-line:#e07a4f;--wl:#e07a4f;--err:#b3261e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8f1f2;--muted:#a2b6ba;--bg:#12191b;--card:#1d292c;--line:#2a3b3f;--accent:#56c7d4;--accent-ink:#06242a;--accent-soft:#173a3f;--sun-soft:#3d2a23;--warn:#3d2b25;--warn-line:#ff9a7a;--wl:#ff9a7a;--err:#ff8a8f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg) radial-gradient(700px 300px at 90% -5%,var(--sun-soft),transparent 70%) no-repeat;color:var(--ink);font:17px/1.6 var(--font)}
+.wrap{max-width:700px;margin:0 auto;padding:0 20px 40px}
+.entwurf{background:var(--warn);border-bottom:2px dashed var(--warn-line);padding:8px 20px;font-size:14px}
+h1{font-size:30px;line-height:1.15;color:var(--accent);margin:28px 0 10px;letter-spacing:-.01em}h2{font-size:19px;color:var(--accent);margin:26px 0 6px}
+p{margin:0 0 14px}.muted{color:var(--muted)}.small{font-size:14px}
+a{color:var(--accent)}
+form,.out{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;margin-top:18px;box-shadow:0 10px 30px rgba(20,50,55,.08)}
+label{display:block;font-weight:700;margin:16px 0 4px}label:first-child{margin-top:0}
+.hint{font-weight:400;color:var(--muted);font-size:14px}
+input[type=text],input[type=email],input[type=number],select,textarea{width:100%;padding:11px 14px;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:14px}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+textarea{min-height:76px}
+.row{display:grid;gap:12px;grid-template-columns:1fr 1fr}@media (max-width:520px){.row{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin-top:12px;background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px}
+.check input{margin-top:6px;accent-color:var(--accent)}
+.btn{display:inline-block;padding:13px 26px;border-radius:999px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:700;cursor:pointer;text-decoration:none;margin:6px 8px 6px 0}
+.btn.sec{background:transparent;color:var(--accent)}
+.err{color:var(--err);font-size:14px;margin-top:4px;display:none}
+.hinweis{background:var(--warn);border-left:4px solid var(--warn-line);padding:10px 12px;border-radius:8px;font-size:15px;margin-top:14px;display:none}
+pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px;font:14px/1.5 ui-monospace,Menlo,monospace}
+.platzhalter{background:var(--warn);border:1px dashed var(--warn-line);padding:0 5px;border-radius:6px;font-size:.92em}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>

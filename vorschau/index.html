@@ -7,78 +7,86 @@
 <meta name="description" content="Preisberatung für Privatverkäufer von Eigentumswohnungen in Nürnberg: Marktpreis-Einschätzung für Ihre Wohnung und die Auszahlung vor Steuern nach Restschuld und Kosten. Festpreis, keine Provision.">
 <meta name="robots" content="noindex">
 <style>
-:root{--ink:#1b2127;--muted:#5d6872;--bg:#fbfaf7;--card:#ffffff;--line:#dfe3e6;--accent:#17406b;--accent-2:#1f7a4d;--warn:#fff4d6;--warn-line:#9a6a00}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8ecef;--muted:#a3afb8;--bg:#14181c;--card:#1c2228;--line:#2e3740;--accent:#7fb2e5;--accent-2:#6cc79a;--warn:#3a3118;--warn-line:#d8a93c}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-.wrap{max-width:980px;margin:0 auto;padding:0 20px}
-header.top{border-bottom:1px solid var(--line);background:var(--card)}
-header.top .wrap{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;gap:12px;flex-wrap:wrap}
-.logo{font-weight:700;color:var(--accent);text-decoration:none;font-size:18px}
-nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:15px}
-nav a:hover{color:var(--accent)}
-.entwurf{background:var(--warn);border-bottom:2px solid var(--warn-line);padding:8px 0;font-size:14px}
-h1{font-size:clamp(28px,5vw,42px);line-height:1.15;margin:0 0 16px;color:var(--accent)}
-h2{font-size:26px;margin:0 0 12px;color:var(--accent)}
-h3{font-size:18px;margin:0 0 6px}
-p{margin:0 0 14px}
-section{padding:46px 0;border-bottom:1px solid var(--line)}
-.hero{padding:56px 0 46px}
-.lead{font-size:19px;color:var(--muted);max-width:720px}
-.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
-.btn{display:inline-block;padding:13px 22px;border-radius:8px;text-decoration:none;font-weight:600;border:2px solid var(--accent)}
-.btn.primary{background:var(--accent);color:#fff}
-@media (prefers-color-scheme:dark){.btn.primary{color:#0b1218}}
-.btn.sec{color:var(--accent);background:transparent}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
-.card .nr{display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;text-align:center;line-height:28px;font-weight:700;margin-bottom:8px}
-@media (prefers-color-scheme:dark){.card .nr{color:#0b1218}}
-.muted{color:var(--muted)}
-.small{font-size:14px}
-table{border-collapse:collapse;width:100%;font-size:15px;background:var(--card)}
-th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
-th{background:rgba(127,127,127,.1)}
-td.n,th.n{text-align:right;white-space:nowrap}
-.scroll{overflow-x:auto}
-.bar{position:relative;height:34px;border-radius:17px;background:rgba(127,127,127,.15);margin:14px 0 6px}
-.bar .zone{position:absolute;top:0;bottom:0;left:22%;width:50%;background:rgba(31,122,77,.25);border-left:2px solid var(--accent-2);border-right:2px solid var(--accent-2)}
-.bar .m{position:absolute;top:-6px;width:3px;height:46px;background:var(--ink)}
-.musterhinweis{background:var(--warn);border-left:4px solid var(--warn-line);padding:8px 12px;font-size:14px;margin:0 0 16px;border-radius:4px}
-.platzhalter{background:var(--warn);padding:0 4px;border-radius:3px;font-family:ui-monospace,Menlo,monospace;font-size:.92em}
-.ok{color:var(--accent-2);font-weight:700}
-ul.liste{padding-left:20px;margin:0 0 14px}
-ul.liste li{margin:5px 0}
-details{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin:10px 0}
-summary{cursor:pointer;font-weight:600}
-footer{padding:30px 0;color:var(--muted);font-size:14px}
-blockquote.zitat{margin:0 0 18px;padding:6px 0 6px 18px;border-left:4px solid var(--accent);font-size:clamp(20px,3.4vw,27px);line-height:1.3;color:var(--accent);font-weight:600}
-.person{display:grid;gap:22px;grid-template-columns:200px 1fr;align-items:start}
-@media (max-width:640px){.person{grid-template-columns:1fr}}
-.foto{aspect-ratio:4/5;background:rgba(127,127,127,.12);border:2px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;color:var(--muted);font-size:13px}
-.zahlen{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:14px 0}
-.zahl{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}.zahl b{display:block;font-size:24px;color:var(--accent)}
+/* Design "Frisch" (Startseite). Nur Systemschriften, keine externen Dateien. */
+:root{--font:ui-rounded,"SF Pro Rounded","Avenir Next","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;--r:22px;--r-s:14px;--shadow:0 10px 30px rgba(20,50,55,.08),0 2px 6px rgba(20,50,55,.05);
+--bg:#f5fbfa;--bg2:#e6f5f3;--card:#ffffff;--ink:#1f2d33;--muted:#5b6d74;--line:#d6ebe8;--accent:#0f7c8a;--accent-ink:#ffffff;--accent-soft:#d7f0f2;--sun:#ff8a65;--sun-soft:#ffe8df;--accent-2:#1f7a4d;--warn:#fff2e6;--warn-line:#e07a4f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12191b;--bg2:#182225;--card:#1d292c;--ink:#e8f1f2;--muted:#a2b6ba;--line:#2a3b3f;--accent:#56c7d4;--accent-ink:#06242a;--accent-soft:#173a3f;--sun:#ff9a7a;--sun-soft:#3d2a23;--accent-2:#6cc79a;--warn:#3d2b25;--warn-line:#ff9a7a}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 var(--font)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
 a{color:var(--accent)}
-:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.entwurf{background:var(--warn);border-bottom:2px dashed var(--warn-line);padding:8px 0;font-size:14px}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 22px;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);text-decoration:none;font-size:19px}
+.logo i{width:34px;height:34px;border-radius:11px;background:var(--accent);display:grid;place-items:center}.logo svg{width:20px;height:20px}
+nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}nav a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:600}nav a:hover{color:var(--accent)}
+@media (max-width:860px){nav a:not(.btn){display:none}}
+h1{font-size:clamp(34px,5.4vw,54px);line-height:1.08;margin:0 0 18px;letter-spacing:-.02em}h1 em{font-style:normal;color:var(--accent);background:linear-gradient(transparent 68%,var(--sun-soft) 68%)}
+h2{font-size:clamp(26px,3.6vw,36px);line-height:1.15;margin:0 0 12px;letter-spacing:-.01em}h3{font-size:20px;margin:0 0 6px}p{margin:0 0 14px}
+section{padding:60px 0}main>section:nth-of-type(even){background:var(--bg2)}
+.hero{padding:54px 0 40px;background:radial-gradient(900px 420px at 85% -10%,var(--sun-soft),transparent 70%),radial-gradient(700px 380px at -10% 110%,var(--accent-soft),transparent 70%)}
+main>section.hero:nth-of-type(even){background:radial-gradient(900px 420px at 85% -10%,var(--sun-soft),transparent 70%),radial-gradient(700px 380px at -10% 110%,var(--accent-soft),transparent 70%)}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero svg.ill{max-width:320px;margin:0 auto}}
+.lead{font-size:20px;color:var(--muted);max-width:640px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 4px;padding:0;list-style:none}
+.chips li{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 16px 8px 12px;font-size:15px;font-weight:700}
+.chips li:before{content:"✓";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:12px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font:700 17px var(--font);text-decoration:none;border:2px solid var(--accent);cursor:pointer;transition:transform .15s}
+.btn.primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 18px color-mix(in srgb,var(--accent) 30%,transparent)}.btn.primary:hover{transform:translateY(-2px)}
+.btn.sec{background:transparent;color:var(--accent)}.btn.sec:hover{background:var(--accent-soft)}.btn.klein{padding:9px 18px;font-size:15px}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;box-shadow:var(--shadow)}
+.card .nr{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:800;margin-bottom:10px}
+.card.t{border:2px solid var(--accent)}.card .tag{display:inline-block;background:var(--sun);color:#1f2d33;font-size:12px;font-weight:800;padding:3px 12px;border-radius:999px;margin-bottom:8px}
+.ok{color:var(--accent-2)}.muted{color:var(--muted)}.small{font-size:15px}
+ul.liste{list-style:none;padding:0;margin:0 0 14px}ul.liste li{padding:8px 0 8px 30px;position:relative;border-bottom:1px dashed var(--line)}ul.liste li:last-child{border-bottom:0}ul.liste li:before{content:"•";position:absolute;left:8px;color:var(--accent);font-weight:800}
+.zahlen{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:14px 0}.zahl{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow)}.zahl b{display:block;font-size:30px;color:var(--accent);line-height:1.15}
+table{border-collapse:collapse;width:100%;font-size:15px;background:var(--card);border-radius:12px;overflow:hidden}th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}th{background:var(--accent-soft)}td.n,th.n{text-align:right;white-space:nowrap}.scroll{overflow-x:auto}
+.bar{position:relative;height:30px;border-radius:15px;background:var(--bg2);margin:14px 0 6px}.bar .zone{position:absolute;top:0;bottom:0;left:22%;width:50%;background:color-mix(in srgb,var(--accent) 30%,transparent);border-radius:15px}.bar .m{position:absolute;top:-6px;width:4px;height:42px;background:var(--ink);border-radius:2px}
+.musterhinweis{background:var(--warn);border-left:4px solid var(--warn-line);padding:8px 12px;font-size:14px;margin:0 0 16px;border-radius:8px}
+.platzhalter{background:var(--warn);border:1px dashed var(--warn-line);padding:0 5px;border-radius:6px;font-size:.92em}
+.person{display:grid;gap:30px;grid-template-columns:220px 1fr;align-items:center}@media (max-width:700px){.person{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.foto{width:200px;height:200px;border-radius:50%;background:var(--accent-soft);border:4px solid var(--card);box-shadow:var(--shadow);display:grid;place-items:center;text-align:center;font-size:13px;color:var(--muted);padding:20px}
+blockquote.zitat{margin:0 0 14px;font-size:clamp(22px,3vw,30px);line-height:1.3;font-weight:800;color:var(--accent)}
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--r-s);padding:16px 20px;margin:12px 0}summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}summary::after{content:"+";font-size:22px;line-height:1;color:var(--accent)}details[open] summary::after{content:"–"}
+.wege .card h3:after{content:"";display:block;width:36px;height:4px;border-radius:2px;background:var(--sun);margin-top:6px}
+footer{padding:36px 0 60px;color:var(--muted);font-size:14px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 </style>
 </head>
 <body>
 <div class="entwurf"><div class="wrap"><strong>ENTWURF, nicht veröffentlichen.</strong> <span class="platzhalter">Startgebiet: nur Nürnberg (Stadtgebiet). Erlangen und Fürth erst nennen, wenn Marktbericht, Methode und Nutzungsrechte vorliegen und der Bericht lieferfähig ist (sonst Irreführungsrisiko nach § 5 UWG).</span> Gelb markierte Stellen sind Platzhalter. Vor der Veröffentlichung: Gewerbeanmeldung und Rechtsform, Impressum, Datenschutzerklärung, Preise, rechtliche Prüfung der Texte (§ 34c GewO, UWG, RDG). Alle Zahlen in den Mustern sind erfundene Beispiele.</div></div>
 
 <header class="top"><div class="wrap">
-<a class="logo" href="#">[<span class="platzhalter">Name der Beratung</span>]</a>
-<nav><a href="#markt">Der Markt</a><a href="#ablauf">So läuft es</a><a href="#bekommen">Was Sie bekommen</a><a href="#vergleich">Der Unterschied</a><a href="#preis">Preis</a><a href="#faq">Fragen</a></nav>
+<a class="logo" href="#"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></i><span class="platzhalter">Name der Beratung</span></a>
+<nav><a href="#markt">Der Markt</a><a href="#ablauf">So läuft es</a><a href="#wege">Drei Wege</a><a href="#verkaufspaket">Verkaufspaket</a><a href="#preis">Preis</a><a href="#faq">Fragen</a><a class="btn primary klein" href="kurz-check.html">Kurz-Check</a></nav>
 </div></header>
 
 <main>
 <section class="hero"><div class="wrap">
-<h1>Eigentumswohnung in Nürnberg verkaufen? Erst klären, welche Preisspanne der Markt hergibt und was nach Kredit und Kosten vor Steuern übrig bleibt.</h1>
-<p class="lead">Preisberatung für Privatverkäufer. Sie erhalten für Ihre Wohnung eine begründete Preisspanne, die geschätzte Auszahlung vor Steuern und eine klare Checkliste für den Verkauf. Mein Honorar ist ein Festpreis. Er hängt nicht davon ab, ob und zu welchem Preis Sie verkaufen.</p>
+<div>
+<h1>Wissen, wo Sie stehen, <em>bevor Sie entscheiden.</em></h1>
+<p class="lead">Eigentumswohnung in Nürnberg verkaufen? Erst klären, welche Preisspanne der Markt hergibt und was nach Kredit und Kosten vor Steuern übrig bleibt. Sie erhalten eine begründete Preisspanne, die geschätzte Auszahlung vor Steuern und eine klare Checkliste für den Verkauf. Mein Honorar ist ein Festpreis. Er hängt nicht davon ab, ob und zu welchem Preis Sie verkaufen.</p>
+<ul class="chips"><li>Kurz-Check kostenlos</li><li>Festpreis</li><li>Keine Provision aus dem Verkauf</li><li>Exposé und Verkaufsleitfaden im Verkaufspaket</li></ul>
 <div class="btns">
-<a class="btn primary" href="kurz-check.html">Kurz-Check starten</a>
+<a class="btn primary" href="kurz-check.html">Kurz-Check starten →</a>
 <a class="btn sec" href="#ablauf">So läuft es ab</a>
 </div>
 <p class="small muted" style="margin-top:14px">Der Kurz-Check ist kostenlos und verpflichtet Sie zu nichts. Ich antworte nur auf Ihre Anfrage; weitere E-Mails bekommen Sie nur, wenn Sie das ausdrücklich wollen. <span class="platzhalter">[Frist der Rückmeldung festlegen]</span></p>
+</div>
+<svg class="ill" viewBox="0 0 360 320" role="img" aria-label="Illustration: Haus mit Preisschild und Schlüssel">
+<ellipse cx="180" cy="290" rx="150" ry="16" fill="var(--accent-soft)"/>
+<rect x="70" y="140" width="190" height="140" rx="14" fill="var(--card)" stroke="var(--line)" stroke-width="3"/>
+<path d="M52 150 165 58 278 150Z" fill="var(--accent)"/>
+<rect x="145" y="200" width="42" height="80" rx="10" fill="var(--sun)"/><circle cx="177" cy="242" r="3.5" fill="#fff"/>
+<rect x="94" y="168" width="36" height="34" rx="8" fill="var(--accent-soft)"/><rect x="200" y="168" width="36" height="34" rx="8" fill="var(--accent-soft)"/>
+<g transform="translate(252 70) rotate(10)"><rect width="104" height="56" rx="16" fill="var(--sun)"/><circle cx="18" cy="28" r="6" fill="var(--card)"/><text x="32" y="35" font-size="22" font-weight="800" fill="#1f2d33" font-family="ui-rounded,system-ui,sans-serif">?? €</text></g>
+<g transform="translate(28 214) rotate(-14)"><circle cx="20" cy="20" r="16" fill="none" stroke="var(--accent)" stroke-width="7"/><rect x="34" y="16" width="52" height="9" rx="4.5" fill="var(--accent)"/><rect x="66" y="25" width="8" height="14" rx="3" fill="var(--accent)"/><rect x="78" y="25" width="8" height="10" rx="3" fill="var(--accent)"/></g>
+</svg>
 </div></section>
 
 <section id="fuer-wen"><div class="wrap">
@@ -99,6 +107,14 @@ a{color:var(--accent)}
 </div>
 <p>Wer zu hoch startet, riskiert eine lange Standzeit und später Preisverhandlungen aus der Defensive. Wer zu niedrig startet oder bei der ersten Anfrage nachgibt, kann Geld verschenken. Der Bericht hilft Ihnen, beide Risiken besser einzuschätzen: Sie sehen, was Ihre Wohnung im Vergleich trägt und <strong>welche Stärken und Schwächen sie hat</strong>. Eine Garantie für einen bestimmten Verkaufspreis gibt es nicht. Wie Sie das im Verkaufsgespräch nutzen, ist Teil des Verkaufspakets (Verhandlungsplan).</p>
 <p class="small muted">Alle Zahlen sind Beobachtungen und keine Prognose für Ihre Wohnung. Keine Rechts- oder Steuerberatung, keine Vermittlung, kein Verkehrswertgutachten.</p>
+</div></section>
+
+<section id="bestandsaufnahme"><div class="wrap">
+<h2>Erst wissen, dann entscheiden</h2>
+<p class="lead">Nicht jeder Eigentümer einer Wohnung in Nürnberg weiß schon, ob er verkaufen will. Wer zuerst wissen möchte, wo er steht, bekommt hier eine Grundlage dafür.</p>
+<p>Mein Honorar ist ein Festpreis und hängt nicht davon ab, ob und zu welchem Preis Sie verkaufen. Deshalb können Sie die Standortbestimmung auch machen, wenn Sie noch nicht sicher sind. Sie erhalten für Ihre Eigentumswohnung auf Basis Ihrer Angaben (ohne Besichtigung): eine <strong>Preisspanne</strong> auf Basis veröffentlichter Marktdaten und aktueller Angebote, die <strong>geschätzte Auszahlung nach Restschuld und Kosten vor Steuern</strong> und, wenn Ihre Wohnung vermietet ist und Sie die nötigen Angaben machen, eine <strong>Rechenübersicht „Halten oder verkaufen?“</strong> mit offen genannten Annahmen. Danach entscheiden Sie selbst. Entscheiden Sie sich zu verkaufen, bietet das Verkaufspaket Inserat, Exposé und Verhandlungsplan; Besichtigungen und Verhandlung führen Sie selbst.</p>
+<p>Die Standortbestimmung (Marktpreis-Bericht) kostet <span class="platzhalter">[Preis Paket A, Festpreis, inklusive USt oder Kleinunternehmerhinweis, siehe Abschnitt Preis]</span>; der Kurz-Check vorab ist kostenlos. Ich vermittle keine Käufer und erhalte keine Provision aus dem Verkauf. <span class="platzhalter">[nur nach schriftlicher Eigenerklärung: „und keine Vergütung von Maklern, Banken, Handwerkern oder Portalen“]</span> Marktpreis-Einschätzung, kein Verkehrswertgutachten, keine Rechts-, Steuer-, Anlage- oder Darlehensberatung. Alle Zahlen sind Schätzungen mit Annahmen; es gibt keine Garantie für einen Verkaufspreis.</p>
+<p class="small muted"><span class="platzhalter">[ENTWURF, Stand Claim-Check 24.10.2026, Prüfbericht pruefungen/claimcheck_2026-10-24_unabhaengigkeit.md: Das Wort „unabhängig“ und der Vergleich mit Maklern sind bewusst entfallen (Marcos Gedanke: Makler und Banken arbeiten erst im Detail, wenn sicher verkauft wird; als Aussage über Dritte nicht belegt). Vor Veröffentlichung: Nutzungsrechte Nürnberg schriftlich, Eigenerklärung zu Vergütungen Dritter, Entscheidung Handwerkernetz, Steuerrechnung im Bericht (Fachperson).]</span></p>
 </div></section>
 
 <section id="makler"><div class="wrap">
@@ -133,6 +149,16 @@ a{color:var(--accent)}
 </div>
 </div></section>
 
+<section id="wege"><div class="wrap wege">
+<h2>Drei Wege, wie ich Sie begleite</h2>
+<p class="muted" style="max-width:660px">Sie wählen, wie viel Unterstützung Sie beim Bericht möchten. Den Wunsch geben Sie schon im Kurz-Check an, unverbindlich. Preise nenne ich Ihnen in meiner Antwort. <span class="platzhalter">[Umfang und Preis je Weg festlegen]</span></p>
+<div class="grid" style="margin-top:22px">
+<div class="card"><h3>Basis</h3><p class="small">Sie tragen Angaben und Fotos selbst im Fragebogen ein, beantworten einige Rückfragen und bekommen den Bericht mit einem abschließenden Gespräch.</p></div>
+<div class="card t"><span class="tag">Persönlich</span><h3>Vor Ort</h3><p class="small">Wie Basis, dazu Besichtigung vor Ort und persönliches Durchgehen des Fragebogens, bevor der Bericht fertig wird.</p></div>
+<div class="card"><h3>Szenarien</h3><p class="small">Zusätzlich Rechenbeispiele zu Ihren Optionen, zum Beispiel verkaufen, behalten oder vermieten. Sie zeigen, was bei angenommenen Zahlen herauskommt, und sind keine Anlage-, Finanzierungs-, Steuer- oder Rechtsberatung.</p></div>
+</div>
+</div></section>
+
 <section id="bekommen"><div class="wrap">
 <h2>Was Sie bekommen</h2>
 <p class="musterhinweis">Muster mit erfundenen Beispielzahlen, keine echte Wohnung, kein Marktpreis. Keine Wertermittlung im Sinn eines Verkehrswertgutachtens, keine Garantie für einen Verkaufspreis.</p>
@@ -152,9 +178,22 @@ a{color:var(--accent)}
 <div class="card">
 <h3>3. Wie ein Käufer rechnet</h3>
 <p class="small">Beispielrechnung (Mietrendite, Cashflow) für einen typischen Käufer, mit offen genannten Annahmen. Keine Steuerberatung. So sehen Sie, welcher Preis für Anleger noch trägt.</p>
-<p class="small muted">Dazu: Entwürfe für Inserat und Exposé, Verhandlungsplan, Checklisten.</p>
+<p class="small muted">Im Verkaufspaket (siehe unten) kommen Exposé, Inserattext zum Kopieren, Verkaufsleitfaden, Verhandlungsplan und Checklisten dazu.</p>
 </div>
 </div>
+</div></section>
+
+<section id="verkaufspaket"><div class="wrap">
+<h2>Selbst verkaufen, ohne Makler: das Verkaufspaket</h2>
+<p class="lead">Möchten Sie Ihre Wohnung selbst verkaufen, bekommen Sie zum Marktpreis-Bericht alles, was Sie dafür vorbereiten müssen: fertig zum Kopieren und Verwenden.</p>
+<div class="grid" style="margin-top:22px">
+<div class="card"><h3>Exposé</h3><p class="small">Ein fertiges Exposé mit den Angaben und Argumenten Ihrer Wohnung, das Sie Interessenten schicken können.</p></div>
+<div class="card"><h3>Inserat zum Kopieren</h3><p class="small">Titel und Text für Ihr Portal-Inserat als Copy-and-paste-Version, dazu ein Check der Pflichtangaben (zum Beispiel Energieausweis) und eine Foto-Checkliste.</p></div>
+<div class="card"><h3>Verkaufsleitfaden</h3><p class="small">Der Weg von der Vorbereitung bis zur Übergabe: Anfragen, Besichtigung, Prüfung der Interessenten, Verhandlung, Notar und Übergabe, mit Zeitplan.</p></div>
+<div class="card"><h3>Verhandlung und Checklisten</h3><p class="small">Verhandlungsplan mit Preisstufen, Besichtigungs-Checkliste und Vorlagen für Antworten an Interessenten.</p></div>
+</div>
+<p style="margin-top:22px"><strong>So starten Sie:</strong> nur mit dem Marktpreis-Bericht, oder mit dem Marktpreis-Bericht und dem Verkaufspaket zusammen. <span class="platzhalter">[Ob das Verkaufspaket auch später dazu bestellt werden kann: festlegen. Leistungsumfang im Detail abstimmen.]</span></p>
+<p class="small muted">Besichtigungen und Verhandlung führen Sie selbst. Ich vermittle keine Käufer und keinen Vertrag und schreibe keinen Kaufvertrag. Keine Rechts- oder Steuerberatung.</p>
 </div></section>
 
 <section id="vergleich"><div class="wrap">
@@ -171,10 +210,10 @@ a{color:var(--accent)}
 
 <section id="preis"><div class="wrap">
 <h2>Preis</h2>
-<p>Festpreis je Leistung, vorab genannt. Kein Erfolgshonorar, keine Provision. Der Kurz-Check ist kostenlos. Kosten entstehen erst, wenn Sie ein Paket ausdrücklich bestellen. <span class="platzhalter">[nur so lassen, wenn wahr; Fragebogen: kostenlos oder im Preis enthalten?]</span></p>
+<p>Festpreis je Leistung, vorab genannt. Kein Erfolgshonorar, keine Provision. Der Kurz-Check ist kostenlos. Kosten entstehen erst, wenn Sie ein Paket ausdrücklich bestellen. Sie können nur mit dem Marktpreis-Bericht starten oder das Verkaufspaket gleich dazunehmen. <span class="platzhalter">[nur so lassen, wenn wahr; Fragebogen: kostenlos oder im Preis enthalten?]</span></p>
 <div class="grid">
-<div class="card"><h3>Marktpreis-Bericht</h3><p class="small">Preisspanne, Auszahlung vor Steuern, Beispielrechnung Käufer, Besprechung.</p><p><strong class="platzhalter">[Preis A]</strong></p></div>
-<div class="card"><h3>Verkaufspaket</h3><p class="small">Zusätzlich Inserat, Exposé, Verhandlungsplan, Checklisten (Besichtigungen und Verhandlung führen Sie selbst).</p><p><strong class="platzhalter">[Preis B]</strong></p></div>
+<div class="card"><h3>Marktpreis-Bericht</h3><p class="small">Nur der Bericht: Preisspanne, Auszahlung vor Steuern, Beispielrechnung Käufer, Besprechung.</p><p><strong class="platzhalter">[Preis A]</strong></p></div>
+<div class="card"><h3>Verkaufspaket</h3><p class="small">Zusätzlich zum Marktpreis-Bericht: Exposé, Inserattext zum Kopieren, Verkaufsleitfaden, Verhandlungsplan und Checklisten. Damit verkaufen Sie selbst, ohne Makler. Besichtigungen und Verhandlung führen Sie selbst.</p><p><strong class="platzhalter">[Preis B]</strong></p></div>
 <div class="card"><h3>Begleitung</h3><p class="small">Zusätzlich Begleitung über 3 bis 6 Monate: regelmäßige Gespräche, Auswertung Ihrer eigenen Unterlagen, Checklisten und eine Fragenliste für Ihr Gespräch mit dem Notar. Besichtigungen, Verhandlung und Vertragsabschluss führen Sie selbst.</p><p><strong class="platzhalter">[Preis C]</strong></p></div>
 </div>
 <p class="small muted" style="margin-top:10px">Marktpreis-Einschätzung auf Basis veröffentlichter Daten und Ihrer Angaben. Kein Verkehrswertgutachten, keine Rechts- oder Steuerberatung, keine Vermittlung. Keine Garantie für den Verkaufspreis.</p>
