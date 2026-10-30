@@ -236,6 +236,7 @@ const SECTIONS = [
   { p:"verkauf.vorfaelligkeit_eur", l:"Vorfälligkeitsentschädigung laut Bank (nur wenn schon angefragt)", t:"num", u:"€", min:0 },
   { p:"verkauf.darlehen_zins_pct", l:"Zinssatz Ihres Darlehens (falls bekannt)", t:"num", u:"% pro Jahr", min:0, max:15, step:0.01 },
   { p:"verkauf.zinsbindung_bis", l:"Zinsbindung endet im Jahr (falls bekannt)", t:"num", min:2026, max:2060, step:1, h:"Danach kann der Zins steigen; das ändert Ihren Cashflow beim Halten." },
+  { p:"verkauf.tilgung_pct", l:"Tilgung am Anfang (falls bekannt)", t:"num", u:"% pro Jahr", min:0, max:20, step:0.01, h:"Wird für ein Rechenbeispiel zur Anschlussfinanzierung gebraucht; ohne Angabe rechne ich mit 2 %." },
   { p:"verkauf.d1_betrag", l:"Mehrere Darlehen, Darlehen 1: Restschuld heute", t:"num", u:"€", min:0, max:20000000, h:"Nur ausfüllen, wenn Sie mehrere Darlehen haben und Rechenbeispiele wünschen. Bei einem Darlehen genügen die Felder oben." },
   { p:"verkauf.d1_tilgung_pct", l:"Darlehen 1: Tilgung am Anfang", t:"num", u:"% pro Jahr", min:0, max:20, step:0.01, h:"Leer lassen, wenn das Darlehen endfällig ist." },
   { p:"verkauf.d1_endfaellig", l:"Darlehen 1: Wird es am Ende der Laufzeit auf einmal zurückgezahlt (endfällig, keine laufende Tilgung)?", t:"tri", full:true },
