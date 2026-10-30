@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="de" data-theme="warm">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<title>Design-Vorschlag: freundlichere Startseite</title>
+<style>
+/* Schriften: nur Systemschriften (keine externen Fonts, kein Datenabfluss an Dritte, DSGVO-freundlich) */
+:root{
+  --font: ui-rounded, "SF Pro Rounded", "Avenir Next", "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --r: 22px; --r-s: 14px;
+  --shadow: 0 10px 30px rgba(40,30,20,.08), 0 2px 6px rgba(40,30,20,.05);
+}
+[data-theme="warm"]{
+  --bg:#fff9f0; --bg2:#fff1de; --card:#ffffff; --ink:#2d2a32; --muted:#6b6672; --line:#f0e3d0;
+  --primary:#1f8a70; --primary-ink:#ffffff; --primary-soft:#dff3ec;
+  --accent:#f2a93b; --accent-soft:#fff0cf; --rose:#f4d9d0;
+}
+[data-theme="frisch"]{
+  --bg:#f5fbfa; --bg2:#e6f5f3; --card:#ffffff; --ink:#1f2d33; --muted:#5b6d74; --line:#d6ebe8;
+  --primary:#0f7c8a; --primary-ink:#ffffff; --primary-soft:#d7f0f2;
+  --accent:#ff8a65; --accent-soft:#ffe8df; --rose:#ffe1d6;
+}
+@media (prefers-color-scheme:dark){
+  [data-theme="warm"]{--bg:#1d1a17; --bg2:#26211c; --card:#2b2621; --ink:#f4eee6; --muted:#b9afa3; --line:#3b342c; --primary:#4fc4a3; --primary-ink:#0f2a22; --primary-soft:#1f3a33; --accent:#f2b24f; --accent-soft:#3b2f18; --rose:#3c2a24}
+  [data-theme="frisch"]{--bg:#12191b; --bg2:#182225; --card:#1d292c; --ink:#e8f1f2; --muted:#a2b6ba; --line:#2a3b3f; --primary:#56c7d4; --primary-ink:#06242a; --primary-soft:#173a3f; --accent:#ff9a7a; --accent-soft:#3d2a23; --rose:#3d2b25}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 var(--font)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+a{color:var(--primary)}
+.hinweis{background:var(--accent-soft);border-bottom:2px dashed var(--accent);font-size:14px;padding:8px 0}
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 22px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);text-decoration:none;font-size:19px}
+.logo i{width:34px;height:34px;border-radius:11px;background:var(--primary);display:grid;place-items:center}
+.logo svg{width:20px;height:20px}
+nav{display:flex;gap:18px;align-items:center}
+nav a.l{color:var(--muted);text-decoration:none;font-size:15px;font-weight:600}
+nav a.l:hover{color:var(--primary)}
+@media (max-width:760px){nav a.l{display:none}}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font:700 17px var(--font);text-decoration:none;border:2px solid var(--primary);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn.p{background:var(--primary);color:var(--primary-ink);box-shadow:0 8px 18px color-mix(in srgb,var(--primary) 35%,transparent)}
+.btn.p:hover{transform:translateY(-2px)}
+.btn.s{background:transparent;color:var(--primary)}
+.btn.s:hover{background:var(--primary-soft)}
+.btn.klein{padding:9px 18px;font-size:15px}
+h1{font-size:clamp(34px,5.6vw,56px);line-height:1.08;margin:0 0 18px;letter-spacing:-.02em}
+h1 em{font-style:normal;color:var(--primary);background:linear-gradient(transparent 68%,var(--accent-soft) 68%)}
+h2{font-size:clamp(26px,3.6vw,36px);line-height:1.15;margin:0 0 10px;letter-spacing:-.01em}
+h3{font-size:20px;margin:0 0 6px}
+p{margin:0 0 14px}
+.muted{color:var(--muted)} .small{font-size:15px}
+section{padding:64px 0}
+.alt{background:var(--bg2)}
+.hero{padding:54px 0 40px;background:radial-gradient(900px 420px at 85% -10%,var(--accent-soft),transparent 70%),radial-gradient(700px 380px at -10% 110%,var(--primary-soft),transparent 70%)}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero svg.ill{max-width:340px;margin:0 auto}}
+.lead{font-size:20px;color:var(--muted);max-width:620px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 4px;padding:0;list-style:none}
+.chips li{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 16px 8px 12px;font-size:15px;font-weight:700;box-shadow:0 2px 6px rgba(40,30,20,.04)}
+.chips li:before{content:"";width:20px;height:20px;border-radius:50%;background:var(--primary-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3.2L15 7' fill='none' stroke='%231f8a70' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow)}
+.ico{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;margin-bottom:14px;background:var(--primary-soft)}
+.ico svg{width:30px;height:30px}
+.ico.a{background:var(--accent-soft)} .ico.r{background:var(--rose)}
+.nr{display:inline-block;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:6px}
+.zwei{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.passt{border-top:6px solid var(--primary)} .nicht{border-top:6px solid var(--muted)}
+.passt h3,.nicht h3{display:flex;align-items:center;gap:10px}
+ul.l{list-style:none;padding:0;margin:0}
+ul.l li{padding:8px 0 8px 32px;position:relative;border-bottom:1px dashed var(--line)}
+ul.l li:last-child{border-bottom:0}
+.passt ul.l li:before{content:"✓";position:absolute;left:0;top:8px;color:var(--primary);font-weight:800}
+.nicht ul.l li:before{content:"–";position:absolute;left:6px;top:8px;color:var(--muted);font-weight:800}
+.wege .card{position:relative;overflow:hidden}
+.wege .card.t{border:2px solid var(--primary)}
+.badge{position:absolute;top:16px;right:16px;background:var(--accent);color:#2d2a32;font-size:12px;font-weight:800;padding:4px 12px;border-radius:999px}
+.beispiel{display:grid;gap:30px;grid-template-columns:1fr 1fr;align-items:center}
+@media (max-width:860px){.beispiel{grid-template-columns:1fr}}
+.mock{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.mock .gross{font-size:32px;font-weight:800;color:var(--primary);text-align:center;line-height:1.1}
+.mock .kicker{font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-align:center;color:var(--muted);font-weight:800}
+.leiste{position:relative;height:16px;margin:26px 8px 8px;background:var(--bg2);border-radius:999px}
+.leiste .band{position:absolute;left:22%;width:46%;top:0;bottom:0;background:color-mix(in srgb,var(--primary) 38%,transparent);border-radius:999px}
+.leiste .raute{position:absolute;left:43%;top:-6px;width:28px;height:28px;background:var(--primary);transform:rotate(45deg) scale(.7);border-radius:6px;box-shadow:0 0 0 4px var(--card)}
+.stufen{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px;text-align:center}
+.stufen div{background:var(--bg);border:1px solid var(--line);border-radius:var(--r-s);padding:8px 4px;font-size:13px;color:var(--muted)}
+.stufen div b{display:block;font-size:17px;color:var(--ink)}
+.stufen div.m{border:2px solid var(--primary)}
+.zahlen{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.zahl b{display:block;font-size:34px;color:var(--primary);line-height:1.1}
+.person{display:grid;grid-template-columns:220px 1fr;gap:34px;align-items:center}
+@media (max-width:700px){.person{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.foto{width:200px;height:200px;border-radius:50%;background:var(--primary-soft);border:4px solid var(--card);box-shadow:var(--shadow);display:grid;place-items:center;text-align:center;font-size:13px;color:var(--muted);padding:20px}
+blockquote{margin:0 0 14px;font-size:clamp(22px,3vw,30px);line-height:1.3;font-weight:800;color:var(--primary)}
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--r-s);padding:16px 20px;margin:12px 0}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";font-size:22px;line-height:1;color:var(--primary)}
+details[open] summary::after{content:"–"}
+.cta{background:var(--primary);color:var(--primary-ink);border-radius:30px;padding:44px 30px;text-align:center;margin:0 auto}
+.cta h2{color:inherit} .cta p{opacity:.92}
+.cta .btn.p{background:var(--card);color:var(--primary);border-color:var(--card)}
+footer{padding:36px 0 60px;color:var(--muted);font-size:14px}
+.ph{background:var(--accent-soft);border:1px dashed var(--accent);padding:0 6px;border-radius:6px;font-size:.92em}
+.wechsler{position:fixed;right:14px;bottom:14px;z-index:9;background:var(--card);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow);display:flex;gap:4px;padding:5px;font-size:13px}
+.wechsler button{border:0;background:transparent;color:var(--ink);font:700 13px var(--font);padding:8px 14px;border-radius:999px;cursor:pointer}
+.wechsler button[aria-pressed="true"]{background:var(--primary);color:var(--primary-ink)}
+</style>
+</head>
+<body>
+<div class="hinweis"><div class="wrap"><strong>Design-Vorschlag, nicht veröffentlicht.</strong> Nur das Aussehen ist neu; die Aussagen entsprechen der bisherigen Startseite (Platzhalter in Gelb). Überschrift und Zwischentitel sind Textvorschläge und gehen vor einer Veröffentlichung durch den Claim-Check. Alle Zahlen im Beispiel sind erfunden. Unten rechts wechselst du die Farbwelt.</div></div>
+
+<header><div class="wrap">
+  <a class="logo" href="#"><svg class="logomark" viewBox="4 6 68 68" width="34" height="34" style="width:34px;height:34px;display:block;flex:none" aria-hidden="true"><path class="h" fill="#0f7c8a" fill-rule="evenodd" d="M8 40 L38 10 L68 40 V70 H8 Z M45 33 A7 7 0 1 0 31 33 A7 7 0 1 0 45 33 Z"/><rect x="22" y="50" width="32" height="7" rx="3.5" fill="#f2a93b"/></svg><span>Immology <small style="font-size:.62em;letter-spacing:.18em;color:#0f7c8a;font-weight:800">SML</small></span></a>
+  <nav><a class="l" href="#ablauf">So läuft es</a><a class="l" href="#wege">Drei Wege</a><a class="l" href="#beispiel">Beispiel</a><a class="l" href="#fragen">Fragen</a><a class="btn p klein" href="#start">Kurz-Check starten</a></nav>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <div>
+    <h1>Wissen, wo Sie stehen, <em>bevor Sie entscheiden.</em></h1>
+    <p class="lead">Eigentumswohnung oder Haus verkaufen? Sie bekommen eine begründete Preisspanne und die geschätzte Auszahlung vor Steuern nach Restschuld und Kosten. Mein Honorar ist ein Festpreis, unabhängig davon, ob und zu welchem Preis Sie verkaufen.</p>
+    <ul class="chips"><li>Kurz-Check kostenlos</li><li>Festpreis</li><li>Keine Provision aus dem Verkauf</li></ul>
+    <div class="btns"><a class="btn p" id="start" href="#">Kurz-Check starten →</a><a class="btn s" href="#ablauf">So läuft es ab</a></div>
+    <p class="small muted" style="margin-top:14px">Verpflichtet Sie zu nichts. Ich antworte nur auf Ihre Anfrage.</p>
+  </div>
+  <svg class="ill" viewBox="0 0 360 320" role="img" aria-label="Illustration: Haus mit Preisschild und Schlüssel">
+    <ellipse cx="180" cy="290" rx="150" ry="16" fill="var(--primary-soft)"/>
+    <rect x="70" y="140" width="190" height="140" rx="14" fill="var(--card)" stroke="var(--line)" stroke-width="3"/>
+    <path d="M52 150 165 58 278 150Z" fill="var(--primary)"/>
+    <rect x="145" y="200" width="42" height="80" rx="10" fill="var(--accent)"/>
+    <circle cx="177" cy="242" r="3.5" fill="#fff"/>
+    <rect x="94" y="168" width="36" height="34" rx="8" fill="var(--primary-soft)"/><rect x="200" y="168" width="36" height="34" rx="8" fill="var(--primary-soft)"/>
+    <g transform="translate(252 70) rotate(10)"><rect width="104" height="56" rx="16" fill="var(--accent)"/><circle cx="18" cy="28" r="6" fill="var(--card)"/><text x="32" y="35" font-size="22" font-weight="800" fill="#2d2a32" font-family="ui-rounded,system-ui,sans-serif">?? €</text></g>
+    <g transform="translate(28 214) rotate(-14)"><circle cx="20" cy="20" r="16" fill="none" stroke="var(--primary)" stroke-width="7"/><rect x="34" y="16" width="52" height="9" rx="4.5" fill="var(--primary)"/><rect x="66" y="25" width="8" height="14" rx="3" fill="var(--primary)"/><rect x="78" y="25" width="8" height="10" rx="3" fill="var(--primary)"/></g>
+  </svg>
+</div></section>
+
+<section id="ablauf"><div class="wrap">
+  <h2>So läuft es ab</h2>
+  <p class="muted" style="max-width:640px">Drei einfache Schritte. Der Kurz-Check ist kostenlos und verpflichtet Sie zu nichts. Weitere E-Mails bekommen Sie nur, wenn Sie das ausdrücklich wollen. <span class="ph">[Frist der Rückmeldung festlegen]</span></p>
+  <div class="grid" style="margin-top:26px">
+    <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></div><span class="nr">Schritt 1</span><h3>Kurz-Check</h3><p class="muted">Ein paar Basisangaben zu Ort, Größe und Baujahr. Daraus entsteht eine fertige E-Mail an mich, die Sie selbst abschicken.</p></div>
+    <div class="card"><div class="ico a"><svg viewBox="0 0 24 24" fill="none" stroke="#b9770e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></div><span class="nr">Schritt 2</span><h3>Fragebogen</h3><p class="muted">Sie erhalten den Link zum ausführlichen Fragebogen. Er läuft nur in Ihrem Browser und sendet nichts.</p></div>
+    <div class="card"><div class="ico r"><svg viewBox="0 0 24 24" fill="none" stroke="#c4543a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><span class="nr">Schritt 3</span><h3>Bericht und Gespräch</h3><p class="muted">Sie bekommen die Marktpreis-Einschätzung und wir gehen alles gemeinsam in einem Gespräch durch.</p></div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <h2>Für wen das gedacht ist</h2>
+  <div class="zwei" style="margin-top:22px">
+    <div class="card passt"><h3>Das passt</h3><ul class="l"><li>Sie besitzen eine Eigentumswohnung oder ein Haus in Nürnberg oder im Landkreis Nürnberger Land und wollen selbst verkaufen oder erst wissen, was möglich ist.</li><li>Sie wollen vor dem Start wissen, welcher Preis realistisch ist und was nach Kredit und Kosten bleibt.</li><li>Selbst genutzt oder vermietet: Bei Vermietung rechne ich mit Ihren Mietangaben.</li></ul></div>
+    <div class="card nicht"><h3>Das passt nicht</h3><ul class="l"><li>Ein Verkehrswertgutachten für Gericht, Erbe oder Bank: Dafür brauchen Sie einen Sachverständigen.</li><li>Rechts- oder Steuerberatung im Einzelfall.</li><li>Die Vermittlung eines Käufers: Ich nenne Ihnen keine Käufer und vermittle keinen Vertrag.</li></ul></div>
+  </div>
+</div></section>
+
+<section id="wege"><div class="wrap wege">
+  <h2>Drei Wege, wie ich Sie begleite</h2>
+  <p class="muted" style="max-width:660px">Sie wählen, wie viel Unterstützung Sie möchten. Den Wunsch geben Sie schon im Kurz-Check an, unverbindlich. Preise nenne ich Ihnen in meiner Antwort.</p>
+  <div class="grid" style="margin-top:26px">
+    <div class="card"><h3>Basis</h3><p class="muted">Sie tragen Angaben und Fotos selbst im Fragebogen ein, beantworten einige Rückfragen und bekommen den Bericht mit einem abschließenden Gespräch.</p></div>
+    <div class="card t"><span class="badge">Persönlich</span><h3>Vor Ort</h3><p class="muted">Wie Basis, dazu Besichtigung vor Ort und persönliches Durchgehen des Fragebogens, bevor der Bericht fertig wird.</p></div>
+    <div class="card"><h3>Szenarien</h3><p class="muted">Zusätzlich Rechenbeispiele zu Ihren Optionen, zum Beispiel verkaufen, behalten oder vermieten. Sie zeigen, was bei angenommenen Zahlen herauskommt, und sind keine Anlage-, Finanzierungs-, Steuer- oder Rechtsberatung.</p></div>
+  </div>
+</div></section>
+
+<section class="alt" id="beispiel"><div class="wrap beispiel">
+  <div>
+    <h2>Das sehen Sie im Bericht</h2>
+    <p class="muted">Eine Preisspanne statt einer einzigen Zahl, dazu drei Preisstufen für Ihren Start. Jede Zahl ist begründet, jede Annahme steht offen im Bericht.</p>
+    <p class="small muted">Marktpreis-Einschätzung, kein Verkehrswertgutachten. Keine Garantie für einen Verkaufspreis.</p>
+  </div>
+  <div class="mock" aria-label="Beispiel einer Preisspanne mit erfundenen Zahlen">
+    <div class="kicker">Orientierung (Beispiel mit erfundenen Zahlen)</div>
+    <div class="gross">xxx.000 € bis yyy.000 €</div>
+    <div class="leiste"><div class="band"></div><div class="raute"></div></div>
+    <div class="stufen"><div>vorsichtig<b>xxx.000 €</b></div><div class="m">realistisch<b>zzz.000 €</b></div><div>ambitioniert<b>yyy.000 €</b></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Der Markt hat sich gedreht</h2>
+  <p class="muted" style="max-width:680px">Aus meiner Sicht ist der Markt seit 2021 anspruchsvoller geworden. Käufer vergleichen genauer, und die richtige Strategie hat mehr Einfluss auf den Verlauf eines Verkaufs.</p>
+  <div class="zahlen" style="margin-top:22px">
+    <div class="card zahl"><b>1,2 % → 3,8 %</b>Zins für Wohnungsbaukredite (Zinsbindung 5 bis 10 Jahre): 1,16 % im Dezember 2021, 3,81 % im August 2026. <span class="small muted">Quelle: Deutsche Bundesbank, Zinsstatistik.</span></div>
+    <div class="card zahl"><b><span class="ph">[über 50 %]</span></b>der untersuchten Angebote standen länger als drei Monate online. <span class="small muted">Kleine Stichprobe, Entwurfszahl; noch zu prüfen.</span></div>
+  </div>
+  <p class="small muted" style="margin-top:14px">Alle Zahlen sind Beobachtungen und keine Prognose für Ihre Immobilie.</p>
+</div></section>
+
+<section class="alt"><div class="wrap person">
+  <div class="foto">Porträt (neutral, ohne Logos)</div>
+  <div><blockquote>„Ob mit oder ohne Makler: Jede Entscheidung braucht eine Grundlage.“</blockquote><h3>Marco Fischhold</h3><p class="muted"><span class="ph">[Kurzgeschichte in 3 bis 4 Sätzen, nur belegbare Angaben]</span></p></div>
+</div></section>
+
+<section id="fragen"><div class="wrap">
+  <h2>Häufige Fragen</h2>
+  <details><summary>Was kostet der Kurz-Check?</summary><p class="muted" style="margin-top:10px">Nichts. Er verpflichtet Sie zu nichts.</p></details>
+  <details><summary>Was passiert mit meinen Daten?</summary><p class="muted" style="margin-top:10px">Die Seiten speichern und übertragen nichts. Ihre Angaben gehen erst an mich, wenn Sie die vorbereitete E-Mail abschicken. <span class="ph">[Datenschutzerklärung nach Prüfung]</span></p></details>
+  <details><summary>Ist das ein Gutachten?</summary><p class="muted" style="margin-top:10px">Nein. Es ist eine Marktpreis-Einschätzung auf Basis Ihrer Angaben und veröffentlichter Marktdaten. Für Gericht, Erbe oder Bank brauchen Sie einen Sachverständigen.</p></details>
+  <details><summary>Vermitteln Sie auch Käufer?</summary><p class="muted" style="margin-top:10px">Nein. Ich vermittle keine Käufer und erhalte keine Provision aus dem Verkauf.</p></details>
+</div></section>
+
+<section style="padding-top:20px"><div class="wrap"><div class="cta">
+  <h2>Bereit für den ersten Schritt?</h2>
+  <p>Der Kurz-Check dauert nur wenige Minuten und ist kostenlos.</p>
+  <a class="btn p" href="#">Kurz-Check starten →</a>
+</div></div></section>
+</main>
+
+<footer><div class="wrap"><p><span class="ph">[Name der Beratung]</span> · <a href="#">Impressum</a> · <a href="#">Datenschutz</a></p><p>Marktpreis-Einschätzung, kein Verkehrswertgutachten, keine Rechts-, Steuer-, Anlage- oder Darlehensberatung und keine Vermittlung. Alle Zahlen sind Schätzungen mit Annahmen.</p></div></footer>
+
+<div class="wechsler" role="group" aria-label="Farbwelt wählen"><button aria-pressed="true" data-t="warm">Warm</button><button aria-pressed="false" data-t="frisch">Frisch</button></div>
+<script>
+(function(){var b=document.querySelectorAll('.wechsler button');b.forEach(function(x){x.addEventListener('click',function(){document.documentElement.setAttribute('data-theme',x.dataset.t);b.forEach(function(y){y.setAttribute('aria-pressed',y===x?'true':'false')})})})})();
+</script>
+</body>
+</html>

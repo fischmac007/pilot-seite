@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>Kurz-Check: Passt die Beratung zu Ihrer Wohnung?</title>
 <meta name="robots" content="noindex">
 <style>
@@ -40,8 +41,8 @@ pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);borde
 <div class="wrap">
 <p style="margin-top:18px"><a href="index.html">← Zurück</a></p>
 <h1>Kurz-Check</h1>
-<p>Sechs Angaben zu Ihrer Wohnung. Ich melde mich danach per E-Mail, ob die Beratung für Ihren Fall passt. <span class="platzhalter">[Frist festlegen]</span></p>
-<p class="small muted"><strong>Diese Seite selbst speichert und überträgt nichts.</strong> Ihre Angaben gehen erst an mich, wenn Sie in Ihrem E-Mail-Programm auf „Senden" klicken. E-Mails sind nicht Ende-zu-Ende-verschlüsselt. Ich verwende Ihre Angaben nur, um Ihnen zu antworten. <span class="platzhalter">[Verantwortlicher, Rechtsgrundlage, Speicherdauer, Empfänger (Mail-Anbieter) nach Datenschutzprüfung ergänzen]</span></p>
+<p>Ein paar Angaben zu Ihrer Wohnung. Ich melde mich danach per E-Mail, ob die Beratung für Ihren Fall passt. <span class="platzhalter">[Frist festlegen]</span></p>
+<p class="small muted"><strong>Diese Seite selbst speichert und überträgt nichts.</strong> Ihre Angaben gehen erst an mich, wenn Sie in Ihrem E-Mail-Programm auf „Senden" klicken. E-Mails sind nicht Ende-zu-Ende-verschlüsselt. Ich verwende Ihre Angaben, um Ihnen zu antworten und Ihren Bericht vorzubereiten. <span class="platzhalter">[Verantwortlicher, Rechtsgrundlage, Speicherdauer, Empfänger (Mail-Anbieter) nach Datenschutzprüfung ergänzen]</span></p>
 <p class="small muted">Bitte tragen Sie keine Namen oder Kontaktdaten von Mietern ein. Pflichtfelder: Lage, Fläche, Baujahr, Nutzung, E-Mail.</p>
 
 <form id="f" novalidate>
@@ -71,6 +72,17 @@ pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);borde
 <option>in den nächsten 6 Monaten</option>
 <option>später, ich will erst wissen, was möglich ist</option>
 </select>
+
+<label for="zinsbindung">Läuft die Zinsbindung Ihres Darlehens in den nächsten drei Jahren aus? <span class="hint">(freiwillig)</span></label>
+<select id="zinsbindung">
+<option value="">Keine Angabe</option>
+<option>ja, in den nächsten 12 Monaten</option>
+<option>ja, in 1 bis 3 Jahren</option>
+<option>nein, später</option>
+<option>kein Darlehen</option>
+<option>weiß ich nicht</option>
+</select>
+<p class="small">Wenn Sie später im ausführlichen Fragebogen Restschuld und Zinssatz angeben, kann der Bericht ein Rechenbeispiel zeigen, wie sich Ihre Monatsrate bei einem anderen Zins ändern könnte, neben dem, was Ihnen ein Verkauf bringt. Ich berate nicht zu Darlehen, vermittle keine Finanzierung und nenne keine Konditionen einer Bank.</p>
 
 <label>Welchen Umfang würden Sie sich wünschen? <span class="hint">(freiwillig und unverbindlich; Preise nenne ich Ihnen in meiner Antwort)</span></label>
 <label class="check"><input type="radio" name="umfang" value="Basis"><span><strong>Basis:</strong> Ich trage meine Angaben und Fotos selbst im Fragebogen ein, beantworte einige Rückfragen und bekomme den Bericht mit einem abschließenden Gespräch.</span></label>
@@ -107,7 +119,7 @@ pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);borde
 
 <script>
 (function(){
-  var EMPFAENGER = "fischmac007@me.com"; // Vorschau-Kopie: Adresse gesetzt, im Original noch Platzhalter
+  var EMPFAENGER = "fischmac007@me.com";
   var $ = function(id){return document.getElementById(id)};
   var f = $("f");
   // Aktives Gebiet: nur Nürnberg (Stadtgebiet). Erlangen und Fürth werden erkannt, aber noch nicht angeboten; Umlandgemeinden (z. B. Schwaig 90571, Stein, Oberasbach, Zirndorf, Schwabach) gehören nicht dazu.
@@ -152,6 +164,7 @@ pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);borde
       "Baujahr: " + bj,
       "Nutzung: " + $("nutzung").value,
       "Verkauf: " + ($("zeit").value || "keine Angabe"),
+      "Zinsbindung läuft in den nächsten drei Jahren aus: " + ($("zinsbindung").value || "keine Angabe"),
       "Gewünschter Umfang: " + umfang(),
       "Verkaufspaket gewünscht: " + ($("paket").checked ? "ja" : "nein"),
       "Wichtigste Frage: " + ($("frage").value.trim() || "keine Angabe"),
