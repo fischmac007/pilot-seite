@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Zinsbindung läuft aus: Was die Anschlussfinanzierung bedeuten kann</title>
+<meta name="description" content="Belegbare Zahlen zur auslaufenden Zinsbindung: Zinssprung nach Darlehensjahrgang (Bundesbank), Rechenbeispiel zur Monatsrate und der Unterschied zwischen Zinsbindung und Zehnjahresfrist beim Verkauf.">
+<meta name="robots" content="noindex">
+<style>
+/* Design "Frisch" (Startseite). Nur Systemschriften, keine externen Dateien. */
+:root{--font:ui-rounded,"SF Pro Rounded","Avenir Next","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;--r:22px;--r-s:14px;--shadow:0 10px 30px rgba(20,50,55,.08),0 2px 6px rgba(20,50,55,.05);
+--bg:#f5fbfa;--bg2:#e6f5f3;--card:#ffffff;--ink:#1f2d33;--muted:#5b6d74;--line:#d6ebe8;--accent:#0f7c8a;--accent-ink:#ffffff;--accent-soft:#d7f0f2;--sun:#ff8a65;--sun-soft:#ffe8df;--accent-2:#1f7a4d;--warn:#fff2e6;--warn-line:#e07a4f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12191b;--bg2:#182225;--card:#1d292c;--ink:#e8f1f2;--muted:#a2b6ba;--line:#2a3b3f;--accent:#56c7d4;--accent-ink:#06242a;--accent-soft:#173a3f;--sun:#ff9a7a;--sun-soft:#3d2a23;--accent-2:#6cc79a;--warn:#3d2b25;--warn-line:#ff9a7a}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 var(--font)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+a{color:var(--accent)}
+.entwurf{background:var(--warn);border-bottom:2px dashed var(--warn-line);padding:8px 0;font-size:14px}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 22px;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);text-decoration:none;font-size:19px}
+.logo i{width:34px;height:34px;border-radius:11px;background:var(--accent);display:grid;place-items:center}.logo svg{width:20px;height:20px}
+nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}nav a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:600}nav a:hover{color:var(--accent)}
+@media (max-width:860px){nav a:not(.btn){display:none}}
+h1{font-size:clamp(34px,5.4vw,54px);line-height:1.08;margin:0 0 18px;letter-spacing:-.02em}h1 em{font-style:normal;color:var(--accent);background:linear-gradient(transparent 68%,var(--sun-soft) 68%)}
+h2{font-size:clamp(26px,3.6vw,36px);line-height:1.15;margin:0 0 12px;letter-spacing:-.01em}h3{font-size:20px;margin:0 0 6px}p{margin:0 0 14px}
+section{padding:60px 0}main>section:nth-of-type(even){background:var(--bg2)}
+.hero{padding:54px 0 40px;background:radial-gradient(900px 420px at 85% -10%,var(--sun-soft),transparent 70%),radial-gradient(700px 380px at -10% 110%,var(--accent-soft),transparent 70%)}
+main>section.hero:nth-of-type(even){background:radial-gradient(900px 420px at 85% -10%,var(--sun-soft),transparent 70%),radial-gradient(700px 380px at -10% 110%,var(--accent-soft),transparent 70%)}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero svg.ill{max-width:320px;margin:0 auto}}
+.lead{font-size:20px;color:var(--muted);max-width:640px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 4px;padding:0;list-style:none}
+.chips li{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 16px 8px 12px;font-size:15px;font-weight:700}
+.chips li:before{content:"✓";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:12px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font:700 17px var(--font);text-decoration:none;border:2px solid var(--accent);cursor:pointer;transition:transform .15s}
+.btn.primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 18px color-mix(in srgb,var(--accent) 30%,transparent)}.btn.primary:hover{transform:translateY(-2px)}
+.btn.sec{background:transparent;color:var(--accent)}.btn.sec:hover{background:var(--accent-soft)}.btn.klein{padding:9px 18px;font-size:15px}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;box-shadow:var(--shadow)}
+.card .nr{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:800;margin-bottom:10px}
+.card.t{border:2px solid var(--accent)}.card .tag{display:inline-block;background:var(--sun);color:#1f2d33;font-size:12px;font-weight:800;padding:3px 12px;border-radius:999px;margin-bottom:8px}
+.ok{color:var(--accent-2)}.muted{color:var(--muted)}.small{font-size:15px}
+ul.liste{list-style:none;padding:0;margin:0 0 14px}ul.liste li{padding:8px 0 8px 30px;position:relative;border-bottom:1px dashed var(--line)}ul.liste li:last-child{border-bottom:0}ul.liste li:before{content:"•";position:absolute;left:8px;color:var(--accent);font-weight:800}
+.zahlen{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:14px 0}.zahl{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow)}.zahl b{display:block;font-size:30px;color:var(--accent);line-height:1.15}
+table{border-collapse:collapse;width:100%;font-size:15px;background:var(--card);border-radius:12px;overflow:hidden}th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}th{background:var(--accent-soft)}td.n,th.n{text-align:right;white-space:nowrap}.scroll{overflow-x:auto}
+.bar{position:relative;height:30px;border-radius:15px;background:var(--bg2);margin:14px 0 6px}.bar .zone{position:absolute;top:0;bottom:0;left:22%;width:50%;background:color-mix(in srgb,var(--accent) 30%,transparent);border-radius:15px}.bar .m{position:absolute;top:-6px;width:4px;height:42px;background:var(--ink);border-radius:2px}
+.musterhinweis{background:var(--warn);border-left:4px solid var(--warn-line);padding:8px 12px;font-size:14px;margin:0 0 16px;border-radius:8px}
+.platzhalter{background:var(--warn);border:1px dashed var(--warn-line);padding:0 5px;border-radius:6px;font-size:.92em}
+.person{display:grid;gap:30px;grid-template-columns:220px 1fr;align-items:center}@media (max-width:700px){.person{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.foto{width:200px;height:200px;border-radius:50%;background:var(--accent-soft);border:4px solid var(--card);box-shadow:var(--shadow);display:grid;place-items:center;text-align:center;font-size:13px;color:var(--muted);padding:20px}
+blockquote.zitat{margin:0 0 14px;font-size:clamp(22px,3vw,30px);line-height:1.3;font-weight:800;color:var(--accent)}
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--r-s);padding:16px 20px;margin:12px 0}summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}summary::after{content:"+";font-size:22px;line-height:1;color:var(--accent)}details[open] summary::after{content:"–"}
+.wege .card h3:after{content:"";display:block;width:36px;height:4px;border-radius:2px;background:var(--sun);margin-top:6px}
+footer{padding:36px 0 60px;color:var(--muted);font-size:14px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+.bn{fill:var(--line)}.bh{fill:var(--accent)}.bt{font:700 15px var(--font);fill:var(--ink)}.bj{font:600 14px var(--font);fill:var(--muted)}
+td.n,th.n{text-align:right}th.n{white-space:normal}td.n{white-space:nowrap}.tabwrap{overflow-x:auto;margin-bottom:14px}table.zt{table-layout:fixed;width:100%}table.zt th,table.zt td{word-break:normal;hyphens:manual}.chart-klein{display:none}.wisch{display:none}@media (max-width:640px){.chart-gross{display:none}.chart-klein{display:block}.wisch{display:block}}th,td{padding:8px 9px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="entwurf"><div class="wrap"><strong>ENTWURF, nicht veröffentlichen.</strong> Vor der Veröffentlichung: Claim-Check, Prüfung durch die Fachperson (§ 34i GewO, RDG, UWG), Impressum und Datenschutz. Alle Beispiele rechnen mit erfundenen Darlehen; die Zinsreihe ist amtlich (Deutsche Bundesbank).</div></div>
+<header class="top"><div class="wrap">
+<a class="logo" href="index.html"><svg class="logomark" viewBox="4 6 68 68" width="34" height="34" style="width:34px;height:34px;display:block;flex:none" aria-hidden="true"><path class="h" fill="#0f7c8a" fill-rule="evenodd" d="M8 40 L38 10 L68 40 V70 H8 Z M45 33 A7 7 0 1 0 31 33 A7 7 0 1 0 45 33 Z"/><rect x="22" y="50" width="32" height="7" rx="3.5" fill="#f2a93b"/></svg><span>Immology <small style="font-size:.62em;letter-spacing:.18em;color:#0f7c8a;font-weight:800">SML</small></span></a>
+<nav><a href="index.html">Startseite</a><a href="#zinssprung">Zinssprung</a><a href="#rate">Monatsrate</a><a href="#fristen">Zwei Fristen</a><a class="btn primary klein" href="kurz-check.html">Kurz-Check</a></nav>
+</div></header>
+<main>
+<section class="hero"><div class="wrap" style="display:block">
+<h1>Ihre Zinsbindung läuft aus: <em>was das in Zahlen bedeuten kann</em></h1>
+<p class="lead">Wer 2016 bis 2020 ein Darlehen mit zehn Jahren Zinsbindung abgeschlossen hat, muss die dann noch offene Restschuld in der Regel neu vereinbaren oder zurückzahlen; Ausnahmen (zum Beispiel eine bereits vereinbarte Verlängerung) gibt es. Der Marktzins liegt dafür im Durchschnitt heute deutlich über dem damaligen. Hier steht, was sich belegen lässt, wie sich das auf die Monatsrate auswirken kann und was offen bleibt. Eine Empfehlung, ob Sie verlängern oder verkaufen, gibt diese Seite nicht.</p>
+<div class="btns"><a class="btn primary" href="kurz-check.html">Kurz-Check starten (kostenlos, unverbindlich)</a><a class="btn sec" href="#zinssprung">Zu den Marktzahlen</a></div>
+<p class="small" style="margin-top:14px">Ich berate nicht zu Darlehen, vermittle keine Finanzierung und keine Käufer, nenne keine Bankkonditionen und gebe keine Steuer- oder Rechtsberatung.</p>
+<p class="small muted">Auf dieser Seite: <a href="#zinssprung">Zinssprung</a> · <a href="#rate">Monatsrate</a> · <a href="#fristen">Zwei Fristen</a> · <a href="#weiter">Was zu klären ist</a></p>
+</div></section>
+
+<section id="zinssprung"><div class="wrap">
+<h2>Der Zinssprung nach Darlehensjahrgang</h2>
+<p>Die Deutsche Bundesbank veröffentlicht den durchschnittlichen Effektivzins für neu vergebene Wohnungsbaukredite an private Haushalte (anfängliche Zinsbindung über 5 bis 10 Jahre). Aus den Monatswerten habe ich Jahresdurchschnitte gebildet und mit dem letzten Wert (August 2026: 3,81 %, vorläufig) verglichen; die Monate sind dabei einfach gemittelt.</p>
+<div class="card"><div class="chart-gross"><svg viewBox="0 0 640 250" role="img" aria-label="Durchschnittlicher Effektivzins für neue Wohnungsbaukredite je Jahr" style="width:100%;height:auto"><rect class="bn" x="15.0" y="78.1" width="31.4" height="137.9" rx="3"/><text class="bt" x="30.7" y="73.1" text-anchor="middle">3,0</text><text class="bj" x="30.7" y="236" text-anchor="middle">12</text><rect class="bn" x="56.3" y="91.6" width="31.4" height="124.4" rx="3"/><text class="bt" x="72.0" y="86.6" text-anchor="middle">2,7</text><text class="bj" x="72.0" y="236" text-anchor="middle">13</text><rect class="bn" x="97.6" y="104.1" width="31.4" height="111.9" rx="3"/><text class="bt" x="113.3" y="99.1" text-anchor="middle">2,5</text><text class="bj" x="113.3" y="236" text-anchor="middle">14</text><rect class="bn" x="139.0" y="132.9" width="31.4" height="83.1" rx="3"/><text class="bt" x="154.7" y="127.9" text-anchor="middle">1,8</text><text class="bj" x="154.7" y="236" text-anchor="middle">15</text><rect class="bh" x="180.3" y="143.8" width="31.4" height="72.2" rx="3"/><text class="bt" x="196.0" y="138.8" text-anchor="middle">1,6</text><text class="bj" x="196.0" y="236" text-anchor="middle">16</text><rect class="bh" x="221.6" y="140.6" width="31.4" height="75.4" rx="3"/><text class="bt" x="237.3" y="135.6" text-anchor="middle">1,7</text><text class="bj" x="237.3" y="236" text-anchor="middle">17</text><rect class="bh" x="263.0" y="138.3" width="31.4" height="77.7" rx="3"/><text class="bt" x="278.7" y="133.3" text-anchor="middle">1,7</text><text class="bj" x="278.7" y="236" text-anchor="middle">18</text><rect class="bh" x="304.3" y="154.2" width="31.4" height="61.8" rx="3"/><text class="bt" x="320.0" y="149.2" text-anchor="middle">1,4</text><text class="bj" x="320.0" y="236" text-anchor="middle">19</text><rect class="bh" x="345.6" y="166.6" width="31.4" height="49.4" rx="3"/><text class="bt" x="361.3" y="161.6" text-anchor="middle">1,1</text><text class="bj" x="361.3" y="236" text-anchor="middle">20</text><rect class="bh" x="387.0" y="166.6" width="31.4" height="49.4" rx="3"/><text class="bt" x="402.7" y="161.6" text-anchor="middle">1,1</text><text class="bj" x="402.7" y="236" text-anchor="middle">21</text><rect class="bn" x="428.3" y="107.0" width="31.4" height="109.0" rx="3"/><text class="bt" x="444.0" y="102.0" text-anchor="middle">2,4</text><text class="bj" x="444.0" y="236" text-anchor="middle">22</text><rect class="bn" x="469.6" y="47.3" width="31.4" height="168.7" rx="3"/><text class="bt" x="485.3" y="42.3" text-anchor="middle">3,7</text><text class="bj" x="485.3" y="236" text-anchor="middle">23</text><rect class="bn" x="511.0" y="56.4" width="31.4" height="159.6" rx="3"/><text class="bt" x="526.7" y="51.4" text-anchor="middle">3,5</text><text class="bj" x="526.7" y="236" text-anchor="middle">24</text><rect class="bn" x="552.3" y="57.7" width="31.4" height="158.3" rx="3"/><text class="bt" x="568.0" y="52.7" text-anchor="middle">3,5</text><text class="bj" x="568.0" y="236" text-anchor="middle">25</text><rect class="bn" x="593.6" y="49.0" width="31.4" height="167.0" rx="3"/><text class="bt" x="609.3" y="44.0" text-anchor="middle">3,7</text><text class="bj" x="609.3" y="236" text-anchor="middle">26</text></svg></div><div class="chart-klein"><svg viewBox="0 0 640 250" role="img" aria-label="Durchschnittlicher Effektivzins für neue Wohnungsbaukredite je Jahr" style="width:100%;height:auto"><rect class="bh" x="20.6" y="143.8" width="67.3" height="72.2" rx="3"/><text class="bt" x="54.3" y="138.8" text-anchor="middle">1,6</text><text class="bj" x="54.3" y="236" text-anchor="middle">2016</text><rect class="bh" x="109.2" y="140.6" width="67.3" height="75.4" rx="3"/><text class="bt" x="142.9" y="135.6" text-anchor="middle">1,7</text><text class="bj" x="142.9" y="236" text-anchor="middle">2017</text><rect class="bh" x="197.8" y="138.3" width="67.3" height="77.7" rx="3"/><text class="bt" x="231.4" y="133.3" text-anchor="middle">1,7</text><text class="bj" x="231.4" y="236" text-anchor="middle">2018</text><rect class="bh" x="286.3" y="154.2" width="67.3" height="61.8" rx="3"/><text class="bt" x="320.0" y="149.2" text-anchor="middle">1,4</text><text class="bj" x="320.0" y="236" text-anchor="middle">2019</text><rect class="bh" x="374.9" y="166.6" width="67.3" height="49.4" rx="3"/><text class="bt" x="408.6" y="161.6" text-anchor="middle">1,1</text><text class="bj" x="408.6" y="236" text-anchor="middle">2020</text><rect class="bh" x="463.5" y="166.6" width="67.3" height="49.4" rx="3"/><text class="bt" x="497.1" y="161.6" text-anchor="middle">1,1</text><text class="bj" x="497.1" y="236" text-anchor="middle">2021</text><rect class="bn" x="552.1" y="49.0" width="67.3" height="167.0" rx="3"/><text class="bt" x="585.7" y="44.0" text-anchor="middle">3,7</text><text class="bj" x="585.7" y="236" text-anchor="middle">2026</text></svg></div>
+<p class="small muted" style="margin:6px 0 0">Durchschnittlicher Effektivzins in % pro Jahr (Neugeschäft, Zinsbindung über 5 bis 10 Jahre). Hervorgehoben: Abschlussjahre 2016 bis 2021 (auf dem Handy nur diese Jahre und 2026). 2026: Durchschnitt Januar bis August (vorläufig).</p></div>
+<div class="tabwrap"><table class="zt" style="margin-top:16px" aria-label="Zins damals und heute je Abschlussjahr">
+<thead><tr><th>Abschluss (Ende bei 10 J.)</th><th class="n">Marktzins im Ab&shy;schluss&shy;jahr (Ø)</th><th class="n">Zins Aug. 2026 im Vergleich (Faktor)</th></tr></thead>
+<tbody><tr><td>2016 <span class="muted small">(bis 2026)</span></td><td class="n">1,60 %</td><td class="n">2,4-fach</td></tr><tr><td>2017 <span class="muted small">(bis 2027)</span></td><td class="n">1,67 %</td><td class="n">2,3-fach</td></tr><tr><td>2018 <span class="muted small">(bis 2028)</span></td><td class="n">1,72 %</td><td class="n">2,2-fach</td></tr><tr><td>2019 <span class="muted small">(bis 2029)</span></td><td class="n">1,37 %</td><td class="n">2,8-fach</td></tr><tr><td>2020 <span class="muted small">(bis 2030)</span></td><td class="n">1,09 %</td><td class="n">3,5-fach</td></tr><tr><td>2021 <span class="muted small">(bis 2031)</span></td><td class="n">1,09 %</td><td class="n">3,5-fach</td></tr></tbody></table></div><p class="small muted wisch">Tabelle seitlich wischen, falls sie nicht ganz passt.</p>
+<p>Im Durchschnitt aller neuen Wohnungsbaukredite mit 5 bis 10 Jahren Zinsbindung lag der Zins im August 2026 beim <strong>2,2- bis 3,5-Fachen</strong> des Jahresmittels der Abschlussjahre 2016 bis 2021. Ihr eigener Zins und Ihr Angebot können deutlich davon abweichen. Für Darlehen, die jetzt auslaufen (Abschluss 2016), ist es etwa das 2,4-Fache. Gegenüber dem niedrigsten Monatswert (1,02 %, Dezember 2020 und März 2021) ist der Zins vom August 2026 das 3,7-Fache; Darlehen aus dieser Zeit laufen bei zehn Jahren Zinsbindung allerdings erst 2030 bis 2031 aus.</p>
+<p class="small muted"><strong>Was die Zahlen nicht sagen:</strong> Das ist ein Durchschnitt über alle Banken und Verträge, ein Effektivzins (kein Sollzins) und die Zinsbindung reicht von über 5 bis 10 Jahren. Die Bundesbank-Effektivzinssätze schließen Nebenkosten nicht ein, und die Reihe umfasst auch weitere Wohnungsbaukredite (zum Beispiel Bauspardarlehen). Quelle: Deutsche Bundesbank, Zinsstatistik, Effektivzinssätze der Banken in Deutschland (Neugeschäft, Wohnungsbaukredite an private Haushalte, anfängliche Zinsbindung über 5 bis 10 Jahre), Reihe BBIM1.M.DE.B.A2C.O.R.A.2250.EUR.N, Stand der Reihe 01.10.2026, letzter Wert August 2026; Jahresmittel und Verhältniszahlen eigene Berechnung.</p>
+</div></section>
+
+<section id="rate"><div class="wrap">
+<h2>Was das für die Monatsrate heißen kann</h2>
+<p>Ein Rechenbeispiel (Modell eines Immobilienportals, von mir nachgerechnet): Darlehen 350.000 €, zehn Jahre Zinsbindung, Zins damals 1,4 %, Anschlusszins 3,9 %. Die Rate bleibt in den ersten zehn Jahren gleich, danach gilt der neue Zins auf die Restschuld. Die 1,4 % und 3,9 % sind Sollzinsannahmen des Rechenbeispiels und nicht dasselbe wie die Bundesbank-Werte oben. Die Anfangstilgung von 1, 2 oder 3 % gilt im Beispiel jeweils für die dann noch offene Restschuld; die Rate wird monatlich gezahlt und der Zins monatlich berechnet.</p>
+<div class="tabwrap"><table>
+<thead><tr><th>Tilgung</th><th class="n">Rate bisher</th><th class="n">Rest nach 10 J.</th><th class="n">Rate neu</th><th class="n">Plus</th></tr></thead>
+<tbody><tr><td>1 %</td><td class="n">700 €</td><td class="n">312.455 €</td><td class="n">1.276 €</td><td class="n">+82 %</td></tr><tr><td>2 %</td><td class="n">992 €</td><td class="n">274.910 €</td><td class="n">1.352 €</td><td class="n">+36 %</td></tr><tr><td>3 %</td><td class="n">1.283 €</td><td class="n">237.365 €</td><td class="n">1.365 €</td><td class="n">+6 %</td></tr></tbody></table></div><p class="small muted wisch">Tabelle seitlich wischen, falls sie nicht ganz passt.</p>
+<p>Je höher die anfängliche Tilgung war, desto kleiner ist der Sprung, weil die Restschuld stärker gesunken ist. Wer mit 1 % getilgt hat, schuldet nach zehn Jahren noch rund 89 % des ursprünglichen Betrags.</p>
+<p class="small muted"><strong>Annahmen und Grenzen:</strong> Fester Zins in beiden Phasen, keine Sondertilgungen, keine Steuern, keine Wertentwicklung. Der Anschlusszins 3,9 % ist eine Annahme des Portals, kein Angebot einer Bank. Quelle: ImmoScout24, Medieninformation „Anschlussfinanzierung 2026“ vom 09.07.2026 (Modellrechnung, Zahlen von mir nachgerechnet); ob und zu welchen Konditionen Ihre Bank verlängert, erfahren Sie nur dort.</p>
+</div></section>
+
+<section id="fristen"><div class="wrap">
+<h2>Zwei Fristen, die man nicht verwechseln sollte</h2>
+<div class="grid">
+<div class="card"><h3>Zinsbindung (Vertrag)</h3><p>Der Zeitraum, für den der Zins im Darlehensvertrag festgeschrieben ist. Danach wird neu verhandelt. Das Gesetz (§ 489 BGB) gibt Darlehensnehmern bei gebundenem Zins unter bestimmten Voraussetzungen ein Kündigungsrecht, zum Beispiel wenn die Zinsbindung endet und nichts Neues vereinbart wurde (Frist ein Monat) oder nach zehn Jahren ab vollständiger Auszahlung (Frist sechs Monate). Eine Kündigung gilt als nicht erfolgt, wenn das Darlehen nicht innerhalb von zwei Wochen zurückgezahlt wird. Welche Regel für Ihren Vertrag gilt, klärt Ihre Bank oder eine Finanzierungsberatung.</p></div>
+<div class="card"><h3>Zehnjahresfrist (Steuer)</h3><p>Gewinne aus dem Verkauf einer Immobilie sind nach § 23 Einkommensteuergesetz in der Regel steuerpflichtig, wenn zwischen Anschaffung und Verkauf <strong>nicht mehr als zehn Jahre</strong> liegen. Ausnahmen gibt es unter anderem bei Eigennutzung (zum Beispiel wenn die Immobilie im Jahr des Verkaufs und in den beiden Jahren davor selbst bewohnt wurde) und bei einem Gesamtgewinn unter 1.000 Euro im Jahr. Wie die Frist in Ihrem Fall zählt, klärt die Steuerberatung.</p></div>
+</div>
+<p style="margin-top:16px">Beide Fristen können zeitlich zusammenfallen, zum Beispiel bei einem Kauf 2016 mit zehn Jahren Zinsbindung. Sie sind rechtlich voneinander unabhängig: Die eine legt fest, wann der Zins neu vereinbart wird, die andere, ob ein Verkaufsgewinn versteuert wird. Wer verkaufen oder behalten abwägt, sollte beide kennen.</p>
+<p class="small muted">Stand der Rechtsangaben: <span class="platzhalter">[Datum der Fachprüfung]</span>. Allgemeine Information, keine Rechts- oder Steuerberatung.</p>
+</div></section>
+
+<section id="weiter"><div class="wrap">
+<h2>Was Sie für Ihre Situation klären sollten</h2>
+<ul class="liste">
+<li>Wie hoch ist die Restschuld, wann endet die Zinsbindung, wie hoch sind Zins und Tilgung heute?</li>
+<li>Was bietet Ihre Bank an, und was bieten andere? (Das erfahren Sie dort, nicht von mir.)</li>
+<li>Wie sieht Ihr Cashflow aus: Miete oder eigene Nutzung gegen Rate, Zinsen, Instandhaltung?</li>
+<li>Was bleibt bei einem Verkauf nach Restschuld und Kosten vor Steuern, und wie wirkt die Zehnjahresfrist?</li>
+<li>Was sind Ihre Ziele: Wohnung behalten, Geld freisetzen, etwas anderes kaufen?</li>
+</ul>
+<p>Wenn Sie im Fragebogen Restschuld und Zinssatz Ihres Darlehens angeben (und nur ein Darlehen haben), zeigt der Bericht ein Rechenbeispiel, wie sich Ihre Monatsrate bei einem anderen Zins ändern könnte, neben dem, was Ihnen ein Verkauf bringt (vor Steuern). Ich berate nicht zu Darlehen, vermittle keine Finanzierung und nenne keine Konditionen einer Bank. Eine Empfehlung, ob Sie verlängern oder verkaufen, gibt der Bericht nicht. Der Kurz-Check ist kostenlos und unverbindlich; der Bericht ist eine bezahlte Leistung, den Preis nenne ich Ihnen vorab.</p>
+<div class="btns"><a class="btn primary" href="kurz-check.html">Kurz-Check starten (kostenlos, unverbindlich)</a></div>
+</div></section>
+
+<section id="grenzen"><div class="wrap">
+<h2>Was diese Seite nicht leistet</h2>
+<ul class="liste">
+<li>Sie ist <strong>keine Finanzierungsberatung</strong>, vermittelt keine Darlehen und nennt keine Konditionen oder Banken.</li>
+<li>Sie ist keine Steuer- oder Rechtsberatung und kein Gutachten.</li>
+<li>Sie sagt <strong>nicht</strong>, dass viele Eigentümer verkaufen müssen. Eine Verkaufswelle wegen auslaufender Zinsbindungen habe ich in amtlichen Statistiken und wissenschaftlichen Veröffentlichungen nicht gefunden (Recherche 29.10.2026, Umfang begrenzt); Zahlen für Nürnberg und Umland habe ich ebenfalls nicht gefunden. Das heißt nicht, dass es solche Zahlen nicht gibt.</li>
+<li>Die Zinszahlen sind Durchschnitte und Beispiele, keine Prognose und kein Angebot.</li>
+</ul>
+</div></section>
+</main>
+<footer><div class="wrap">
+<p id="impressum"><a href="impressum.html">Impressum</a> <span class="platzhalter">[Gerüst, Angaben nach Rechtsform und Gewerbeanmeldung ergänzen]</span></p>
+<p id="datenschutz"><strong>Datenschutz</strong> <span class="platzhalter">[Datenschutzerklärung nach Prüfung durch die Fachperson]</span></p>
+</div></footer>
+</body>
+</html>
