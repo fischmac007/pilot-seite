@@ -147,7 +147,7 @@
 // Feldbeschreibung: path = Pfad im JSON (Schema fragebogen-verkauf-v1)
 const TRI = [["", "weiß nicht / keine Angabe"], ["ja", "Ja"], ["nein", "Nein"]];
 const STAT_BEZIRKE = [["75", "Almoshof"], ["35", "Altenfurt Nord"], ["38", "Altenfurt, Moorenbrunn"], ["01", "Altstadt, St. Lorenz"], ["06", "Altstadt, St. Sebald"], ["22", "Bärenschanze"], ["34", "Beuthener Straße"], ["24", "Bielingplatz"], ["78", "Boxdorf"], ["97", "Brunn"], ["73", "Buch"], ["86", "Buchenbühl"], ["43", "Dianastraße"], ["30", "Dutzendteich"], ["64", "Eberhardshof"], ["53", "Eibach"], ["91", "Erlenstegen"], ["96", "Fischbach"], ["87", "Flughafen"], ["62", "Gaismannshof"], ["13", "Galgenhof"], ["45", "Gartenstadt"], ["61", "Gebersdorf"], ["39", "Gewerbepark Nürnberg-Feucht"], ["17", "Gibitzenhof"], ["29", "Gleißhammer"], ["11", "Glockenhof"], ["04", "Gostenhof"], ["79", "Großgründlach"], ["60", "Großreuth b. Schweinau"], ["15", "Gugelstraße"], ["12", "Guntherstraße"], ["40", "Hasenbuck"], ["05", "Himpfelshof"], ["63", "Höfen"], ["50", "Hohe Marter"], ["14", "Hummelstein"], ["90", "St. Jobst"], ["07", "St. Johannis"], ["48", "Katzwang, Reichelsdorf Ost, Reichelsdorfer Keller"], ["42", "Katzwanger Straße"], ["49", "Kornburg, Worzeldorf"], ["76", "Kraftshof"], ["55", "Krottenbach, Mühlhof"], ["33", "Langwasser Nordost"], ["32", "Langwasser Nordwest"], ["36", "Langwasser Südost"], ["37", "Langwasser Südwest"], ["94", "Laufamholz"], ["20", "St. Leonhard"], ["10", "Ludwigsfeld"], ["47", "Maiach"], ["83", "Marienberg"], ["02", "Marienvorstadt"], ["26", "Maxfeld"], ["92", "Mögeldorf"], ["85", "Mooshof"], ["65", "Muggenhof"], ["77", "Neunhof"], ["08", "Pirckheimerstraße"], ["41", "Rangierbahnhof"], ["31", "Rangierbahnhof-Siedlung"], ["54", "Reichelsdorf"], ["52", "Röthenbach Ost"], ["51", "Röthenbach West"], ["23", "Sandberg"], ["18", "Sandreuth"], ["82", "Schafhof"], ["80", "Schleifweg"], ["93", "Schmausenbuckstraße"], ["71", "Schniegling"], ["81", "Schoppershof"], ["19", "Schweinau"], ["16", "Steinbühl"], ["21", "Sündersbühl"], ["03", "Tafelhof"], ["74", "Thon"], ["44", "Trierer Straße"], ["28", "Tullnau"], ["25", "Uhlandstraße"], ["27", "Veilhof"], ["46", "Werderau"], ["70", "Westfriedhof"], ["72", "Wetzendorf"], ["09", "Wöhrd"], ["95", "Zerzabelshof"], ["84", "Ziegelstein"]];  // Statistische Bezirke der Stadt Nürnberg (Quelle: Liste Stadtteilnamen, Amt für Stadtforschung und Statistik); Reihenfolge alphabetisch
-const WUNSCH = [["", "keine Angabe"], ["basis", "Basis: Ich trage Angaben und Fotos selbst ein, beantworte Rückfragen und erhalte den Bericht mit einem abschließenden Gespräch"], ["vor_ort", "Vor Ort: wie Basis, dazu Besichtigung und persönliches Durchgehen des Fragebogens vor dem fertigen Bericht"], ["szenarien", "Szenarien: zusätzlich Rechenbeispiele zu meinen Optionen (zum Beispiel verkaufen, behalten oder vermieten)"], ["offen", "Weiß ich noch nicht, ich möchte zuerst wissen, was möglich ist"]];
+const WUNSCH = [["", "keine Angabe"], ["basis", "Basis: Ich trage Angaben und Fotos selbst ein, beantworte Rückfragen und erhalte den Bericht mit einem abschließenden Gespräch"], ["vor_ort", "Vor Ort: wie Basis, dazu Besichtigung und persönliches Durchgehen des Fragebogens vor dem fertigen Bericht"], ["szenarien", "Szenarien: zusätzlich Rechenbeispiele zu meinen Optionen (zum Beispiel verkaufen, halten oder vermieten)"], ["offen", "Weiß ich noch nicht, ich möchte zuerst wissen, was möglich ist"]];
 const PILOT = true;   // Pilot-Fragen zur Preiseinschätzung (Teil 8); für den Regelbetrieb auf false setzen
 const SECTIONS = [
  { title: "1. Die Wohnung", intro: "Grunddaten. Die Wohnfläche steht im Kaufvertrag oder in der Wohnflächenberechnung.", fields: [
@@ -225,7 +225,7 @@ const SECTIONS = [
   { p:"weg.sonderumlage_geplant", l:"Sind Sonderumlagen beschlossen oder geplant?", t:"tri" },
   { p:"weg.sanierung_beschluesse", l:"Beschlossene oder geplante Sanierungen (Dach, Fassade, Heizung, Aufzug)", t:"area", full:true }
  ]},
- { title: "6. Ihre Ziele", intro: "Damit ich die Empfehlung auf Ihre Situation abstimmen kann.", fields: [
+ { title: "6. Ihre Ziele", intro: "Damit ich die Einschätzung auf Ihre Situation abstimmen kann.", fields: [
   { p:"verkauf.preisvorstellung", l:"Preisvorstellung", t:"num", u:"€", min:0 },
   { p:"verkauf.stellplatz_im_preis", l:"Stellplatz oder Garage: Ist er in Ihrer Preisvorstellung enthalten?", t:"sel", o:[["", "keine Angabe"],["im_preis","ja, im Preis enthalten"],["aufpreis","wird mitverkauft, aber gegen Aufpreis (separat)"],["nein","nein, nicht Teil des Verkaufs"]], h:"Nur relevant, wenn Sie bei den Objektdaten einen Stellplatz oder eine Garage angegeben haben." },
   { p:"verkauf.stellplatz_aufpreis", l:"Aufpreis für den Stellplatz oder die Garage (nur wenn separat)", t:"num", u:"€", min:0 },
@@ -279,7 +279,7 @@ const SECTIONS = [
  ,{ title: "8. Ihre Einschätzung zum Angebot (nur Pilot)", intro: `Ich teste ein Angebot in drei Umfängen. <strong>Es gibt keine falschen Antworten</strong>, und es geht nicht darum, dass Sie etwas kaufen. Mich interessiert, was Ihnen etwas wert wäre.<ul>
   <li><strong>Basis:</strong> Sie tragen Angaben und Fotos selbst im Fragebogen ein, beantworten einige Rückfragen und bekommen den Bericht mit einem abschließenden Gespräch.</li>
   <li><strong>Vor Ort:</strong> Wie Basis, dazu Besichtigung vor Ort und persönliches Durchgehen des Fragebogens, bevor der Bericht fertig wird.</li>
-  <li><strong>Szenarien:</strong> Zusätzlich Rechenbeispiele zu Ihren Optionen, zum Beispiel verkaufen, behalten oder vermieten. Die Rechenbeispiele zeigen, was bei angenommenen Zahlen herauskommt; sie sind keine Anlage-, Finanzierungs-, Steuer- oder Rechtsberatung.</li></ul>
+  <li><strong>Szenarien:</strong> Zusätzlich Rechenbeispiele zu Ihren Optionen, zum Beispiel verkaufen, halten oder vermieten. Die Rechenbeispiele zeigen, was bei angenommenen Zahlen herauskommt; sie sind keine Anlage-, Finanzierungs-, Steuer- oder Rechtsberatung.</li></ul>
   Zusatz für vermietete Wohnungen: eine Rechnung, was passiert, wenn die Wohnung vermietet oder frei verkauft wird.`, fields: [
   { p:"pilot.alternative", l:"Was hätten Sie ohne diese Beratung getan?", t:"sel", full:true, o:[["", "keine Angabe"],["makler","einen Makler beauftragt"],["allein","allein verkauft"],["online_bewertung","nur eine Online-Bewertung genutzt"],["abwarten","abgewartet"],["unklar","weiß ich nicht"]] },
   { p:"pilot.erwartung", l:"Was erwarten Sie von so einer Beratung?", t:"area", full:true },
@@ -563,6 +563,23 @@ var UI_KONFIG = {
   labelIcons: { 'objekt.wohnflaeche': 'lineal', 'objekt.etage': 'etage', 'objekt.oberste_wohnung': 'dach', 'objekt.aufzug': 'aufzug', 'objekt.balkon_vorhanden': 'balkon', 'objekt.terrasse': 'terrasse', 'objekt.wintergarten': 'wintergarten', 'objekt.keller': 'keller',
     'ausstattung.fussbodenheizung': 'fbheizung', 'ausstattung.sprechanlage': 'sprechanlage', 'ausstattung.kuechenboden_gefliest': 'grundriss', 'ausstattung.bad_renoviert_jahr': 'bad', 'ausstattung.kueche_jahr': 'kueche', 'vermietung.vermietet': 'schluessel', 'vermietung.moebliert': 'sofa', 'vermietung.befristet': 'kalender' },
   ohneUnbekannt: ['objekt.stadt'],
+  praesets: {
+    'objekt.zimmer': { werte: [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6], fmt: 'zimmer' },
+    'objekt.baujahr': { jahre: [2026, 1900], fmt: 'jahr' },
+    'objekt.etage': { werte: [0, 1, 2, 3, 4, 5, 6, 7, 8], fmt: 'etage' },
+    'objekt.obergeschosse_gebaeude': { werte: [0, 1, 2, 3, 4, 5, 6, 7, 8], fmt: 'og0' },
+    'ausstattung.heizung_baujahr': { jahre: [2026, 1980], fmt: 'jahr' },
+    'ausstattung.kueche_jahr': { jahre: [2026, 1995], fmt: 'jahr' },
+    'ausstattung.bad_renoviert_jahr': { jahre: [2026, 1995], fmt: 'jahr' },
+    'fall.kaufjahr': { jahre: [2026, 1995], fmt: 'jahr' },
+    'verkauf.darlehen_zins_pct': { werte: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5, 5], fmt: 'pct' },
+    'verkauf.zinsbindung_bis': { jahre: [2026, 2040], fmt: 'jahr' },
+    'verkauf.tilgung_pct': { werte: [0, 1, 1.5, 2, 2.5, 3, 4, 5], fmt: 'pct' },
+    'verkauf.d1_tilgung_pct': { werte: [0, 1, 1.5, 2, 2.5, 3, 4, 5], fmt: 'pct' },
+    'verkauf.d2_zins_pct': { werte: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5, 5], fmt: 'pct' },
+    'verkauf.d2_tilgung_pct': { werte: [0, 1, 1.5, 2, 2.5, 3, 4, 5], fmt: 'pct' },
+    'verkauf.d2_zinsbindung_bis': { jahre: [2026, 2040], fmt: 'jahr' }
+  },
   vorSetzen: function (f, c) { if (f.p === 'objekt.engere_innenstadt') { c.dataset.manuell = '1'; c.dataset.auto = ''; } },     // eine Antwort von Hand ersetzt die automatische Bestimmung
   fotoKacheln: [
     ['aussen', 'Hausansicht', 'haus', 'Straßenseite'], ['wohnzimmer', 'Wohnzimmer', 'sofa', 'Querformat'], ['kueche', 'Küche', 'kueche', 'von der Tür aus'],
@@ -615,6 +632,14 @@ var UI_T = {
   hilfe: 'Hilfe anzeigen',
   weniger: 'weniger',
   mehr: 'mehr',
+  waehlen: 'bitte wählen',
+  andererWert: 'Anderer Wert …',
+  anderesJahr: 'Anderes Jahr …',
+  zimmerSuffix: ' Zimmer',
+  erdgeschoss: 'Erdgeschoss',
+  ogSuffix: '. Obergeschoss',
+  keineOg: '0 (nur Erdgeschoss)',
+  endfaellig: '0 % (endfällig, keine Tilgung)',
   bildHilfe: 'Bild: ',
   fotoIntro: 'Mit diesen Fotos schätze ich Zustand und Ausstattung ein. Dafür werte ich sie mit einem KI-Dienst aus (Claude von Anthropic, USA); jedes Ergebnis prüfe ich selbst, bei Zweifel entscheide ich. Tippen Sie auf ein Feld und wählen Sie ein Foto aus; mehrere Fotos je Feld sind möglich. Alles ist freiwillig.',
   fotoStand: ' Wunschfotos vorhanden',
@@ -776,6 +801,32 @@ var UI_T = {
     c.after(box);
     ui.push({ upd() { const un = UNK.has(f.p), v = c.value; [[bj, v === 'ja' && !un], [bn, v === 'nein' && !un], [bu, un]].forEach(([b, on]) => { b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); } });
   }
+  // ---- Auswahlliste mit gängigen Werten für Zahlenfelder (UI_KONFIG.praesets = {pfad: {werte: [...] oder jahre: [von, bis], fmt: 'zimmer'|'etage'|'og0'|'pct'|'jahr'}}).
+  // Das Zahlenfeld bleibt im Dokument und liefert den Wert; "Anderer Wert" zeigt es zum Eintippen. Die JSON-Ausgabe bleibt gleich.
+  function praeset(f, cfg) {
+    const c = el[f.p], anchor = c.closest('.unit') || c, nf = (x) => String(x).replace('.', ',');
+    const FMT = {
+      zimmer: (x) => nf(x) + T.zimmerSuffix, etage: (x) => x === 0 ? T.erdgeschoss : x + T.ogSuffix, og0: (x) => x === 0 ? T.keineOg : String(x),
+      pct: (x) => x === 0 ? T.endfaellig : nf(x) + ' %', jahr: (x) => String(x)
+    };
+    const fm = FMT[cfg.fmt || 'jahr'];
+    let vals = cfg.werte;
+    if (!vals) { vals = []; const [a, b] = cfg.jahre, d = a <= b ? 1 : -1; for (let y = a; d > 0 ? y <= b : y >= b; y += d) vals.push(y); }
+    const sel = document.createElement('select'); sel.className = 'praeset'; sel.setAttribute('aria-label', f.l.replace(/<[^>]+>/g, ''));
+    sel.innerHTML = `<option value="">${T.waehlen}</option>` + vals.map(v => `<option value="${v}">${fm(v)}</option>`).join('') + `<option value="__andere">${cfg.fmt === 'jahr' || !cfg.fmt ? T.anderesJahr : T.andererWert}</option>`;
+    anchor.before(sel);
+    let eigen = false;     // "Anderer Wert" gewählt, Feld noch leer
+    sel.onchange = () => {
+      if (sel.value === '__andere') { eigen = true; UNK.delete(f.p); anchor.classList.remove('uihide'); c.focus(); ui.forEach(u => u.upd()); return; }
+      eigen = false; setVal(f, sel.value);
+    };
+    ui.push({ upd() {
+      const v = c.value, un = UNK.has(f.p), hit = v !== '' && vals.some(x => Number(x) === Number(v));
+      sel.value = un ? '' : (v === '' ? (eigen ? '__andere' : '') : (hit ? String(vals.find(x => Number(x) === Number(v))) : '__andere'));
+      anchor.classList.toggle('uihide', sel.value !== '__andere');
+      if (v !== '' && !hit) eigen = true;
+    } });
+  }
   function stepper(f) {
     const c = el[f.p], s = document.createElement('div'); s.className = 'stepper';
     const m = document.createElement('button'), p = document.createElement('button'); m.type = p.type = 'button'; m.textContent = '−'; p.textContent = '+'; m.setAttribute('aria-label', T.weniger); p.setAttribute('aria-label', T.mehr);
@@ -807,7 +858,8 @@ var UI_T = {
       else if (K[f.p]) choice(f, 'kacheln', nb.map(lb), K[f.p]);
       else if (nb.length <= 4 && (CFG.dropdown || []).indexOf(f.p) < 0) choice(f, 'segment', nb.map(lb));
     } else if (f.t === 'num') {
-      if (f.step === 1 && !f.u && f.max != null && f.max <= 20 && (f.min === 0 || f.min === 1)) stepper(f);
+      if (CFG.praesets && CFG.praesets[f.p]) praeset(f, CFG.praesets[f.p]);
+      else if (f.step === 1 && !f.u && f.max != null && f.max <= 20 && (f.min === 0 || f.min === 1)) stepper(f);
       if (!noUnk(f)) unkChip(f);
     } else if (f.t === 'text') { if (!noUnk(f)) unkChip(f); }
   }));

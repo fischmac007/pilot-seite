@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<title>Angebotspreis, Verkaufspreis, Verkehrswert: drei Preise, drei Zeitpunkte</title>
+<meta name="description" content="Was Angebotspreis, Verkaufspreis und Verkehrswert (oft Marktpreis genannt) unterscheidet, mit erfundenem Rechenbeispiel und der Definition nach § 194 BauGB.">
+<meta name="robots" content="noindex">
+<style>
+/* Design "Frisch" (Startseite). Nur Systemschriften, keine externen Dateien. */
+:root{--font:ui-rounded,"SF Pro Rounded","Avenir Next","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;--r:22px;--r-s:14px;--shadow:0 10px 30px rgba(20,50,55,.08),0 2px 6px rgba(20,50,55,.05);
+--bg:#f5fbfa;--bg2:#e6f5f3;--card:#ffffff;--ink:#1f2d33;--muted:#5b6d74;--line:#d6ebe8;--accent:#0f7c8a;--accent-ink:#ffffff;--accent-soft:#d7f0f2;--sun:#ff8a65;--sun-soft:#ffe8df;--accent-2:#1f7a4d;--warn:#fff2e6;--warn-line:#e07a4f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12191b;--bg2:#182225;--card:#1d292c;--ink:#e8f1f2;--muted:#a2b6ba;--line:#2a3b3f;--accent:#56c7d4;--accent-ink:#06242a;--accent-soft:#173a3f;--sun:#ff9a7a;--sun-soft:#3d2a23;--accent-2:#6cc79a;--warn:#3d2b25;--warn-line:#ff9a7a}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 var(--font)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+a{color:var(--accent)}
+.entwurf{background:var(--warn);border-bottom:2px dashed var(--warn-line);padding:8px 0;font-size:14px}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 22px;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);text-decoration:none;font-size:19px}
+.logo i{width:34px;height:34px;border-radius:11px;background:var(--accent);display:grid;place-items:center}.logo svg{width:20px;height:20px}
+nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}nav a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:600}nav a:hover{color:var(--accent)}
+@media (max-width:860px){nav a:not(.btn){display:none}}
+h1{font-size:clamp(34px,5.4vw,54px);line-height:1.08;margin:0 0 18px;letter-spacing:-.02em}h1 em{font-style:normal;color:var(--accent);background:linear-gradient(transparent 68%,var(--sun-soft) 68%)}
+h2{font-size:clamp(26px,3.6vw,36px);line-height:1.15;margin:0 0 12px;letter-spacing:-.01em}h3{font-size:20px;margin:0 0 6px}p{margin:0 0 14px}
+section{padding:60px 0}main>section:nth-of-type(even){background:var(--bg2)}
+.hero{padding:54px 0 40px;background:radial-gradient(900px 420px at 85% -10%,var(--sun-soft),transparent 70%),radial-gradient(700px 380px at -10% 110%,var(--accent-soft),transparent 70%)}
+main>section.hero:nth-of-type(even){background:radial-gradient(900px 420px at 85% -10%,var(--sun-soft),transparent 70%),radial-gradient(700px 380px at -10% 110%,var(--accent-soft),transparent 70%)}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero svg.ill{max-width:320px;margin:0 auto}}
+.lead{font-size:20px;color:var(--muted);max-width:640px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 4px;padding:0;list-style:none}
+.chips li{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 16px 8px 12px;font-size:15px;font-weight:700}
+.chips li:before{content:"✓";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:12px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font:700 17px var(--font);text-decoration:none;border:2px solid var(--accent);cursor:pointer;transition:transform .15s}
+.btn.primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 18px color-mix(in srgb,var(--accent) 30%,transparent)}.btn.primary:hover{transform:translateY(-2px)}
+.btn.sec{background:transparent;color:var(--accent)}.btn.sec:hover{background:var(--accent-soft)}.btn.klein{padding:9px 18px;font-size:15px}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;box-shadow:var(--shadow)}
+.card .nr{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:800;margin-bottom:10px}
+.card.t{border:2px solid var(--accent)}.card .tag{display:inline-block;background:var(--sun);color:#1f2d33;font-size:12px;font-weight:800;padding:3px 12px;border-radius:999px;margin-bottom:8px}
+.ok{color:var(--accent-2)}.muted{color:var(--muted)}.small{font-size:15px}
+ul.liste{list-style:none;padding:0;margin:0 0 14px}ul.liste li{padding:8px 0 8px 30px;position:relative;border-bottom:1px dashed var(--line)}ul.liste li:last-child{border-bottom:0}ul.liste li:before{content:"•";position:absolute;left:8px;color:var(--accent);font-weight:800}
+.zahlen{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:14px 0}.zahl{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow)}.zahl b{display:block;font-size:30px;color:var(--accent);line-height:1.15}
+table{border-collapse:collapse;width:100%;font-size:15px;background:var(--card);border-radius:12px;overflow:hidden}th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}th{background:var(--accent-soft)}td.n,th.n{text-align:right;white-space:nowrap}.scroll{overflow-x:auto}
+.bar{position:relative;height:30px;border-radius:15px;background:var(--bg2);margin:14px 0 6px}.bar .zone{position:absolute;top:0;bottom:0;left:22%;width:50%;background:color-mix(in srgb,var(--accent) 30%,transparent);border-radius:15px}.bar .m{position:absolute;top:-6px;width:4px;height:42px;background:var(--ink);border-radius:2px}
+.musterhinweis{background:var(--warn);border-left:4px solid var(--warn-line);padding:8px 12px;font-size:14px;margin:0 0 16px;border-radius:8px}
+.platzhalter{background:var(--warn);border:1px dashed var(--warn-line);padding:0 5px;border-radius:6px;font-size:.92em}
+.person{display:grid;gap:30px;grid-template-columns:220px 1fr;align-items:center}@media (max-width:700px){.person{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.foto{width:200px;height:200px;border-radius:50%;background:var(--accent-soft);border:4px solid var(--card);box-shadow:var(--shadow);display:grid;place-items:center;text-align:center;font-size:13px;color:var(--muted);padding:20px}
+blockquote.zitat{margin:0 0 14px;font-size:clamp(22px,3vw,30px);line-height:1.3;font-weight:800;color:var(--accent)}
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--r-s);padding:16px 20px;margin:12px 0}summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}summary::after{content:"+";font-size:22px;line-height:1;color:var(--accent)}details[open] summary::after{content:"–"}
+.wege .card h3:after{content:"";display:block;width:36px;height:4px;border-radius:2px;background:var(--sun);margin-top:6px}
+footer{padding:36px 0 60px;color:var(--muted);font-size:14px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+h1{overflow-wrap:anywhere;hyphens:auto;font-size:clamp(28px,5.4vw,50px)}td.n,th.n{text-align:right}.tabwrap{overflow-x:auto;margin-bottom:14px}th,td{padding:8px 9px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="entwurf"><div class="wrap"><strong>ENTWURF, nicht veröffentlichen.</strong> Vor der Veröffentlichung: Claim-Check, Fachprüfung (RDG, § 34i GewO), Impressum und Datenschutz. Alle Zahlen in den Beispielen sind erfunden.</div></div>
+<header class="top"><div class="wrap">
+<a class="logo" href="../index.html"><svg class="logomark" viewBox="4 6 68 68" width="34" height="34" style="width:34px;height:34px;display:block;flex:none" aria-hidden="true"><path class="h" fill="#0f7c8a" fill-rule="evenodd" d="M8 40 L38 10 L68 40 V70 H8 Z M45 33 A7 7 0 1 0 31 33 A7 7 0 1 0 45 33 Z"/><rect x="22" y="50" width="32" height="7" rx="3.5" fill="#f2a93b"/></svg><span>Immology <small style="font-size:.62em;letter-spacing:.18em;color:#0f7c8a;font-weight:800">SML</small></span></a>
+<nav><a href="../index.html">Startseite</a><a href="../anschlussfinanzierung.html">Zinsbindung</a><a class="btn primary klein" href="../kurz-check.html">Kurz-Check</a></nav>
+</div></header>
+<main>
+<section class="hero"><div class="wrap" style="display:block">
+<h1>Angebotspreis, Verkaufspreis, Verkehrswert: <em>drei Preise, drei Zeitpunkte</em></h1>
+<p class="lead">Wer eine Wohnung verkauft, hört mehrere Wörter für „den Preis“ (auch „Marktpreis“). Sie meinen nicht dasselbe, und wer sie vermischt, vergleicht schnell Wünsche mit Abschlüssen. Hier steht, was jeder Preis aussagt und was nicht. Eine Preisempfehlung gibt diese Seite nicht.</p>
+<div class="btns"><a class="btn primary" href="../kurz-check.html">Kurz-Check starten (kostenlos, unverbindlich)</a></div>
+<p class="small" style="margin-top:14px">Ich vermittle keine Käufer, erstelle kein Verkehrswertgutachten und gebe keine Rechts-, Steuer- oder Anlageberatung.</p>
+</div></section>
+
+<section id="drei"><div class="wrap">
+<h2>Die drei Preise im Überblick</h2>
+<div class="tabwrap"><table>
+<thead><tr><th>Preis</th><th>Was er ist</th><th>Wer legt ihn fest?</th><th>Was er nicht sagt</th></tr></thead>
+<tbody>
+<tr><td><strong>Verkehrswert</strong> (im Gesetz auch „Marktwert“)</td><td>Der Preis, der zu einem Stichtag im gewöhnlichen Geschäftsverkehr zu erzielen wäre, ohne Rücksicht auf ungewöhnliche oder persönliche Verhältnisse (so die Definition in § 194 BauGB). <strong>Meine Preisspanne ist kein Verkehrswert</strong> und wird nicht in einem Gutachten-Verfahren ermittelt.</td><td>Niemand legt ihn fest. Er wird für einen Stichtag ermittelt, zum Beispiel von einem Sachverständigen oder vom Gutachterausschuss, mit Vergleichs-, Ertrags- oder Sachwertverfahren.</td><td>Er ist keine Zusage. Wie ein einzelner Käufer entscheidet, hängt von Lage, Zustand, Zeitpunkt und Verhandlung ab.</td></tr>
+<tr><td><strong>Angebotspreis</strong></td><td>Der Preis, der im Inserat steht.</td><td>Der Verkäufer (oder ein beauftragter Makler).</td><td>Er ist ein Wunsch, kein Abschluss. Oft steht „VB“ (Verhandlungsbasis) dabei; wie viel darunter verkauft wird, steht nicht im Inserat.</td></tr>
+<tr><td><strong>Verkaufspreis</strong> (Kaufpreis)</td><td>Der Preis, der im notariellen Kaufvertrag steht.</td><td>Käufer und Verkäufer gemeinsam, nach Verhandlung.</td><td>Er gilt für genau diesen Verkauf. Was zum Preis gehört (Küche, Stellplatz, Möbel), sollte im Vertrag geregelt sein; sonst lassen sich Preise nicht vergleichen. Wie, klärt der Notar.</td></tr>
+</tbody></table></div>
+<p class="small muted">Quelle für die Definition: § 194 BauGB. Die Erläuterungen in der Tabelle sind allgemeine Information. Rechtsstand: <span class="platzhalter">[Datum der Fachprüfung]</span>.</p>
+</div></section>
+
+<section id="beispiel"><div class="wrap">
+<h2>Ein Beispiel mit erfundenen Zahlen</h2>
+<p>Eine Wohnung steht für <strong>310.000 €</strong> im Inserat (Angebotspreis), mit „VB“. Verkauft wird sie nach Verhandlungen für <strong>295.000 €</strong> (Verkaufspreis, laut Kaufvertrag). Ein Sachverständiger schätzt für den Stichtag <strong>298.000 €</strong> (Verkehrswert).</p>
+<ul class="liste">
+<li>Wer nur Inserate vergleicht, sieht 310.000 €, vergleicht also, was Verkäufer <em>verlangen</em>.</li>
+<li>Wer den Kaufvertrag kennt, sieht 295.000 €, also was <em>bezahlt</em> wurde, in genau diesem Fall.</li>
+<li>In diesem erfundenen Beispiel liegt der geschätzte Verkehrswert zwischen beiden Preisen, im echten Markt kann er auch darunter oder darüber liegen. Er ist keiner der beiden Preise, sondern eine begründete Schätzung für einen Stichtag.</li>
+</ul>
+<p class="small muted">Alle Zahlen erfunden. Wie groß der Abstand zwischen Angebots- und Verkaufspreisen in Nürnberg ist, ist hier nicht belegt. <span class="platzhalter">[Eigene Kennzahl, zum Beispiel Anteil der Angebote mit „VB“ in Nürnberg: erst nach Klärung der Nutzungsrechte (Frage B10) und mit Stichtag]</span></p>
+</div></section>
+
+<section id="folge"><div class="wrap">
+<h2>Was das für Ihre Preisentscheidung bedeutet</h2>
+<ul class="liste">
+<li><strong>Angebote zeigen den Wettbewerb</strong>, nicht den Markt. Sie sagen, wo andere Verkäufer ihre Preise ansetzen und wie viele Wohnungen im Angebot sind.</li>
+<li><strong>Marktberichte der Gutachterausschüsse werten Kaufverträge aus</strong>, die dem Ausschuss vorliegen. Sie beschreiben, was in einem Zeitraum bezahlt wurde (Zeitraum und Bezugsjahr nennt der jeweilige Bericht), nicht, was heute verlangt wird.</li>
+<li><strong>Meine Preisspanne stützt sich auf mehrere Rechenwege:</strong> den Marktbericht des zuständigen Gutachterausschusses, eine Gegenprobe über die Miete (Ertragswert) und, wo ich sie verwenden darf, aktuelle Angebote als Orientierung. Der Bericht zeigt jeden Rechenweg mit Quellen und Annahmen. Diese Seite gibt keine Preisempfehlung; im Bericht zeige ich eine Preisspanne und einen Startpreis als Vorschlag mit Begründung, welchen Preis Sie verlangen, entscheiden Sie. Der Bericht ist kein Verkehrswertgutachten.</li>
+</ul>
+<div class="btns"><a class="btn primary" href="../kurz-check.html">Kurz-Check starten (kostenlos, unverbindlich)</a></div>
+<p class="small muted">Der Kurz-Check ist kostenlos; der Bericht ist eine bezahlte Leistung, den Preis nenne ich vorab.</p>
+</div></section>
+
+<section id="grenzen"><div class="wrap">
+<h2>Was diese Seite nicht leistet</h2>
+<ul class="liste">
+<li>Sie ist <strong>kein Verkehrswertgutachten</strong> und ersetzt keins. Für Gericht, Erbfall, Finanzamt oder Bank wird in der Regel ein Verkehrswertgutachten verlangt, von einem Sachverständigen oder vom Gutachterausschuss; was in Ihrem Fall verlangt wird, sagt die Stelle, die es braucht.</li>
+<li>Sie ist keine Rechts-, Steuer- oder Anlageberatung und sagt nicht, zu welchem Preis Sie verkaufen sollten.</li>
+</ul>
+<p class="small muted">Stand der Rechtsangaben: <span class="platzhalter">[Datum der Fachprüfung]</span>. Allgemeine Information.</p>
+</div></section>
+</main>
+<footer><div class="wrap">
+<p id="impressum"><a href="../impressum.html">Impressum</a> <span class="platzhalter">[Gerüst, Angaben nach Rechtsform und Gewerbeanmeldung ergänzen]</span></p>
+<p id="datenschutz"><strong>Datenschutz</strong> <span class="platzhalter">[Datenschutzerklärung nach Prüfung durch die Fachperson]</span></p>
+</div></footer>
+</body>
+</html>

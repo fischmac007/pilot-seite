@@ -151,12 +151,12 @@ const GEMEINDEN = [["altdorf", "Altdorf b. Nürnberg"], ["burgthann", "Burgthann
   ["schwarzenbruck", "Schwarzenbruck"], ["winkelhaid", "Winkelhaid"]];   // Gemeinden des Landkreises Nürnberger Land (Grundstücksmarktbericht 2025)
 const ZUSTAND = [["", "keine Angabe"], ["neuwertig", "neuwertig: neu eingebaut oder erneuert, ohne Gebrauchsspuren"], ["gut", "gut: einwandfrei, aber nicht neu"], ["altersgemaess", "altersgemäß: funktioniert, normale Gebrauchsspuren"], ["maengel", "Mängel sichtbar: Reparatur oder Teilerneuerung nötig"], ["erneuerung", "stark abgenutzt oder defekt: Erneuerung nötig"]];
 const MOD = [["", "weiß nicht / keine Angabe"], ["nein", "nicht erneuert"], ["teilweise", "teilweise erneuert"], ["voll", "vollständig erneuert"]];
-const WUNSCH = [["", "keine Angabe"], ["basis", "Basis: Ich trage Angaben und Fotos selbst ein, beantworte Rückfragen und erhalte den Bericht mit einem abschließenden Gespräch"], ["vor_ort", "Vor Ort: wie Basis, dazu Besichtigung und persönliches Durchgehen des Fragebogens vor dem fertigen Bericht"], ["szenarien", "Szenarien: zusätzlich Rechenbeispiele zu meinen Optionen (zum Beispiel verkaufen, behalten oder vermieten)"], ["offen", "Weiß ich noch nicht, ich möchte zuerst wissen, was möglich ist"]];
+const WUNSCH = [["", "keine Angabe"], ["basis", "Basis: Ich trage Angaben und Fotos selbst ein, beantworte Rückfragen und erhalte den Bericht mit einem abschließenden Gespräch"], ["vor_ort", "Vor Ort: wie Basis, dazu Besichtigung und persönliches Durchgehen des Fragebogens vor dem fertigen Bericht"], ["szenarien", "Szenarien: zusätzlich Rechenbeispiele zu meinen Optionen (zum Beispiel verkaufen, halten oder vermieten)"], ["offen", "Weiß ich noch nicht, ich möchte zuerst wissen, was möglich ist"]];
 const PILOT = true;   // Pilot-Fragen zur Preiseinschätzung (Teil 12); für den Regelbetrieb auf false setzen
 const SECTIONS = [
  { title: "1. Das Haus", intro: "Grunddaten. Die Wohnfläche steht im Kaufvertrag, in der Wohnflächenberechnung oder im Gutachten.", fields: [
-  { p:"objekt.gemeinde_nl", l:"Gemeinde", t:"sel", req:true, o:[["", "bitte wählen"], ...GEMEINDEN, ["andere", "andere Gemeinde (unten eintragen)"]],
-    h:"Für Häuser rechne ich derzeit mit den Daten des Landkreises Nürnberger Land. Liegt Ihr Haus anderswo, wählen Sie „andere Gemeinde“: Dann kann ich die Einschätzung erst nach einer Prüfung der Datenlage anbieten." },
+  { p:"objekt.gemeinde_nl", l:"Gemeinde", t:"sel", req:true, o:[["", "bitte wählen"], ...GEMEINDEN, ["nuernberg", "Nürnberg (Stadt)"], ["andere", "andere Gemeinde (unten eintragen)"]],
+    h:"Für Häuser rechne ich mit den Daten des Landkreises Nürnberger Land und der Stadt Nürnberg (Stadtteil bitte unten bei „Ortsteil“ eintragen). Liegt Ihr Haus anderswo, wählen Sie „andere Gemeinde“: Dann kann ich die Einschätzung erst nach einer Prüfung der Datenlage anbieten." },
   { p:"objekt.stadt", l:"Ort (nur ausfüllen bei „andere Gemeinde“)", t:"text", ph:"z. B. Postbauer-Heng" },
   { p:"objekt.ortsteil", l:"Ortsteil oder Siedlung (freiwillig)", t:"text", ph:"z. B. Leuzenberg" },
   { p:"objekt.plz", l:"Postleitzahl", t:"text", ph:"5 Ziffern, z. B. 91244" },
@@ -301,7 +301,7 @@ const SECTIONS = [
   { p:"gutachten.verfahren", l:"Wertermittlungsverfahren", t:"sel", o:[["", "weiß nicht / keine Angabe"], ["sachwert", "Sachwertverfahren"], ["ertragswert", "Ertragswertverfahren"], ["vergleichswert", "Vergleichswertverfahren"], ["mehrere", "mehrere Verfahren"]] },
   { p:"gutachten.ersteller", l:"Wer hat das Gutachten erstellt? (freiwillig)", t:"text" }
  ]},
- { title: "10. Ihre Ziele und Ihr Kauf", intro: "Damit ich die Empfehlung auf Ihre Situation abstimmen kann.", fields: [
+ { title: "10. Ihre Ziele und Ihr Kauf", intro: "Damit ich die Einschätzung auf Ihre Situation abstimmen kann.", fields: [
   { p:"verkauf.preisvorstellung", l:"Preisvorstellung", t:"num", u:"€", min:0 },
   { p:"verkauf.garage_im_preis", l:"Garage und Nebengebäude: Sind sie in der Preisvorstellung enthalten?", t:"sel", o:[["", "keine Angabe"], ["im_preis", "ja, im Preis enthalten"], ["aufpreis", "gegen Aufpreis"], ["nein", "nicht Teil des Verkaufs"]] },
   { p:"verkauf.zeitrahmen_monate", l:"Gewünschter Zeitrahmen", t:"sel", o:[["", "keine Angabe"], ["unter 3", "unter 3 Monate"], ["3-6", "3 bis 6 Monate"], ["6-12", "6 bis 12 Monate"], ["offen", "kein fester Zeitrahmen"]] },
@@ -318,7 +318,7 @@ const SECTIONS = [
   { p:"fall.selbstgenutzt_bis", l:"Bis wann haben Sie das Haus selbst bewohnt (Jahr)?", t:"num", min:1900, max:2100, step:1 },
   { p:"fall.bisher_versucht", l:"Haben Sie bereits einen Verkauf versucht oder einen Makler angefragt?", t:"sel", full:true, o:[["", "keine Angabe"], ["nein", "nein"], ["makler_angefragt", "Makler angefragt"], ["inseriert", "bereits inseriert"], ["anderes", "anderes"]] }
  ]},
- { title: "11. Finanzierung (freiwillig)", intro: "Alles in diesem Teil ist freiwillig. Er hilft mir nur, wenn Sie Rechenbeispiele zu Verkauf, Behalten oder einem neuen Haus wünschen. Die Zahlen stehen im Darlehensvertrag oder in der Jahresmitteilung Ihrer Bank. Wenn Sie mehrere Darlehen haben, tragen Sie die zwei größten ein und den Rest unter „Weitere Darlehen“. Eine Restschuld ohne weitere Angaben ist ebenfalls in Ordnung.", fields: [
+ { title: "11. Finanzierung (freiwillig)", intro: "Alles in diesem Teil ist freiwillig. Er hilft mir nur, wenn Sie Rechenbeispiele zu Verkauf, Halten oder einem neuen Haus wünschen. Die Zahlen stehen im Darlehensvertrag oder in der Jahresmitteilung Ihrer Bank. Wenn Sie mehrere Darlehen haben, tragen Sie die zwei größten ein und den Rest unter „Weitere Darlehen“. Eine Restschuld ohne weitere Angaben ist ebenfalls in Ordnung.", fields: [
   { p:"verkauf.d1_betrag", l:"Darlehen 1: Restschuld heute", t:"num", u:"€", min:0, max:20000000 },
   { p:"verkauf.d1_zins_pct", l:"Darlehen 1: Zinssatz", t:"num", u:"% pro Jahr", min:0, max:15, step:0.01 },
   { p:"verkauf.d1_tilgung_pct", l:"Darlehen 1: Tilgung am Anfang", t:"num", u:"% pro Jahr", min:0, max:20, step:0.01, h:"Leer lassen, wenn das Darlehen endfällig ist." },
@@ -392,7 +392,7 @@ function buildJson() {
   const out = { schema: 'fragebogen-verkauf-haus-v1', erstellt: new Date().toISOString().slice(0, 10) };
   SECTIONS.forEach(s => s.fields.forEach(f => setNested(out, f.p, readField(f))));
   { const o = out.objekt, gem = GEMEINDEN.find(x => x[0] === o.gemeinde_nl);   // Klartext der Gemeinde für die Auswertung
-    if (gem) { o.gemeinde = gem[1]; if (!o.stadt) o.stadt = gem[1]; } else if (o.gemeinde_nl === 'andere') o.gemeinde = o.stadt || null; }
+    if (gem) { o.gemeinde = gem[1]; if (!o.stadt) o.stadt = gem[1]; } else if (o.gemeinde_nl === 'nuernberg') { o.gemeinde = 'Nürnberg'; if (!o.stadt) o.stadt = 'Nürnberg'; } else if (o.gemeinde_nl === 'andere') o.gemeinde = o.stadt || null; }
   out.unterlagen = {};
   document.querySelectorAll('[data-doc]').forEach(c => out.unterlagen[c.dataset.doc] = c.checked);
   out.einwilligung = document.getElementById('einwilligung').checked;
@@ -596,6 +596,23 @@ var UI_KONFIG = {
   icons: ['haus', 'grund', 'lineal', 'werkzeug', 'wand', 'blitz', 'schluessel', 'waage', 'dok', 'flagge', 'euro', 'stern'],
   kacheln: { 'objekt.haustyp': 'haustyp', 'gebaeude.keller': 'keller', 'gebaeude.dachgeschoss': 'dachgeschoss', 'gebaeude.dachform': 'dachform', 'gebaeude.garage': 'garage', 'ausstattung.heizung': 'heizung', 'ausstattung.solar': 'solar', 'ausstattung.kueche': 'kueche', 'ausstattung.kueche_stufe': 'stufe' },
   ohneUnbekannt: ['objekt.stadt'],
+  praesets: {
+    'objekt.baujahr': { jahre: [2026, 1900], fmt: 'jahr' },
+    'modernisierung.dach_jahr': { jahre: [2026, 1980], fmt: 'jahr' },
+    'modernisierung.fenster_jahr': { jahre: [2026, 1980], fmt: 'jahr' },
+    'modernisierung.leitungen_jahr': { jahre: [2026, 1980], fmt: 'jahr' },
+    'modernisierung.heizung_jahr': { jahre: [2026, 1980], fmt: 'jahr' },
+    'modernisierung.aussenwand_jahr': { jahre: [2026, 1980], fmt: 'jahr' },
+    'modernisierung.baeder_jahr': { jahre: [2026, 1980], fmt: 'jahr' },
+    'ausstattung.kueche_jahr': { jahre: [2026, 1995], fmt: 'jahr' },
+    'fall.kaufjahr': { jahre: [2026, 1980], fmt: 'jahr' },
+    'verkauf.d1_zins_pct': { werte: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5, 5], fmt: 'pct' },
+    'verkauf.d1_tilgung_pct': { werte: [0, 1, 1.5, 2, 2.5, 3, 4, 5], fmt: 'pct' },
+    'verkauf.d1_zinsbindung_bis': { jahre: [2026, 2040], fmt: 'jahr' },
+    'verkauf.d2_zins_pct': { werte: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5, 5], fmt: 'pct' },
+    'verkauf.d2_tilgung_pct': { werte: [0, 1, 1.5, 2, 2.5, 3, 4, 5], fmt: 'pct' },
+    'verkauf.d2_zinsbindung_bis': { jahre: [2026, 2040], fmt: 'jahr' }
+  },
   labelIcons: { 'ausstattung.kueche_jahr': 'kueche', 'ausstattung.kueche_kaufpreis': 'euro', 'verkauf.kueche_im_preis': 'kueche', 'gebaeude.wintergarten': 'wintergarten', 'grundstueck.hanglage': 'berg', 'gebaeude.wohnflaeche_m2': 'lineal' },
   fotoKacheln: [
     ['aussen', 'Außenansicht', 'haus', 'Straßenseite, ganzes Haus'], ['garten', 'Garten', 'baum', 'Rasen und Terrasse'], ['dach', 'Dach und Fassade', 'dach', 'von außen, bei Tageslicht'],
@@ -640,6 +657,14 @@ var UI_T = {
   hilfe: 'Hilfe anzeigen',
   weniger: 'weniger',
   mehr: 'mehr',
+  waehlen: 'bitte wählen',
+  andererWert: 'Anderer Wert …',
+  anderesJahr: 'Anderes Jahr …',
+  zimmerSuffix: ' Zimmer',
+  erdgeschoss: 'Erdgeschoss',
+  ogSuffix: '. Obergeschoss',
+  keineOg: '0 (nur Erdgeschoss)',
+  endfaellig: '0 % (endfällig, keine Tilgung)',
   bildHilfe: 'Bild: ',
   fotoIntro: 'Mit diesen Fotos schätze ich Zustand und Ausstattung ein. Dafür werte ich sie mit einem KI-Dienst aus (Claude von Anthropic, USA); jedes Ergebnis prüfe ich selbst, bei Zweifel entscheide ich. Tippen Sie auf ein Feld und wählen Sie ein Foto aus; mehrere Fotos je Feld sind möglich. Alles ist freiwillig.',
   fotoStand: ' Wunschfotos vorhanden',
@@ -801,6 +826,32 @@ var UI_T = {
     c.after(box);
     ui.push({ upd() { const un = UNK.has(f.p), v = c.value; [[bj, v === 'ja' && !un], [bn, v === 'nein' && !un], [bu, un]].forEach(([b, on]) => { b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); } });
   }
+  // ---- Auswahlliste mit gängigen Werten für Zahlenfelder (UI_KONFIG.praesets = {pfad: {werte: [...] oder jahre: [von, bis], fmt: 'zimmer'|'etage'|'og0'|'pct'|'jahr'}}).
+  // Das Zahlenfeld bleibt im Dokument und liefert den Wert; "Anderer Wert" zeigt es zum Eintippen. Die JSON-Ausgabe bleibt gleich.
+  function praeset(f, cfg) {
+    const c = el[f.p], anchor = c.closest('.unit') || c, nf = (x) => String(x).replace('.', ',');
+    const FMT = {
+      zimmer: (x) => nf(x) + T.zimmerSuffix, etage: (x) => x === 0 ? T.erdgeschoss : x + T.ogSuffix, og0: (x) => x === 0 ? T.keineOg : String(x),
+      pct: (x) => x === 0 ? T.endfaellig : nf(x) + ' %', jahr: (x) => String(x)
+    };
+    const fm = FMT[cfg.fmt || 'jahr'];
+    let vals = cfg.werte;
+    if (!vals) { vals = []; const [a, b] = cfg.jahre, d = a <= b ? 1 : -1; for (let y = a; d > 0 ? y <= b : y >= b; y += d) vals.push(y); }
+    const sel = document.createElement('select'); sel.className = 'praeset'; sel.setAttribute('aria-label', f.l.replace(/<[^>]+>/g, ''));
+    sel.innerHTML = `<option value="">${T.waehlen}</option>` + vals.map(v => `<option value="${v}">${fm(v)}</option>`).join('') + `<option value="__andere">${cfg.fmt === 'jahr' || !cfg.fmt ? T.anderesJahr : T.andererWert}</option>`;
+    anchor.before(sel);
+    let eigen = false;     // "Anderer Wert" gewählt, Feld noch leer
+    sel.onchange = () => {
+      if (sel.value === '__andere') { eigen = true; UNK.delete(f.p); anchor.classList.remove('uihide'); c.focus(); ui.forEach(u => u.upd()); return; }
+      eigen = false; setVal(f, sel.value);
+    };
+    ui.push({ upd() {
+      const v = c.value, un = UNK.has(f.p), hit = v !== '' && vals.some(x => Number(x) === Number(v));
+      sel.value = un ? '' : (v === '' ? (eigen ? '__andere' : '') : (hit ? String(vals.find(x => Number(x) === Number(v))) : '__andere'));
+      anchor.classList.toggle('uihide', sel.value !== '__andere');
+      if (v !== '' && !hit) eigen = true;
+    } });
+  }
   function stepper(f) {
     const c = el[f.p], s = document.createElement('div'); s.className = 'stepper';
     const m = document.createElement('button'), p = document.createElement('button'); m.type = p.type = 'button'; m.textContent = '−'; p.textContent = '+'; m.setAttribute('aria-label', T.weniger); p.setAttribute('aria-label', T.mehr);
@@ -832,7 +883,8 @@ var UI_T = {
       else if (K[f.p]) choice(f, 'kacheln', nb.map(lb), K[f.p]);
       else if (nb.length <= 4 && (CFG.dropdown || []).indexOf(f.p) < 0) choice(f, 'segment', nb.map(lb));
     } else if (f.t === 'num') {
-      if (f.step === 1 && !f.u && f.max != null && f.max <= 20 && (f.min === 0 || f.min === 1)) stepper(f);
+      if (CFG.praesets && CFG.praesets[f.p]) praeset(f, CFG.praesets[f.p]);
+      else if (f.step === 1 && !f.u && f.max != null && f.max <= 20 && (f.min === 0 || f.min === 1)) stepper(f);
       if (!noUnk(f)) unkChip(f);
     } else if (f.t === 'text') { if (!noUnk(f)) unkChip(f); }
   }));
